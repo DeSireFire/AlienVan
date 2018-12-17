@@ -8,9 +8,7 @@ def index(request):
     :return:
     '''
     context = {
-        'title': '次元圣经',
-        'novelTypes_html': [],
-        'novelTypes': [],
+        'title': '主页',
     }
 
     return render(request, 'index/index.html', context)
