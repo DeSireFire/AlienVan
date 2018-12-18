@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('index.urls')),
     path('manage/', include('management.urls')),
+    path('install/', include('initialization.urls')),
 ]
