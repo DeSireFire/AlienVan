@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 from collections import OrderedDict
 
 try:
-    from static import *
+    from alienVan.appConfig import *
     from uploader import *
     from helper_file import *
     from helper_item import *
@@ -16,7 +16,7 @@ try:
     from helper_print import *
     from downloader import *
 except ImportError:
-    from .static import *
+    from alienVan.appConfig import *
     from .uploader import *
     from .helper_file import *
     from .helper_item import *
@@ -24,6 +24,7 @@ except ImportError:
     from .helper_print import *
     from .downloader import *
 
+# python2 兼容
 try:
     from urlparse import urlparse # python 2
 except:
