@@ -130,8 +130,8 @@ STATIC_URL = '/static/'
 redirect_uri = 'https://od.cnbeining.com'
 
 ## Normal
-client_secret_normal = 'RQdGA24FctsiBGuP8v3juea'
-client_id_normal = 'aeba6391-92fd-437d-a9d9-33a258b96c4e'
+client_secret_normal = 'o.+2TBy+7-ijKLMl05spsohdx464OtwU'
+client_id_normal = 'e2d585cd-751f-4c7e-aab7-d8b48c485f94'
 api_base_url = 'https://api.onedrive.com/v1.0/'
 scopes = ['wl.signin', 'wl.offline_access', 'onedrive.readwrite']
 
