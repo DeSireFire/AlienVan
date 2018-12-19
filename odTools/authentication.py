@@ -29,6 +29,8 @@ def authenticate_init_N():
     :param client:
     :return:
     '''
+    funcName = 'hentai'
+
     http_provider = onedrivesdk.HttpProvider()
     auth_provider = onedrivesdk.AuthProvider(
         http_provider = http_provider,
@@ -40,11 +42,11 @@ def authenticate_init_N():
     auth_url = client.auth_provider.get_auth_url(redirect_uri)
 
     print(auth_url) # 登陆授权的URL
-
-    # client.auth_provider.authenticate(code, redirect_uri, client_secret_normal)
+    code = input('Paste code here: ')
+    client.auth_provider.authenticate(code, redirect_uri, client_secret_normal)
     # return client
 
-    return auth_url
+    return auth_url,funcName
 
 def init_business():
     '''
@@ -60,6 +62,8 @@ def init_business():
     '''
     # auth url:
     # https://login.microsoftonline.com/common/oauth2/authorize?scope=wl.signin+wl.offline_access+onedrive.readwrite&redirect_uri=https%3A%2F%2Fod.cnbeining.com&response_type=code&client_id=bac72a8b-77c8-4b76-8b8f-b7c65a239ce6
+
+    funcName = 'business'
 
     http = onedrivesdk.HttpProvider()
     auth = onedrivesdk.AuthProvider(http,
@@ -89,7 +93,11 @@ def init_business():
     client = onedrivesdk.OneDriveClient(service_info.service_resource_id + '_api/v2.0/', auth, http)
 
 
-    return client
+    return client,funcName
+
+# 其他工具
+def authUrlToClient(code,funcName):
+    pass
 
 if __name__ == '__main__':
     authenticate_init_N()
