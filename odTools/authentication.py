@@ -8,12 +8,6 @@ try:
 except ImportError:
     from alienVan.appConfig import *
 
-# python2 兼容
-# try:
-#     from urlparse import urlparse # python 2
-# except:
-#     from urllib.parse import urlparse
-
 import onedrivesdk
 from onedrivesdk.helpers.resource_discovery import ResourceDiscoveryRequest
 from os.path import splitext
@@ -21,7 +15,7 @@ from os.path import splitext
 
 # 初始化
 # 非商业版(个人版)
-def authenticate_init_N():
+def init_N():
     '''
     用于普通版的oneDrive，office365商业版无法使用的初始化函数。
     用户登录，获取详细信息，将详细信息保存在conf文件中。
@@ -29,8 +23,6 @@ def authenticate_init_N():
     :param client:
     :return:
     '''
-    funcName = 'hentai'
-
     http_provider = onedrivesdk.HttpProvider()
     auth_provider = onedrivesdk.AuthProvider(
         http_provider = http_provider,
@@ -40,15 +32,15 @@ def authenticate_init_N():
     client = onedrivesdk.OneDriveClient(api_base_url, auth_provider, http_provider)
 
     auth_url = client.auth_provider.get_auth_url(redirect_uri)
-
-    print(auth_url) # 登陆授权的URL
+    print(auth_url)
+    print(type(auth_url))
     code = input('Paste code here: ')
+
     client.auth_provider.authenticate(code, redirect_uri, client_secret_normal)
-    # return client
 
-    return auth_url,funcName
+    return client
 
-def init_business():
+def init_B():
     '''
     备用
     用于登陆Business/Office 365版OneDrive的初始化函数。
@@ -63,13 +55,12 @@ def init_business():
     # auth url:
     # https://login.microsoftonline.com/common/oauth2/authorize?scope=wl.signin+wl.offline_access+onedrive.readwrite&redirect_uri=https%3A%2F%2Fod.cnbeining.com&response_type=code&client_id=bac72a8b-77c8-4b76-8b8f-b7c65a239ce6
 
-    funcName = 'business'
-
     http = onedrivesdk.HttpProvider()
-    auth = onedrivesdk.AuthProvider(http,
-                                    client_id_business,
-                                    auth_server_url = auth_server_url,
-                                    auth_token_url = auth_token_url)
+    auth = onedrivesdk.AuthProvider(
+        http_provider = http,
+        client_id = client_id_business,
+        auth_server_url = auth_server_url,
+        auth_token_url = auth_token_url)
     auth_url = auth.get_auth_url(redirect_uri)
 
     # now the url looks like "('https://login.microsoftonline.com/common/oauth2/authorize',)?redirect_uri=https%3A%2F%2Fod.cnbeining.com&response_type=code&client_id=bac72a8b-77c8-4b76-8b8f-b7c65a239ce6"
@@ -93,11 +84,14 @@ def init_business():
     client = onedrivesdk.OneDriveClient(service_info.service_resource_id + '_api/v2.0/', auth, http)
 
 
-    return client,funcName
+    return client
 
 # 其他工具
-def authUrlToClient(code,funcName):
-    pass
+def authUrlToClient(client,funcName):
+    if funcName == 'hentai':
+        return init_N()
+    else:
+        return init_B()
 
 if __name__ == '__main__':
-    authenticate_init_N()
+    init_N()
