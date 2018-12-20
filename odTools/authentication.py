@@ -94,4 +94,6 @@ def getClient(funcName):
         return init_B()
 
 if __name__ == '__main__':
-    init_N()
+    print(init_N())
+    code = input('code:')
+    print(init_N(code))

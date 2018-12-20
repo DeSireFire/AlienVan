@@ -15,3 +15,14 @@ def initBinding(request):
     auth_url = authentication.getClient(init_type)
     context['auth_url'] = auth_url
     return render(request, 'home.html', context)
+
+def callBackBinding(request):
+    import json
+    if request.method == 'POST':
+        json_data = json.loads(request.body)
+        print(json_data)
+        return HttpResponse(json.dumps(json_data), content_type="application/json")
+
+    else:
+        return HttpResponse('It is not a POST request!!!')
+
