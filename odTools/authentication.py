@@ -15,7 +15,7 @@ from os.path import splitext
 
 # 初始化
 # 非商业版(个人版)
-def init_N():
+def init_N(code=None):
     '''
     用于普通版的oneDrive，office365商业版无法使用的初始化函数。
     用户登录，获取详细信息，将详细信息保存在conf文件中。
@@ -31,16 +31,15 @@ def init_N():
 
     client = onedrivesdk.OneDriveClient(api_base_url, auth_provider, http_provider)
 
-    auth_url = client.auth_provider.get_auth_url(redirect_uri)
-    print(auth_url)
-    print(type(auth_url))
-    code = input('Paste code here: ')
+    # 有code码时返回client对象，无则发射授权登陆URL
+    if code:
+        client.auth_provider.authenticate(code, redirect_uri, client_secret_normal)
+        return client
+    else:
+        auth_url = client.auth_provider.get_auth_url(redirect_uri)
+        return auth_url
 
-    client.auth_provider.authenticate(code, redirect_uri, client_secret_normal)
-
-    return client
-
-def init_B():
+def init_B(code=None):
     '''
     备用
     用于登陆Business/Office 365版OneDrive的初始化函数。
@@ -65,30 +64,31 @@ def init_B():
 
     # now the url looks like "('https://login.microsoftonline.com/common/oauth2/authorize',)?redirect_uri=https%3A%2F%2Fod.cnbeining.com&response_type=code&client_id=bac72a8b-77c8-4b76-8b8f-b7c65a239ce6"
 
-    try:  # Python 2
-        auth_url = auth_url.encode('utf-8').replace("('", '').replace("',)", '')
-    except TypeError:
-        auth_url = auth_url.replace("('", '').replace("',)", '')
+    if code:
+        try:  # Python 2
+            auth_url = auth_url.encode('utf-8').replace("('", '').replace("',)", '')
+        except TypeError:
+            auth_url = auth_url.replace("('", '').replace("',)", '')
 
-    print(auth_url)
+        return auth_url
+    else:
+        auth.authenticate(code, redirect_uri, client_secret_business, resource = 'https://api.office.com/discovery/')
 
-    code = input('Paste code here: ')
+        # this step is slow
+        service_info = ResourceDiscoveryRequest().get_service_info(auth.access_token)[0]
 
-    auth.authenticate(code, redirect_uri, client_secret_business, resource = 'https://api.office.com/discovery/')
+        auth.redeem_refresh_token(service_info.service_resource_id)
 
-    # this step is slow
-    service_info = ResourceDiscoveryRequest().get_service_info(auth.access_token)[0]
-
-    auth.redeem_refresh_token(service_info.service_resource_id)
-
-    client = onedrivesdk.OneDriveClient(service_info.service_resource_id + '_api/v2.0/', auth, http)
+        client = onedrivesdk.OneDriveClient(service_info.service_resource_id + '_api/v2.0/', auth, http)
 
 
-    return client
+        return client
 
 # 其他工具
-def authUrlToClient(client,funcName):
-    if funcName == 'hentai':
+# def authUrlToClient(funcName):
+
+def getClient(funcName):
+    if funcName == 'N':
         return init_N()
     else:
         return init_B()
