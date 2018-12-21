@@ -57,32 +57,46 @@ def dictToSession(status_dict):
 
 
 def save_session(client,fileName):
-    status_dict = {
-        'is_business': False,
-        'client_id': client.auth_provider._client_id,
-        'client.base_url': client.base_url,  # 'https://api.onedrive.com/v1.0/'
-        'client.auth_provider.auth_token_url': client.auth_provider.auth_token_url, # 'https://login.live.com/oauth20_token.srf'
-        'client.auth_provider.auth_server_url': client.auth_provider.auth_server_url,   # 'https://login.live.com/oauth20_authorize.srf'
-        'client.auth_provider.scopes': client.auth_provider.scopes,
-    }
-    status_dict['client.auth_provider._session'] = dict_merge(
-        client.auth_provider._session.__dict__,
-        {'_expires_at': int(
-          client.auth_provider._session._expires_at),
-        'scope_string': ' '.join([str(i) for i in
-                                 client.auth_provider._session.scope]),
-        })
+    if client.base_url == 'https://api.onedrive.com/v1.0/':
+        status_dict = {
+            'is_business': False,
+            'client_id': client.auth_provider._client_id,
+            'client.base_url': client.base_url,  # 'https://api.onedrive.com/v1.0/'
+            'client.auth_provider.auth_token_url': client.auth_provider.auth_token_url, # 'https://login.live.com/oauth20_token.srf'
+            'client.auth_provider.auth_server_url': client.auth_provider.auth_server_url,   # 'https://login.live.com/oauth20_authorize.srf'
+            'client.auth_provider.scopes': client.auth_provider.scopes,
+        }
+        status_dict['client.auth_provider._session'] = dict_merge(
+            client.auth_provider._session.__dict__,
+            {'_expires_at': int(client.auth_provider._session._expires_at),
+            'scope_string': ' '.join([str(i) for i in client.auth_provider._session.scope]),
+            })
+    else:
+        pass
+        status_dict = {
+            'is_business': True,
+            'client_id': client.auth_provider._client_id,
+            'client.base_url': client.base_url,  #'https://{.....}.sharepoint.com/_api/v2.0/'
+            'client.auth_provider.auth_token_url': client.auth_provider.auth_token_url,  #'https://login.microsoftonline.com/common/oauth2/token'
+            'client.auth_provider.auth_server_url': client.auth_provider.auth_server_url[0],  #'https://login.microsoftonline.com/common/oauth2/authorize'
+            'client.auth_provider.scopes': client.auth_provider.scopes,  # empty for business
+        }
 
+        status_dict['client.auth_provider._session'] = dict_merge(
+            client.auth_provider._session.__dict__,
+            {'_expires_at': int(client.auth_provider._session._expires_at),
+            'scope_string': ' '.join([str(i) for i in client.auth_provider._session.scope]),
+            })
 
     status = json.dumps(status_dict)
     # 写入到对应的Json文件中
     with open(os.path.join(BASE_DIR,'driveJsons',fileName), "w+") as session_file:
         session_file.write(status)
 
-def load_session(client,fileName):
+def load_session(client,pathFileName):
 
     try:
-        with open(os.path.join(BASE_DIR,'driveJsons',fileName), 'r') as session_file:
+        with open(pathFileName, 'r') as session_file:
             status_dict = json.loads(session_file.read())
     except IOError as e:
         logging.fatal(e.strerror)
@@ -113,3 +127,6 @@ def load_session(client,fileName):
 
     ## 推送 API endpoint
     return onedrivesdk.OneDriveClient(status_dict['client.base_url'], auth_provider, http_provider)
+
+if __name__ == '__main__':
+    pass
