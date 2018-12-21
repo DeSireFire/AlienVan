@@ -40,6 +40,17 @@ def token_time_to_live(client):
     '''
     return int(client.auth_provider._session._expires_at - time())
 
+def make_session_from_dict(status_dict):
+    return onedrivesdk.auth_provider.Session(
+        status_dict['client.auth_provider._session']['token_type'],
+        status_dict['client.auth_provider._session']['_expires_at'] - time(),
+        status_dict['client.auth_provider._session']['scope_string'],
+        status_dict['client.auth_provider._session']['access_token'],
+        status_dict['client.auth_provider._session']['client_id'],
+        status_dict['client.auth_provider._session']['auth_server_url'],
+        status_dict['client.auth_provider._session']['redirect_uri'],
+        refresh_token=status_dict['client.auth_provider._session']['refresh_token'],
+        client_secret=status_dict['client.auth_provider._session']['client_secret'])
 
 ## Saving and Loading a Session
 ## Session 保存和读取
@@ -68,5 +79,36 @@ def save_session(client,fileName):
     with open(os.path.join(BASE_DIR,'driveJsons',fileName), "w+") as session_file:
         session_file.write(status)
 
-def load_session(client):
-    pass
+def load_session(client,fileName):
+    try:
+        with open(os.path.join(BASE_DIR,'driveJsons',fileName), 'r') as session_file:
+            status_dict = json.loads(session_file.read())
+    except IOError as e:
+        logging.fatal(e.strerror)
+        logging.fatal('Cannot read the session file!')
+        exit()
+
+    if status_dict['is_business']:
+        # mock http and auth
+        http_provider = onedrivesdk.HttpProvider()
+        auth_provider = onedrivesdk.AuthProvider(
+            http_provider,
+            client_id_business,
+            auth_server_url=status_dict['client.auth_provider.auth_server_url'],
+            auth_token_url=status_dict['client.auth_provider.auth_token_url'])
+
+    else:
+        # personal
+        http_provider = onedrivesdk.HttpProvider()
+        auth_provider = onedrivesdk.AuthProvider(
+            http_provider=http_provider,
+            client_id=status_dict['client_id'],
+            scopes=scopes)
+
+    ## Session 装填
+    auth_provider._session = make_session_from_dict(status_dict)
+
+    auth_provider.refresh_token()
+
+    ## 推送 API endpoint
+    return onedrivesdk.OneDriveClient(status_dict['client.base_url'], auth_provider, http_provider)
