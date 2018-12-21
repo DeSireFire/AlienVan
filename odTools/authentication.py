@@ -34,6 +34,8 @@ def init_N(code=None):
     # 有code码时返回client对象，无则发射授权登陆URL
     if code:
         client.auth_provider.authenticate(code, redirect_uri, client_secret_normal)
+        # 保存session()
+        auth_provider.save_session()
         return client
     else:
         auth_url = client.auth_provider.get_auth_url(redirect_uri)
