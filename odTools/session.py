@@ -3,6 +3,8 @@ import logging
 import json
 from time import time
 from alienVan.appConfig import *
+from alienVan.settings import BASE_DIR  # 定位项目目录地址
+from odTools.otherHandler import *
 
 ## Session maintain
 ## Session 维护
@@ -43,8 +45,28 @@ def token_time_to_live(client):
 ## Session 保存和读取
 
 
-def save_session(client):
-    pass
+def save_session(client,fileName):
+    status_dict = {
+        'is_business': False,
+        'client_id': client.auth_provider._client_id,
+        'client.base_url': client.base_url,  # 'https://api.onedrive.com/v1.0/'
+        'client.auth_provider.auth_token_url': client.auth_provider.auth_token_url, # 'https://login.live.com/oauth20_token.srf'
+        'client.auth_provider.auth_server_url': client.auth_provider.auth_server_url,   # 'https://login.live.com/oauth20_authorize.srf'
+        'client.auth_provider.scopes': client.auth_provider.scopes,
+    }
+    status_dict['client.auth_provider._session'] = dict_merge(
+        client.auth_provider._session.__dict__,
+        {'_expires_at': int(
+          client.auth_provider._session._expires_at),
+        'scope_string': ' '.join([str(i) for i in
+                                 client.auth_provider._session.scope]),
+        })
+
+
+    status = json.dumps(status_dict)
+    # 写入到对应的Json文件中
+    with open(os.path.join(BASE_DIR,'driveJsons',fileName), "w+") as session_file:
+        session_file.write(status)
 
 def load_session(client):
     pass
