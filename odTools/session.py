@@ -40,7 +40,7 @@ def token_time_to_live(client):
     '''
     return int(client.auth_provider._session._expires_at - time())
 
-def make_session_from_dict(status_dict):
+def dictToSession(status_dict):
     return onedrivesdk.auth_provider.Session(
         status_dict['client.auth_provider._session']['token_type'],
         status_dict['client.auth_provider._session']['_expires_at'] - time(),
@@ -80,6 +80,7 @@ def save_session(client,fileName):
         session_file.write(status)
 
 def load_session(client,fileName):
+
     try:
         with open(os.path.join(BASE_DIR,'driveJsons',fileName), 'r') as session_file:
             status_dict = json.loads(session_file.read())
@@ -89,7 +90,7 @@ def load_session(client,fileName):
         exit()
 
     if status_dict['is_business']:
-        # mock http and auth
+        # B
         http_provider = onedrivesdk.HttpProvider()
         auth_provider = onedrivesdk.AuthProvider(
             http_provider,
@@ -98,7 +99,7 @@ def load_session(client,fileName):
             auth_token_url=status_dict['client.auth_provider.auth_token_url'])
 
     else:
-        # personal
+        # N
         http_provider = onedrivesdk.HttpProvider()
         auth_provider = onedrivesdk.AuthProvider(
             http_provider=http_provider,
@@ -106,7 +107,7 @@ def load_session(client,fileName):
             scopes=scopes)
 
     ## Session 装填
-    auth_provider._session = make_session_from_dict(status_dict)
+    auth_provider._session = dictToSession(status_dict)
 
     auth_provider.refresh_token()
 
