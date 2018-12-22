@@ -22,6 +22,21 @@ def fileList(path, fileType, listName=[]):
         elif os.path.splitext(file_path)[1]==fileType:
             listName.append(file_path)
     return listName
+
+def dict_to_json_write_file(dictTemp,pathFileName):
+    '''
+    字典转json文本文件
+    :param dictTemp: 字典，需要转换的字典
+    :param pathFileName: 字符串，文件名和目录地址组成
+    :return: dictTemp->json file
+    '''
+    import json
+    if '.json' not in pathFileName:
+        pathFileName = pathFileName+'.json'
+    with open(pathFileName, 'w') as f:
+        json.dump(dictTemp, f)  # 会在目录下生成一个json的文件，文件内容是dict数据转成的json数据
+
+
 if __name__ == '__main__':
     from alienVan.settings import BASE_DIR
     print(os.path.join(BASE_DIR,'driveJsons'))

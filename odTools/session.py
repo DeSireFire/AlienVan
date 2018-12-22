@@ -28,7 +28,7 @@ def refresh_token(client):
     :return: OneDriveClient->OneDriveClient
     '''
     client.auth_provider.refresh_token()
-    return
+    return client
 
 
 def token_time_to_live(client):
@@ -89,16 +89,16 @@ def save_session(client,fileName):
             'scope_string': ' '.join([str(i) for i in client.auth_provider._session.scope]),
             })
 
-    status = json.dumps(status_dict)
-    # 写入到对应的Json文件中
-    with open(os.path.join(BASE_DIR,'driveJsons',fileName), "w+") as session_file:
-        session_file.write(status)
 
-def load_session(client,pathFileName):
+    # 转成json对象并保存
+    with open(os.path.join(BASE_DIR, 'driveJsons', fileName), "w+") as session_file:
+        json.dump(status_dict, session_file)
+
+def load_session(pathFileName):
 
     try:
-        with open(pathFileName, 'r') as session_file:
-            status_dict = json.loads(session_file.read())
+        with open(pathFileName, "r") as session_file:
+            status_dict = json.load(fp=session_file)
     except IOError as e:
         logging.fatal(e.strerror)
         logging.fatal('无法读取到session文件!')
