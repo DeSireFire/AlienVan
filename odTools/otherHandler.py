@@ -36,6 +36,16 @@ def dict_to_json_write_file(dictTemp,pathFileName):
     with open(pathFileName, 'w') as f:
         json.dump(dictTemp, f)  # 会在目录下生成一个json的文件，文件内容是dict数据转成的json数据
 
+def json_file_to_dict(pathFileName):
+    '''
+    json文本文件读取并转为字典
+    :param pathFileName: 字符串，文件名和目录地址组成,用于读取文件
+    :return: json file->dictTemp
+    '''
+    import json
+    with open(pathFileName, 'r') as f:
+        dictTemp = json.load(fp=f)
+    return dictTemp
 
 if __name__ == '__main__':
     from alienVan.settings import BASE_DIR
