@@ -102,9 +102,33 @@ if __name__ == '__main__':
     client = init_N(code)
     print(client)
     print('保存一下session')
-    from odTools.otherHandler import save_session,load_session
+    from odTools.session import save_session,load_session
     save_session(client, '888.json')
     print('不出意外的话，保存完毕')
+    '''
+    报错
+        Traceback (most recent call last):
+      File "/home/rq/softwares/pycharm-2018.2.4/helpers/pydev/pydevd.py", line 1664, in <module>
+        main()
+      File "/home/rq/softwares/pycharm-2018.2.4/helpers/pydev/pydevd.py", line 1658, in main
+        globals = debugger.run(setup['file'], None, None, is_module)
+      File "/home/rq/softwares/pycharm-2018.2.4/helpers/pydev/pydevd.py", line 1068, in run
+        pydev_imports.execfile(file, globals, locals)  # execute the script
+      File "/home/rq/softwares/pycharm-2018.2.4/helpers/pydev/_pydev_imps/_pydev_execfile.py", line 18, in execfile
+        exec(compile(contents+"\n", file, 'exec'), glob, loc)
+      File "/home/rq/workspace/python/AlienVan/odTools/authentication.py", line 112, in <module>
+        client = load_session(client, i)
+      File "/home/rq/workspace/python/AlienVan/odTools/session.py", line 101, in load_session
+        status_dict = json.loads(session_file.read())
+      File "/usr/lib/python3.6/json/__init__.py", line 354, in loads
+        return _default_decoder.decode(s)
+      File "/usr/lib/python3.6/json/decoder.py", line 339, in decode
+        obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+      File "/usr/lib/python3.6/json/decoder.py", line 357, in raw_decode
+        raise JSONDecodeError("Expecting value", s, err.value) from None
+    json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+    '''
+    #todo 待解决json读取报错，且删除session保存pockle的操作
     from odTools.otherHandler import fileList
     from alienVan.settings import BASE_DIR
     fl = fileList(BASE_DIR,'.json')
