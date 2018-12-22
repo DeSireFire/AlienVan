@@ -96,6 +96,18 @@ def getClient(funcName):
         return init_B()
 
 if __name__ == '__main__':
+    #todo 测试登陆授权并且保存session,并读取session
     print(init_N())
     code = input('code:')
-    print(init_N(code))
+    client = init_N(code)
+    print(client)
+    print('保存一下session')
+    from odTools.otherHandler import save_session,load_session
+    save_session(client, '888.json')
+    print('不出意外的话，保存完毕')
+    from odTools.otherHandler import fileList
+    from alienVan.settings import BASE_DIR
+    fl = fileList(BASE_DIR,'.json')
+    for i in fl:
+        client = load_session(client, i)
+        print(client)

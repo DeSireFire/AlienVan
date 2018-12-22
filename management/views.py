@@ -1,13 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from odTools import authentication
+
+
 # Create your views here.
 def home(request):
     # context = initialize_context(request)
     context = {}
 
     return render(request, 'home.html', context)
-
 
 def initBinding(request):
     context = {}
