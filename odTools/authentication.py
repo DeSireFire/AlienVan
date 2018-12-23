@@ -42,6 +42,7 @@ def init_N(code=None):
         auth_url = client.auth_provider.get_auth_url(redirect_uri)
         return auth_url
 
+
 def init_B(code=None):
     '''
     备用
@@ -97,20 +98,20 @@ def getClient(funcName):
         return init_B()
 
 if __name__ == '__main__':
-    # print(init_N())
+    print(init_N())
     # code = input('code:')
     # client = init_N(code)
     # print(client)
     # print('保存一下session')
-    from odTools.session import save_session,load_session,refresh_token
-    # save_session(client, '888.json')
-    # print('不出意外的话，保存完毕')
-    from odTools.otherHandler import fileList
-    from alienVan.settings import BASE_DIR
-    import json
-    fl = fileList(BASE_DIR,'.json')
-    for i in fl:
-        client = load_session(i)
-        print(client)
-        print(type(client))
-        print(refresh_token(client))
+    # from odTools.session import save_session,load_session,refresh_token
+    # # save_session(client, '888.json')
+    # # print('不出意外的话，保存完毕')
+    # from odTools.otherHandler import fileList
+    # from alienVan.settings import BASE_DIR
+    # import json
+    # fl = fileList(BASE_DIR,'.json')
+    # for i in fl:
+    #     client = load_session(i)
+    #     print(client)
+    #     print(type(client))
+    #     print(refresh_token(client))

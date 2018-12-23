@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from odTools import authentication
-
+import json
 
 # Create your views here.
 def home(request):
@@ -22,6 +22,7 @@ def initBinding(request):
         'title': '管理页',
     }
     init_type = request.GET.get('odType')
+    #todo There is no current event loop in thread 'Thread-1'. 报错
     auth_url = authentication.getClient(init_type)
 
     print(auth_url)
@@ -38,12 +39,11 @@ def callBackBinding(request):
     else:
         return HttpResponse('It is not a POST request!!!')
 
-import asyncio
 
-@asyncio.coroutine
-def run_gets(client):
-    coroutines = [client.drive('me').request().get_async() for i in range(3)]
-    for future in asyncio.as_completed(coroutines):
-        drive = yield from future
-        print(drive.id)
-
+def ce_test(request):
+    x = request.GET.get('x', '1')
+    y = request.GET.get('y', '1')
+    from .tasks import test
+    test.delay(int(x), int(y))
+    res = {'code': 200, 'message': 'ok', 'data': [{'x': x, 'y': y}]}
+    return HttpResponse(json.dumps(res))
