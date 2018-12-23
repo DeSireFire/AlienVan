@@ -130,22 +130,23 @@ STATIC_URL = '/static/'
 #############################
 import djcelery
 djcelery.setup_loader()
-BROKER_URL = 'redis://127.0.0.1:6379/1'
-CELERY_IMPORTS = ('art.tasks')
+BROKER_URL = 'redis://:DeSireFire233666888@localhost:6379/0'
+# BROKER_URL = 'redis://127.0.0.1:6379/1'
+CELERY_IMPORTS = ('management.tasks')
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 from celery.schedules import crontab
 from celery.schedules import timedelta
 
-CELERYBEAT_SCHEDULE = {    #定时器策略
-    #定时任务一：　每隔30s运行一次
-    u'测试定时器1': {
-        "task": "art.tasks.tsend_email",
-        #"schedule": crontab(minute='*/2'),  # or 'schedule':   timedelta(seconds=3),
-        "schedule":timedelta(seconds=30),
-        "args": (),
-    },
-}
+# CELERYBEAT_SCHEDULE = {    #定时器策略
+#     #定时任务一：　每隔30s运行一次
+#     u'测试定时器1': {
+#         "task": "art.tasks.tsend_email",
+#         #"schedule": crontab(minute='*/2'),  # or 'schedule':   timedelta(seconds=3),
+#         "schedule":timedelta(seconds=30),
+#         "args": (),
+#     },
+# }
 #############################
 # celery 配置信息 end
 #############################

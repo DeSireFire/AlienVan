@@ -44,6 +44,6 @@ def ce_test(request):
     x = request.GET.get('x', '1')
     y = request.GET.get('y', '1')
     from .tasks import test
-    test.delay(int(x), int(y))
+    test.delay(x,y)
     res = {'code': 200, 'message': 'ok', 'data': [{'x': x, 'y': y}]}
     return HttpResponse(json.dumps(res))
