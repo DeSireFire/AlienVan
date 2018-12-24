@@ -114,6 +114,13 @@ body {
 }
 </style>
 <body>
-<a class="push_button red" href="nd/?odType=N">普通版OneDrive</a> <a class="push_button blue" href="nd/?odType=B">商业版版OneDrive</a>
+<a class="push_button red" href="nd/?odType=N">普通版OneDrive</a>
+<a class="push_button blue" href="nd/?odType=B">商业版版OneDrive</a>
+<a class="push_button blue" href="{{ authURL }}">授权登陆</a>
+<form action="/manage/codecallback/" method="POST">
+{% csrf_token %}
+    <input type="text" name="code">
+    <input type="submit" value="Submit">
+</form>
 </body>
 </html>

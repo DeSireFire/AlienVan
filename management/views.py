@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.template import RequestContext
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 # Create your views here.
@@ -18,17 +20,20 @@ def initBinding(request):
     :return:
     '''
     context = {
-        'title': '管理页',
+        'title': '授权地址页',
+        'authURL':'',
     }
     init_type = request.GET.get('odType')
-    #todo There is no current event loop in thread 'Thread-1'. 报错
-    auth_url = authentication.getClient(init_type)
+    from .tasks import authURL
+    auth_url = authURL.delay(init_type).get()
+    context['authURL'] = auth_url
+    return render(request, 'management/index.html', context)
 
-    # print(auth_url)
-    # context['auth_url'] = auth_url
-    return render(request, 'index/index.html', context)
-
+# @csrf_exempt
 def callBackBinding(request):
+    print(request.body)
+    print(request.method)
+    print(request.POST.get('code'))
     import json
     if request.method == 'POST':
         json_data = json.loads(request.body)
