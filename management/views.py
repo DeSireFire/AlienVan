@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-
 import json
 
 # Create your views here.
@@ -41,11 +40,15 @@ def callBackBinding(request):
 
 
 def ce_test(request):
-    #todo 待查清celery 如何返回值
     x = request.GET.get('x', '1')
     y = request.GET.get('y', '1')
     from .tasks import test
-    a = test.delay(x,y)
-    print(a)
+    a = test.delay(x,y).get()
+    print('這裡是:'+a)
     res = {'code': 200, 'message': 'ok', 'data': [{'x': x, 'y': y}]}
     return HttpResponse(json.dumps(res))
+
+if __name__ == '__main__':
+    from management.tasks import test
+    a = test.delay(1,2).get()
+    print(a)

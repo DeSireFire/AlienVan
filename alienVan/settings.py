@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '5n=1kd%sqn5-&y9v3s#rebx%vhe1ahv=vgwb*q&^-2vqmy48of'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'index',
     'management',
-    'djcelery',
-
+    'celery',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -128,15 +128,15 @@ STATIC_URL = '/static/'
 #############################
 # celery 配置信息 start
 #############################
-import djcelery
-djcelery.setup_loader()
-BROKER_URL = 'redis://:DeSireFire233666888@localhost:6379/0'
-# BROKER_URL = 'redis://127.0.0.1:6379/1'
-CELERY_IMPORTS = ('management.tasks')
+CELERY_BROKER_URL = 'redis://:DeSireFire233666888@localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+# result_backend = 'django-db'
+CELERY_RESULT_BACKEND = 'django-db' # 如果使用django-celery-results 則 CELERY_RESULT_BACKEND
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
-from celery.schedules import crontab
-from celery.schedules import timedelta
+# from celery.schedules import crontab
+# from celery.schedules import timedelta
 
 # CELERYBEAT_SCHEDULE = {    #定时器策略
 #     #定时任务一：　每隔30s运行一次
