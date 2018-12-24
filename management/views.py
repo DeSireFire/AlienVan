@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from odTools import authentication
+
 import json
 
 # Create your views here.
@@ -23,9 +23,9 @@ def initBinding(request):
     }
     init_type = request.GET.get('odType')
     #todo There is no current event loop in thread 'Thread-1'. 报错
-    auth_url = authentication.getClient(init_type)
+    # auth_url = authentication.getClient(init_type)
 
-    print(auth_url)
+    # print(auth_url)
     # context['auth_url'] = auth_url
     return render(request, 'index/index.html', context)
 
@@ -41,9 +41,11 @@ def callBackBinding(request):
 
 
 def ce_test(request):
+    #todo 待查清celery 如何返回值
     x = request.GET.get('x', '1')
     y = request.GET.get('y', '1')
     from .tasks import test
-    test.delay(x,y)
+    a = test.delay(x,y)
+    print(a)
     res = {'code': 200, 'message': 'ok', 'data': [{'x': x, 'y': y}]}
     return HttpResponse(json.dumps(res))
