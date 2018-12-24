@@ -22,7 +22,7 @@ def initBinding(request):
     }
     init_type = request.GET.get('odType')
     #todo There is no current event loop in thread 'Thread-1'. 报错
-    # auth_url = authentication.getClient(init_type)
+    auth_url = authentication.getClient(init_type)
 
     # print(auth_url)
     # context['auth_url'] = auth_url
@@ -46,6 +46,15 @@ def ce_test(request):
     a = test.delay(x,y).get()
     print('這裡是:'+a)
     res = {'code': 200, 'message': 'ok', 'data': [{'x': x, 'y': y}]}
+    return HttpResponse(json.dumps(res))
+
+
+def od_ce_test(request):
+    x = request.GET.get('type', 'N')
+    from .tasks import odtest
+    a = odtest.delay(x).get()
+    print('這裡是:'+a)
+    res = {'code': 200, 'message': 'ok', 'data': [{'x': x}]}
     return HttpResponse(json.dumps(res))
 
 if __name__ == '__main__':
