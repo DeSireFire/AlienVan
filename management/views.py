@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
-from django.views.decorators.csrf import csrf_exempt
 import json
 
 # Create your views here.
@@ -29,19 +28,27 @@ def initBinding(request):
     context['authURL'] = auth_url
     return render(request, 'management/index.html', context)
 
+# csrf 例外
+from django.views.decorators.csrf import csrf_exempt
 # @csrf_exempt
 def callBackBinding(request):
-    print(request.body)
+    print(str(request.body, encoding = "utf-8").split('&'))
     print(request.method)
     print(request.POST.get('code'))
-    import json
-    if request.method == 'POST':
-        json_data = json.loads(request.body)
-        print(json_data)
-        return HttpResponse(json.dumps(json_data), content_type="application/json")
-
-    else:
-        return HttpResponse('It is not a POST request!!!')
+    # import json
+    # if request.method == 'POST':
+    #     json_data = json.loads(request.body)
+    #     print(json_data)
+    #     return HttpResponse(json.dumps(json_data))
+    #
+    # else:
+    #     return HttpResponse('It is not a POST request!!!')
+    from .tasks import returnClient
+    resTask = returnClient.delay('N',request.POST.get('code'))
+    print(resTask.get(propagate=False))
+    print(resTask.ready())
+    res = {'code': 200, 'message': 'ok', 'data': [{'x': 'nya'}]}
+    return HttpResponse(json.dumps(res))
 
 
 def ce_test(request):
