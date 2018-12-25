@@ -154,10 +154,8 @@ if __name__ == '__main__':
     items = navigate(client, item_id)
     for i in items._prop_list:
         print(i)
-    filesList = client.item(drive='me', id='root')
-    print(filesList)
-    print(type(filesList))
 
+    # 虽然挺好用的，但是担心这个SDK淘汰了，考虑是否要手搓一个sdk
 
     # 上传
     # returned_item_up = client.item(drive='me', id='root').children['README.md'].upload('/home/rq/workspace/python/AlienVan/README.md')
