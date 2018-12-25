@@ -5,18 +5,22 @@ import json
 
 # Create your views here.
 def home(request):
-    # context = initialize_context(request)
     context = {
         'title':'管理页',
+        'temp':'',
     }
-
+    # 读取 session 的 json 文件
+    from .tasks import loadSession
+    temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/233.json').get()
+    print(temp)
+    context['temp'] = temp
     return render(request, 'management/index.html', context)
 
 def initBinding(request):
     '''
 
     :param odType: onedrive 类型 普通版或者商业版
-    :return:
+    :return:2/89
     '''
     context = {
         'title': '授权地址页',
@@ -29,35 +33,33 @@ def initBinding(request):
     return render(request, 'management/index.html', context)
 
 # csrf 例外
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
 # @csrf_exempt
 def callBackBinding(request):
     print(str(request.body, encoding = "utf-8").split('&'))
     print(request.method)
-    print(request.POST.get('code'))
-    # import json
-    # if request.method == 'POST':
-    #     json_data = json.loads(request.body)
-    #     print(json_data)
-    #     return HttpResponse(json.dumps(json_data))
-    #
-    # else:
-    #     return HttpResponse('It is not a POST request!!!')
+
+    # 获取前端code
+    code = request.POST.get('code')
+    print(code)
+
+    # code 传入 celery 返回字典化的session信息
     from .tasks import returnClient
-    resTask = returnClient.delay('N',request.POST.get('code'))
-    print(resTask.get(propagate=False))
-    print(resTask.ready())
-    res = {'code': 200, 'message': 'ok', 'data': [{'x': 'nya'}]}
-    return HttpResponse(json.dumps(res))
+    temp = returnClient.delay(code).get()
+    print(temp)
+    return HttpResponse(json.dumps(temp))
+
 
 
 def ce_test(request):
     x = request.GET.get('x', '1')
     y = request.GET.get('y', '1')
+    print(x,y)
     from .tasks import test
     a = test.delay(x,y).get()
-    print('這裡是:'+a)
-    res = {'code': 200, 'message': 'ok', 'data': [{'x': x, 'y': y}]}
+    print(a)
+    res = {'code': 200, 'message': 'ok', 'data': [a]}
+    # res = {'code': 200, 'message': 'ok', 'data': [{'x': x, 'y': y}]}
     return HttpResponse(json.dumps(res))
 
 

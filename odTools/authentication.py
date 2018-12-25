@@ -30,14 +30,15 @@ def init_N(code=None):
         scopes = scopes)
 
     client = onedrivesdk.OneDriveClient(api_base_url, auth_provider, http_provider)
-
     # 有code码时返回client对象，无则发射授权登陆URL
     if code:
         client.auth_provider.authenticate(code, redirect_uri, client_secret_normal)
 
         # 保存session() 巍峨将pickle
         # auth_provider.save_session()
-        return client
+        from odTools.session import save_session
+        return save_session(client, '888.json')
+
     else:
         auth_url = client.auth_provider.get_auth_url(redirect_uri)
         return auth_url
@@ -86,7 +87,9 @@ def init_B(code=None):
         client = onedrivesdk.OneDriveClient(service_info.service_resource_id + '_api/v2.0/', auth, http)
 
 
-        return client
+        from odTools.session import save_session
+        return save_session(client, '888.json')
+
 
 # 其他工具
 # def authUrlToClient(funcName):
@@ -99,12 +102,12 @@ def getClient(funcName):
 
 if __name__ == '__main__':
     print(init_N())
-    # code = input('code:')
-    # client = init_N(code)
-    # print(client)
+    code = input('code:')
+    client = init_N(code)
+    print(client)
     # print('保存一下session')
     # from odTools.session import save_session,load_session,refresh_token
-    # # save_session(client, '888.json')
+    # save_session(client, '888.json')
     # # print('不出意外的话，保存完毕')
     # from odTools.otherHandler import fileList
     # from alienVan.settings import BASE_DIR

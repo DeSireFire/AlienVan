@@ -52,6 +52,7 @@ def dict_to_Session(status_dict):
         refresh_token=status_dict['client.auth_provider._session']['refresh_token'],
         client_secret=status_dict['client.auth_provider._session']['client_secret'])
 
+
 ## Saving and Loading a Session
 ## Session 保存和读取
 
@@ -94,16 +95,16 @@ def save_session(client,fileName):
     with open(os.path.join(BASE_DIR, 'driveJsons', fileName), "w+") as session_file:
         json.dump(status_dict, session_file)
 
-def load_session(pathFileName):
+    print(status_dict)
+    print(type(status_dict))
+    return status_dict
 
-    try:
-        with open(pathFileName, "r") as session_file:
-            status_dict = json.load(fp=session_file)
-    except IOError as e:
-        logging.fatal(e.strerror)
-        logging.fatal('无法读取到session文件!')
-        exit()
-
+def load_session(status_dict):
+    '''
+    将传入的字典对象转为OD的client
+    :param status_dict:
+    :return: dict->OneDriveClient
+    '''
     if status_dict['is_business']:
         # B
         http_provider = onedrivesdk.HttpProvider()
@@ -131,4 +132,13 @@ def load_session(pathFileName):
 
 
 if __name__ == '__main__':
-    pass
+    # 读取保存在json的session信息
+    from odTools.otherHandler import json_file_to_dict
+    temp = json_file_to_dict('/home/rq/workspace/python/AlienVan/driveJsons/233.json')
+    client = load_session(temp)
+    print(client)
+    # 刷新session的 refresh_token
+    client = refresh_token(client)
+    save_session(client,'test2.json')
+    # 上传
+    returned_item = client.item(drive='me', id='root').children['README.md'].upload('/home/rq/workspace/python/AlienVan/README.md')

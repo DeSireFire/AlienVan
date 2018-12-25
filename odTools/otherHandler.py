@@ -43,9 +43,17 @@ def json_file_to_dict(pathFileName):
     :return: json file->dictTemp
     '''
     import json
-    with open(pathFileName, 'r') as f:
-        dictTemp = json.load(fp=f)
-    return dictTemp
+    try:
+        # with open(pathFileName, "r") as session_file:
+        #     status_dict = json.load(fp=session_file)
+        with open(pathFileName, 'r') as f:
+            dictTemp = json.load(fp=f)
+        return dictTemp
+    except IOError as e:
+        import logging
+        logging.fatal(e.strerror)
+        logging.fatal('无法读取到session文件!')
+        exit()
 
 if __name__ == '__main__':
     from alienVan.settings import BASE_DIR
