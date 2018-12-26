@@ -132,15 +132,5 @@ def load_session(status_dict):
 
 
 if __name__ == '__main__':
-    # 读取保存在json的session信息
-    from odTools.otherHandler import json_file_to_dict
-    temp = json_file_to_dict('/home/rq/workspace/python/AlienVan/driveJsons/233.json')
-    client = load_session(temp)
-    print(client)
-
-
-    # 刷新session的 refresh_token
-    client = refresh_token(client)
-    save_session(client,'test2.json')
-
+    pass
 
