@@ -48,7 +48,7 @@ def get_sharing_link(client, item_id):
 
 
 # 创建目录
-def creatFolder(client, item_id, folderName):
+def creat_folder(client, item_id, folderName):
     '''
     创建目录
     :param item_id: 字符串，新创建目录项所在的目录
