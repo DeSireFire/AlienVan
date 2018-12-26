@@ -32,7 +32,7 @@ def navigate(client, item_id = "root"):
 #         image.show()
 
 
-# 复制
+#todo 复制
 def paste(client, item_id, copy_item_ids):
     ref = onedrivesdk.ItemReference()
     ref.id = item_id
@@ -40,7 +40,7 @@ def paste(client, item_id, copy_item_ids):
         client.item(id=id).copy(parent_reference=ref).post()
 
 
-# 获取分享链接
+#todo 获取分享链接
 def get_sharing_link(client, item_id):
     action = int(input("Type? 1:View 2:Edit... "))
     permission = client.item(id=item_id).create_link("view" if action == 1 else "edit").post()
@@ -59,17 +59,16 @@ def creat_folder(client, item_id, folderName):
     i = onedrivesdk.Item()
     i.name = folderName   # 新建的文件夹名
     i.folder = f
+    #todo 待添加新建目录的信息返回
     return client.item(drive='me', id=item_id).children.add(i)
 
 
-# 重命名
-def rename(client, item_id, NewItemName):
+#todo 重命名
+def rename(client, item_id, new_name):
     renamed_item = onedrivesdk.Item()
-    renamed_item.name = NewItemName
+    renamed_item.name = new_name
     renamed_item.id = item_id
-
-    return client.item(drive='me', id=renamed_item.id).update(renamed_item)
-
+    client.item(id=item_id).update(renamed_item)
 
 # 删除
 def delete(client, item_id):
@@ -97,3 +96,19 @@ if __name__ == '__main__':
     save_session(client,'test2.json')
 
 
+    # 测试
+
+    # 查目录
+    temp1 = navigate(client)
+    print(temp1)
+
+    # 获取分享链接 X
+    # temp2 = get_sharing_link(client, 'root')
+    # print(temp2)
+
+    # 创建文件夹
+    # temp3 = creat_folder(client,'root','test')
+    # print(temp3)
+
+    # 重命名 X
+    # temp4 = rename(client,'root','test2')
