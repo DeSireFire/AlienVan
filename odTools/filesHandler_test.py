@@ -64,11 +64,13 @@ def creat_folder(client, item_id, folderName):
 
 
 #todo 重命名
-def rename(client, item_id, new_name):
+def rename(client, item_id):
+    new_name = input("Enter new name: ")
     renamed_item = onedrivesdk.Item()
     renamed_item.name = new_name
     renamed_item.id = item_id
-    client.item(id=item_id).update(renamed_item)
+    # client.item(id=item_id).update(renamed_item)
+    client.item(drive='me', path='root').upload_async(new_name).to_dict()
 
 # 删除
 def delete(client, item_id):
@@ -111,4 +113,4 @@ if __name__ == '__main__':
     # print(temp3)
 
     # 重命名 X
-    # temp4 = rename(client,'root','test2')
+    temp4 = rename(client,'root')
