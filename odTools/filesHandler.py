@@ -27,7 +27,7 @@ def typeURL(client,od_type,path=''):
 
 
 # 操作函数
-def filesList(client,od_type,path=''):
+def files_list(client,od_type,path=''):
     '''
     文件列表查询
     :param od_type: 布尔，onedrive 类型
@@ -86,6 +86,19 @@ def rename_files(client, fileid, new_name):
     payload = {"name": new_name}
     get_res = requests.patch(url, headers=headers, data=json.dumps(payload))
     get_res = json.loads(get_res.text)
+    print(get_res)
+    return get_res
+
+def delete_files(client, fileid):
+    '''
+    删除文件/目录
+    :param client:
+    :param fileid: 文件/目录的id
+    :return:
+    '''
+    url = client['app_url'] + '/v1.0/me/drive/items/{}'.format(fileid)
+    headers = {'Authorization': 'bearer {}'.format(client["access_token"]), 'Content-Type': 'application/json'}
+    get_res = requests.delete(url, headers=headers)
     print(get_res)
     return get_res
 
