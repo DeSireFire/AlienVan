@@ -73,5 +73,22 @@ def new_folder(client, fileName, parent_id='root'):
                 print(n)
     return get_res
 
+
+def rename_files(client, fileid, new_name):
+    '''
+    重命名文件/目录
+    :param client:字典
+    :param new_name:
+    :return:
+    '''
+    url = client['app_url'] + '/v1.0/me/drive/items/{}'.format(fileid)
+    headers = {'Authorization': 'bearer {}'.format(client["access_token"]), 'Content-Type': 'application/json'}
+    payload = {"name": new_name}
+    get_res = requests.patch(url, headers=headers, data=json.dumps(payload))
+    get_res = json.loads(get_res.text)
+    print(get_res)
+    return get_res
+
 if __name__ == '__main__':
+    #todo 待测试
     pass
