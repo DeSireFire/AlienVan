@@ -5,6 +5,9 @@ from requests_oauthlib import OAuth2Session
 import requests,json
 from alienVan.appConfig import token_url,oauthDict,authorize_url
 
+
+
+
 def get_sign_in_url():
     '''
     初始化OA链接
@@ -15,6 +18,7 @@ def get_sign_in_url():
     redirect_uri=oauthDict['redirect'])
     sign_in_url, state = new_auth.authorization_url(authorize_url, prompt='login')
     return sign_in_url, state
+
 
 def get_token_from_code(code):
     '''
@@ -36,6 +40,7 @@ def get_token_from_code(code):
     print(json.loads(rep.text))
     return json.loads(rep.text)
 
+
 def refresh_token(refresh_token):
     '''
     刷新客户端的token。
@@ -54,6 +59,6 @@ def refresh_token(refresh_token):
     }
     req = requests.post(token_url,data=data)
     print(json.loads(req.text))
-    print(type(json.loads(req.text)))
     return json.loads(req.text)
+
 

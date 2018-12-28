@@ -36,7 +36,34 @@ def filesList(client,od_type,path=''):
     '''
 
     headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {}'.format(client["access_token"])}
-    get_res = requests.get(typeURL(client,1,''), headers=headers, timeout=30)
+    get_res = requests.get(typeURL(client,od_type,path), headers=headers, timeout=30)
+    get_res = json.loads(get_res.text)
+    print(get_res)
+    for i in get_res:
+        print('%s:%s'%(i,get_res[i]))
+        if i == 'value':
+            for n in get_res[i]:
+                print(n)
+    return get_res
+
+
+
+def new_folder(client, fileName, parent_id='root'):
+    '''
+    创建新目录
+    :param fileName: 字符串，新建目录名
+    :param parent_id: 字符串，父目录的id
+    :return:
+    '''
+    url = client['app_url'] + '/v1.0/me/drive/{}/children'.format(parent_id)
+
+    headers = {'Authorization': 'bearer {}'.format(client["access_token"]), 'Content-Type': 'application/json'}
+    payload = {
+        "name": fileName,
+        "folder": {},
+        "@microsoft.graph.conflictBehavior": "rename"
+    }
+    get_res = requests.post(url, headers=headers, data=json.dumps(payload))
     get_res = json.loads(get_res.text)
     print(get_res)
     for i in get_res:
