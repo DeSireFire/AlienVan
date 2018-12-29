@@ -1,4 +1,4 @@
-import onedrivesdk
+import requests
 import logging
 import json
 from time import time
@@ -17,18 +17,29 @@ def get_access_token(client):
     :param client:
     :return: OneDriveClient->str
     '''
-    return str(client.auth_provider.access_token)
+    pass
+    # return str(client.auth_provider.access_token)
 
 
-def refresh_token(client):
+def refresh_token(refresh_token):
     '''
     刷新客户端的token。
     一个令牌的默认过期时间为3600秒。
     :param client:
     :return: OneDriveClient->OneDriveClient
+    :param refresh_token: 字符串，原旧的令牌
+    :return:
     '''
-    client.auth_provider.refresh_token()
-    return client
+    data = {
+        'client_id':oauthDict['app_id'],
+        'redirect_uri':oauthDict['redirect'],
+        'client_secret':oauthDict['app_secret'],
+        'refresh_token':refresh_token,
+        'grant_type':'refresh_token',
+    }
+    req = requests.post(token_url,data=data)
+    print(json.loads(req.text))
+    return json.loads(req.text)
 
 
 def token_time_to_live(client):
@@ -40,64 +51,20 @@ def token_time_to_live(client):
     '''
     return int(client.auth_provider._session._expires_at - time())
 
-def dict_to_Session(status_dict):
-    return onedrivesdk.auth_provider.Session(
-        status_dict['client.auth_provider._session']['token_type'],
-        status_dict['client.auth_provider._session']['_expires_at'] - time(),
-        status_dict['client.auth_provider._session']['scope_string'],
-        status_dict['client.auth_provider._session']['access_token'],
-        status_dict['client.auth_provider._session']['client_id'],
-        status_dict['client.auth_provider._session']['auth_server_url'],
-        status_dict['client.auth_provider._session']['redirect_uri'],
-        refresh_token=status_dict['client.auth_provider._session']['refresh_token'],
-        client_secret=status_dict['client.auth_provider._session']['client_secret'])
-
 
 ## Saving and Loading a Session
 ## Session 保存和读取
 
 
 def save_session(client,fileName):
-    if client.base_url == 'https://api.onedrive.com/v1.0/':
-        # N
-        status_dict = {
-            'is_business': False,
-            'client_id': client.auth_provider._client_id,
-            'client.base_url': client.base_url,  # 'https://api.onedrive.com/v1.0/'
-            'client.auth_provider.auth_token_url': client.auth_provider.auth_token_url, # 'https://login.live.com/oauth20_token.srf'
-            'client.auth_provider.auth_server_url': client.auth_provider.auth_server_url,   # 'https://login.live.com/oauth20_authorize.srf'
-            'client.auth_provider.scopes': client.auth_provider.scopes,
-        }
-        status_dict['client.auth_provider._session'] = dict_merge(
-            client.auth_provider._session.__dict__,
-            {'_expires_at': int(client.auth_provider._session._expires_at),
-            'scope_string': ' '.join([str(i) for i in client.auth_provider._session.scope]),
-            })
-    else:
-        # B
-        status_dict = {
-            'is_business': True,
-            'client_id': client.auth_provider._client_id,
-            'client.base_url': client.base_url,  #'https://{.....}.sharepoint.com/_api/v2.0/'
-            'client.auth_provider.auth_token_url': client.auth_provider.auth_token_url,  #'https://login.microsoftonline.com/common/oauth2/token'
-            'client.auth_provider.auth_server_url': client.auth_provider.auth_server_url[0],  #'https://login.microsoftonline.com/common/oauth2/authorize'
-            'client.auth_provider.scopes': client.auth_provider.scopes,  # empty for business
-        }
-
-        status_dict['client.auth_provider._session'] = dict_merge(
-            client.auth_provider._session.__dict__,
-            {'_expires_at': int(client.auth_provider._session._expires_at),
-            'scope_string': ' '.join([str(i) for i in client.auth_provider._session.scope]),
-            })
-
-
+    pass
     # 转成json对象并保存
-    with open(os.path.join(BASE_DIR, 'driveJsons', fileName), "w+") as session_file:
-        json.dump(status_dict, session_file)
-
-    print(status_dict)
-    print(type(status_dict))
-    return status_dict
+    # with open(os.path.join(BASE_DIR, 'driveJsons', fileName), "w+") as session_file:
+    #     json.dump(status_dict, session_file)
+    #
+    # print(status_dict)
+    # print(type(status_dict))
+    # return status_dict
 
 def load_session(status_dict):
     '''
@@ -105,8 +72,8 @@ def load_session(status_dict):
     :param status_dict:
     :return: dict->OneDriveClient
     '''
-
-
+    # json_file_to_dict
+    pass
 
 if __name__ == '__main__':
     pass
