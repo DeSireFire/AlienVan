@@ -63,13 +63,19 @@ def save_session(client,fileName):
     :param fileName:
     :return:
     '''
+    client = refresh_token(client['refresh_token'])
+    client.update({
+        'panName':fileName,
+        'expires_set':int(time()),
+        'is_sharePoint':False,
+        'panFrom':'oneDrive',
+    })
+
     # 转成json对象并保存
-    # with open(os.path.join(BASE_DIR, 'driveJsons', fileName), "w+") as session_file:
-    #     json.dump(status_dict, session_file)
-    #
-    # print(status_dict)
-    # print(type(status_dict))
-    # return status_dict
+    with open(os.path.join(BASE_DIR, 'driveJsons', '%s.json'%fileName), "w+") as session_file:
+        json.dump(client, session_file)
+
+    return client
 
 def load_session(status_dict):
     '''
@@ -81,5 +87,4 @@ def load_session(status_dict):
     pass
 
 if __name__ == '__main__':
-    pass
-
+    print(save_session(client,'nya'))

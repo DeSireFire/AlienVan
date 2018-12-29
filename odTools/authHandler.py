@@ -37,8 +37,9 @@ def get_token_from_code(code):
         'grant_type':'authorization_code',
     }
     rep = requests.post(token_url,headers = myheader,data=data)
-    print(json.loads(rep.text))
-    return json.loads(rep.text)
+    client = json.loads(rep.text)
+    print(client)
+    return client
 
 
 if __name__ == '__main__':
