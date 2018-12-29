@@ -57,7 +57,12 @@ def token_time_to_live(client):
 
 
 def save_session(client,fileName):
-    pass
+    '''
+    将授权信息保存到JSON文件中
+    :param client:
+    :param fileName:
+    :return:
+    '''
     # 转成json对象并保存
     # with open(os.path.join(BASE_DIR, 'driveJsons', fileName), "w+") as session_file:
     #     json.dump(status_dict, session_file)

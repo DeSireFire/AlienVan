@@ -41,27 +41,6 @@ def get_token_from_code(code):
     return json.loads(rep.text)
 
 
-def refresh_token(refresh_token):
-    '''
-    刷新客户端的token。
-    一个令牌的默认过期时间为3600秒。
-    :param client:
-    :return: OneDriveClient->OneDriveClient
-    :param refresh_token: 字符串，原旧的令牌
-    :return:
-    '''
-    data = {
-        'client_id':oauthDict['app_id'],
-        'redirect_uri':oauthDict['redirect'],
-        'client_secret':oauthDict['app_secret'],
-        'refresh_token':refresh_token,
-        'grant_type':'refresh_token',
-    }
-    req = requests.post(token_url,data=data)
-    print(json.loads(req.text))
-    return json.loads(req.text)
-
-
 if __name__ == '__main__':
     print(authorize_url)
     print(token_url)
