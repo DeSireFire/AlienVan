@@ -3,24 +3,36 @@ import os
 
 
 def dict_merge(a, b):
+    '''
+    字典合并
+    :param a:
+    :param b:
+    :return:
+    '''
     c = a.copy()
     c.update(b)
     return c
 
-def fileList(path, fileType, listName=[]):
+def fileList(path, listName=[]):
     '''
     读取指定目录下的文件名
     :param path: 需要检查的目录
-    :param listName: 文件名列表已有
+    :param listName: 已有的文件名列表，用于根新查找出来的列表合并
     :param fileType: 文件格式（后缀）
     :return: str->list
     '''
+    # for file in os.listdir(path):
+    #     file_path = os.path.join(path, file)
+    #     if os.path.isdir(file_path):
+    #         fileList(file_path,fileType,listName)
+    #     elif os.path.splitext(file_path)[1]==fileType:
+    #         listName.append(file_path)
     for file in os.listdir(path):
         file_path = os.path.join(path, file)
         if os.path.isdir(file_path):
-            fileList(file_path,fileType,listName)
-        elif os.path.splitext(file_path)[1]==fileType:
-            listName.append(file_path)
+            fileList(file_path, listName)
+        elif os.path.splitext(file_path)[1] == '.jpeg':
+            fileList.append(file_path)
     return listName
 
 def dict_to_json_write_file(dictTemp,pathFileName):

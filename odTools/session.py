@@ -77,14 +77,18 @@ def save_session(client,fileName):
 
     return client
 
-def load_session(status_dict):
+def load_session(fileName):
     '''
     将传入的字典对象转为OD的client
-    :param status_dict:
+    :param fileName:字符串，对应的json文件夹名
     :return: dict->OneDriveClient
     '''
-    # json_file_to_dict
-    pass
+    print(os.path.join(BASE_DIR, 'driveJsons'))
+    print(fileList(os.path.join(BASE_DIR, 'driveJsons'),''))
+    fileList(os.path.join(BASE_DIR, 'driveJsons'),'json')
+    # json_file_to_dict()
+
 
 if __name__ == '__main__':
-    print(save_session(client,'nya'))
+    # print(save_session(client,'nya'))
+    print(load_session('233'))
