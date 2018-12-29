@@ -105,30 +105,7 @@ def load_session(status_dict):
     :param status_dict:
     :return: dict->OneDriveClient
     '''
-    if status_dict['is_business']:
-        # B
-        http_provider = onedrivesdk.HttpProvider()
-        auth_provider = onedrivesdk.AuthProvider(
-            http_provider,
-            client_id_business,
-            auth_server_url=status_dict['client.auth_provider.auth_server_url'],
-            auth_token_url=status_dict['client.auth_provider.auth_token_url'])
 
-    else:
-        # N
-        http_provider = onedrivesdk.HttpProvider()
-        auth_provider = onedrivesdk.AuthProvider(
-            http_provider=http_provider,
-            client_id=status_dict['client_id'],
-            scopes=scopes)
-
-    ## Session 装填
-    auth_provider._session = dict_to_Session(status_dict)
-
-    auth_provider.refresh_token()
-
-    ## 推送 API endpoint
-    return onedrivesdk.OneDriveClient(status_dict['client.base_url'], auth_provider, http_provider)
 
 
 if __name__ == '__main__':

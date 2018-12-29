@@ -39,3 +39,4 @@ oauthDict = {
 }
 authorize_url = '{0}{1}'.format(oauthDict['authority'], oauthDict['authorize_endpoint'])    # https://login.microsoftonline.com/common/oauth2/v2.0/authorize
 token_url = '{0}{1}'.format(oauthDict['authority'], oauthDict['token_endpoint'])    # https://login.microsoftonline.com/common/oauth2/v2.0/token
+

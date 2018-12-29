@@ -62,3 +62,12 @@ def refresh_token(refresh_token):
     return json.loads(req.text)
 
 
+if __name__ == '__main__':
+    print(authorize_url)
+    print(token_url)
+    sign_in_url,state = get_sign_in_url()
+    print(sign_in_url)
+    print(state)
+    code = input('code:')
+    temp = get_token_from_code(code)
+    # flush_token(temp['refresh_token'])

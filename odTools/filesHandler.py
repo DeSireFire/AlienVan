@@ -47,7 +47,6 @@ def files_list(client,od_type,path=''):
     return get_res
 
 
-
 def new_folder(client, fileName, parent_id='root'):
     '''
     创建新目录
@@ -89,6 +88,7 @@ def rename_files(client, fileid, new_name):
     print(get_res)
     return get_res
 
+
 def delete_files(client, fileid):
     '''
     删除文件/目录
@@ -102,6 +102,14 @@ def delete_files(client, fileid):
     print(get_res)
     return get_res
 
+
 if __name__ == '__main__':
-    #todo 待测试
-    pass
+    temp = flush_token(info["refresh_token"])
+
+    flist = od_filesList(temp,1)
+
+    # folder_create(1,'','wori')
+
+    # rename_files(temp,flist['value'][1]['id'],'rename2')
+
+    # delete_files(temp,flist['value'][1]['id'])
