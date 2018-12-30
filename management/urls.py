@@ -1,9 +1,10 @@
 from django.urls import path
 from . import views
 
-
+app_name = 'management'
 urlpatterns = [
-    path('',views.home),
+    # path('',views.home),
+    path('',views.test),
     path('nd/',views.initBinding),
     path('cetest/',views.ce_test),
     path('odtest/',views.od_ce_test),

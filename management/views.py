@@ -4,6 +4,10 @@ from django.template import RequestContext
 import json
 
 # Create your views here.
+
+def test(request):
+    return render(request, 'theme_AdminLTE/base.html')
+
 def home(request):
     context = {
         'title':'管理页',
@@ -11,10 +15,13 @@ def home(request):
     }
     # 读取 session 的 json 文件
     from .tasks import loadSession
-    temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/233.json').get()
-    print(temp)
-    context['temp'] = temp
-    return render(request, 'management/index.html', context)
+    # temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/233.json').get()
+    # print(temp)
+
+    from odTools.authHandler import get_sign_in_url
+    sign_in_url, state = get_sign_in_url()
+    context['temp'] = sign_in_url
+    return render(request, 'theme_simple/management/index.html', context)
 
 def initBinding(request):
     '''
