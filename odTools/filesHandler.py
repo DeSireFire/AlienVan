@@ -104,9 +104,10 @@ def delete_files(client, fileid):
 
 
 if __name__ == '__main__':
-    temp = flush_token(info["refresh_token"])
+    pass
+    # temp = flush_token(info["refresh_token"])
 
-    flist = od_filesList(temp,1)
+    # flist = od_filesList(temp,1)
 
     # folder_create(1,'','wori')
 

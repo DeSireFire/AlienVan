@@ -51,8 +51,6 @@ def json_file_to_dict(pathFileName):
     '''
     import json
     try:
-        # with open(pathFileName, "r") as session_file:
-        #     status_dict = json.load(fp=session_file)
         with open(pathFileName, 'r') as f:
             dictTemp = json.loads(f.read().replace("'", '"'))
         return dictTemp

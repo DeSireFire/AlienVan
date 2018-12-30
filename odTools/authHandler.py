@@ -6,7 +6,6 @@ import requests,json
 from alienVan.appConfig import token_url,oauthDict,authorize_url
 import logging
 from time import time
-from alienVan.settings import BASE_DIR  # 定位项目目录地址
 from odTools.otherHandler import *
 
 
@@ -91,7 +90,7 @@ def token_time_to_live(client):
     以秒为单位获取令牌的到期时间。
     必须确保令牌可用。
     :param client:
-    :return: OneDriveClient->int
+    :return: OneDriveClient->bool
     '''
     if int(client['expires_set'] - time()) > 3000:
         return True
@@ -106,7 +105,6 @@ def save_session(client, fileName):
     :param fileName:
     :return:
     '''
-    client = refresh_token(client)
     client.update({
         'panName': fileName,
     })
@@ -124,21 +122,24 @@ def load_session(pathFileName):
     :param fileName:字符串，对应的json文件夹名
     :return: dict->OneDriveClient
     '''
-    # fileList(os.path.join(BASE_DIR, 'driveJsons'), '.json')
-    client = json_file_to_dict(pathFileName)
-    if int(client['expires_set'] - time()) > 3000:
 
-    return json_file_to_dict(pathFileName)
+    # print(fileList(os.path.join(BASE_DIR, 'driveJsons'), '.json'))
+    client = json_file_to_dict(pathFileName)
+    if token_time_to_live(client):
+        return refresh_token(client)
+    else:
+        return client
 
 if __name__ == '__main__':
-    print(authorize_url)
-    print(token_url)
-    sign_in_url,state = get_sign_in_url()
-    print(sign_in_url)
-    print(state)
-    code = input('code:')
-    temp = get_token_from_code(code)
+    pass
+    # print(authorize_url)
+    # print(token_url)
+    # sign_in_url,state = get_sign_in_url()
+    # print(sign_in_url)
+    # print(state)
+    # code = input('code:')
+    # temp = get_token_from_code(code)
     # flush_token(temp['refresh_token'])
 
     # print(save_session(client,'nya'))
-    # print(load_session('temp'))
+    # print(load_session('/home/rq/workspace/python/AlienVan/driveJsons/nya.json'))
