@@ -13,7 +13,7 @@ def dict_merge(a, b):
     c.update(b)
     return c
 
-def fileList(path, listName=[]):
+def fileList(path,fileType,listName=[]):
     '''
     读取指定目录下的文件名
     :param path: 需要检查的目录
@@ -21,19 +21,14 @@ def fileList(path, listName=[]):
     :param fileType: 文件格式（后缀）
     :return: str->list
     '''
-    # for file in os.listdir(path):
-    #     file_path = os.path.join(path, file)
-    #     if os.path.isdir(file_path):
-    #         fileList(file_path,fileType,listName)
-    #     elif os.path.splitext(file_path)[1]==fileType:
-    #         listName.append(file_path)
     for file in os.listdir(path):
         file_path = os.path.join(path, file)
         if os.path.isdir(file_path):
-            fileList(file_path, listName)
-        elif os.path.splitext(file_path)[1] == '.jpeg':
-            fileList.append(file_path)
+            fileList(file_path,fileType,listName)
+        elif os.path.splitext(file_path)[1]==fileType:
+            listName.append(file_path)
     return listName
+
 
 def dict_to_json_write_file(dictTemp,pathFileName):
     '''
@@ -59,7 +54,7 @@ def json_file_to_dict(pathFileName):
         # with open(pathFileName, "r") as session_file:
         #     status_dict = json.load(fp=session_file)
         with open(pathFileName, 'r') as f:
-            dictTemp = json.load(fp=f)
+            dictTemp = json.loads(f.read().replace("'", '"'))
         return dictTemp
     except IOError as e:
         import logging

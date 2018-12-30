@@ -4,8 +4,13 @@ onedrive 授权登陆处理器
 from requests_oauthlib import OAuth2Session
 import requests,json
 from alienVan.appConfig import token_url,oauthDict,authorize_url
+import logging
+from time import time
+from alienVan.settings import BASE_DIR  # 定位项目目录地址
+from odTools.otherHandler import *
 
 
+# auth 授权登陆
 
 
 def get_sign_in_url():
@@ -38,9 +43,92 @@ def get_token_from_code(code):
     }
     rep = requests.post(token_url,headers = myheader,data=data)
     client = json.loads(rep.text)
+    client.update({
+        'expires_set': time(),
+        'is_sharePoint': False,
+        'panFrom': 'oneDrive',
+    })
     print(client)
     return client
 
+
+
+
+
+
+# Session 维护
+
+
+def refresh_token(client):
+    '''
+    刷新客户端的token。
+    一个令牌的默认过期时间为3600秒。
+    获取将与所有请求一起使用的访问令牌，需要授权。
+    这只是帮助自定义的辅助函数，下载和上传。
+    :return: OneDriveClient->OneDriveClient
+    :param client: 字典，链接信息
+    :return:
+    '''
+    data = {
+        'client_id': oauthDict['app_id'],
+        'redirect_uri': oauthDict['redirect'],
+        'client_secret': oauthDict['app_secret'],
+        'refresh_token': client['refresh_token'],
+        'grant_type': 'refresh_token',
+    }
+    req = requests.post(token_url, data=data)
+    client.update(json.loads(req.text))
+    client.update({
+        'expires_set': time(),
+        'is_sharePoint': False,
+        'panFrom': 'oneDrive',
+    })
+    return client
+
+
+def token_time_to_live(client):
+    '''
+    以秒为单位获取令牌的到期时间。
+    必须确保令牌可用。
+    :param client:
+    :return: OneDriveClient->int
+    '''
+    if int(client['expires_set'] - time()) > 3000:
+        return True
+    else:
+        return False
+
+
+def save_session(client, fileName):
+    '''
+    将授权信息保存到JSON文件中
+    :param client:
+    :param fileName:
+    :return:
+    '''
+    client = refresh_token(client)
+    client.update({
+        'panName': fileName,
+    })
+
+    # 转成json对象并保存
+    with open(os.path.join(BASE_DIR, 'driveJsons', '%s.json' % fileName), "w+") as session_file:
+        json.dump(client, session_file)
+
+    return client
+
+
+def load_session(pathFileName):
+    '''
+    将传入的字典对象转为OD的client
+    :param fileName:字符串，对应的json文件夹名
+    :return: dict->OneDriveClient
+    '''
+    # fileList(os.path.join(BASE_DIR, 'driveJsons'), '.json')
+    client = json_file_to_dict(pathFileName)
+    if int(client['expires_set'] - time()) > 3000:
+
+    return json_file_to_dict(pathFileName)
 
 if __name__ == '__main__':
     print(authorize_url)
@@ -51,3 +139,6 @@ if __name__ == '__main__':
     code = input('code:')
     temp = get_token_from_code(code)
     # flush_token(temp['refresh_token'])
+
+    # print(save_session(client,'nya'))
+    # print(load_session('temp'))
