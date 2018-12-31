@@ -6,7 +6,7 @@ import json
 # Create your views here.
 
 def test(request):
-    return render(request, 'theme_AdminLTE/base.html')
+    return render(request, 'theme_AdminLTE/management/base_sec.html')
 
 def home(request):
     context = {
