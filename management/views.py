@@ -4,7 +4,14 @@ from django.template import RequestContext
 import json
 
 # Create your views here.
-Sidebar = ['网盘载入','数据库设置','Aria2工具','主题设置']
+# 左导航选项控制[[选项名，次级菜单列表，选项前小图标],[选项名，是否包含次级菜单，选项前小图标]]
+Sidebar = [
+    ['网盘组状态',['硬盘组 1','硬盘组 2'],'fa fa-edit'],
+    ['网盘载入',False,'fa fa-edit'],
+    ['数据库设置',False,'fa fa-edit'],
+    ['Aria2工具',False,'fa fa-edit'],
+    ['主题设置',False,'fa fa-edit'],
+]
 
 def test(request):
     return render(request, 'theme_AdminLTE/management/base_sec.html')
@@ -13,10 +20,9 @@ def loadDrive(request):
     context = {
         'title':'管理-网盘载入',
         'sidebar':sidebar_list('网盘载入'),# 左导航条
-        'pageTitle':'网盘载入',
-
+        'pageHeader':'网盘载入',
+        'pageHeaderSmall':'没有载入网盘，就什么也做不了..emmmmm',
     }
-    print(sidebar_list('网盘载入'))
     return render(request, 'theme_AdminLTE/management/loadDrive.html',context)
 
 def home(request):
@@ -69,12 +75,60 @@ def callBackBinding(request):
 
 
 def sidebar_list(active):
+    #todo fixbug
     temp = []
     for i in Sidebar:
         if i == active:
-            temp.append('<li class="active"><a href="#"><i class="fa fa-link"></i> <span>{}</span></a></li>'.format(i))
+            if i[1]:
+                tempStr = '''
+                    <li class="treeview active">
+                    <a href="#">{i} <span>{name}</span>
+                    <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                    </a>
+                    <ul class="treeview-menu">
+                    {li}
+                    </ul>
+                    </li>
+                '''
+                temp.append(tempStr.format(
+                    i='<i class="{}">'.format(i[2]),
+                    name=i[0],
+                    li=''.join(['<li><a href="#">{}</a></li>'.format(x) for x in i[1]])))
+                print(['<li><a href="#">{}</a></li>'.format(x) for x in i[1]])
+            else:
+                tempStr = '<li class="active"><a href="#">{i} <span>{name}</span></a></li>'
+                temp.append(tempStr.format(
+                    i='<i class="{}">'.format(i[2]),
+                    name=i[0],
+                ))
         else:
-            temp.append('<li class=""><a href="#"><i class="fa fa-link"></i> <span>{}</span></a></li>'.format(i))
+            if i[1]:
+                tempStr = '''
+                    <li class="treeview active">
+                    <a href="#">{i} <span>{name}</span>
+                    <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                    </a>
+                    <ul class="treeview-menu">
+                    {li}
+                    </ul>
+                    </li>
+                '''
+                temp.append(tempStr.format(
+                    i='<i class="{}">'.format(i[2]),
+                    name=i[0],
+                    li=''.join(['<li><a href="#">{}</a></li>'.format(x) for x in i[1]])))
+                print(['<li><a href="#">{}</a></li>'.format(x) for x in i[1]])
+            else:
+                tempStr = '<li class=""><a href="#">{i} <span>{name}</span></a></li>'
+                temp.append(tempStr.format(
+                    i='<i class="{}">'.format(i[2]),
+                    name=i[0],
+                ))
+    print(temp)
     return ''.join(temp)
 
 
