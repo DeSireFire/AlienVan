@@ -4,9 +4,20 @@ from django.template import RequestContext
 import json
 
 # Create your views here.
+Sidebar = ['网盘载入','数据库设置','Aria2工具','主题设置']
 
 def test(request):
     return render(request, 'theme_AdminLTE/management/base_sec.html')
+
+def loadDrive(request):
+    context = {
+        'title':'管理-网盘载入',
+        'sidebar':sidebar_list('网盘载入'),# 左导航条
+        'pageTitle':'网盘载入',
+
+    }
+    print(sidebar_list('网盘载入'))
+    return render(request, 'theme_AdminLTE/management/loadDrive.html',context)
 
 def home(request):
     context = {
@@ -55,6 +66,16 @@ def callBackBinding(request):
     temp = returnClient.delay(code).get()
     print(temp)
     return HttpResponse(json.dumps(temp))
+
+
+def sidebar_list(active):
+    temp = []
+    for i in Sidebar:
+        if i == active:
+            temp.append('<li class="active"><a href="#"><i class="fa fa-link"></i> <span>{}</span></a></li>'.format(i))
+        else:
+            temp.append('<li class=""><a href="#"><i class="fa fa-link"></i> <span>{}</span></a></li>'.format(i))
+    return ''.join(temp)
 
 
 

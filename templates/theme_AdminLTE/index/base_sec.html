@@ -45,17 +45,20 @@
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">管理主菜单</li>
         <!-- Optionally, you can add icons to the links -->
-        <li class="treeview active">
-          <a href="#"><i class="fa fa-link"></i> <span>网盘组状态</span>
+        <li class="active"><a href="#"><i class="fa fa-link"></i> <span>选项卡</span></a></li>
+        <li class=""><a href="#"><i class="fa fa-link"></i> <span>选项卡</span></a></li>
+        <li><a href="#"><i class="fa fa-link"></i> <span>选项卡</span></a></li>
+        <li><a href="#"><i class="fa fa-link"></i> <span>选项卡</span></a></li>
+        <li class="treeview">
+          <a href="#"><i class="fa fa-link"></i> <span>菜单选项卡</span>
             <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">硬盘组 1</a></li>
+            <li><a href="#">次级菜单项</a></li>
           </ul>
         </li>
-        {% block sidebarMenu %} {% endblock sidebarMenu %}
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -80,9 +83,8 @@
     <!-- 内容主体 补充 -->
     <section class="content container-fluid">
 
-      <!--------------------------
-        | Your Page Content Here |
-        -------------------------->
+        <!-- 分页内容 补充 -->
+        {% block Page_content %}{% endblock Page_content %}
 
     </section>
     <!-- /.content -->
