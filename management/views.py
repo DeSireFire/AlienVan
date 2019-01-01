@@ -19,7 +19,7 @@ def test(request):
 def loadDrive(request):
     context = {
         'title':'管理-网盘载入',
-        'sidebar':sidebar_list('网盘载入'),# 左导航条
+        'sidebar':sidebar_list('网盘组状态'),# 左导航条
         'pageHeader':'网盘载入',
         'pageHeaderSmall':'没有载入网盘，就什么也做不了..emmmmm',
     }
@@ -105,19 +105,13 @@ def sidebar_list(active):
     for i in Sidebar:
         if i[0] == active:
             if i[1]:
-                print(''.join([htmlDict['menuLi'].format(x) for x in i[1]]))
-                print(htmlDict['treeview'].format(active='active',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(x) for x in i[1]])))
                 tempStr = htmlDict['treeview'].format(active='active',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(x) for x in i[1]]))
             else:
-                print(htmlDict['li'].format(active='active',i=i[2],name=i[0]))
                 tempStr = htmlDict['li'].format(active='active',i=i[2],name=i[0])
         else:
             if i[1]:
-                print(''.join([htmlDict['menuLi'].format(x) for x in i[1]]))
-                print(htmlDict['treeview'].format(active='',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(x) for x in i[1]])))
                 tempStr = htmlDict['treeview'].format(active='',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(x) for x in i[1]]))
             else:
-                print(htmlDict['li'].format(active='', i=i[2], name=i[0]))
                 tempStr = htmlDict['li'].format(active='', i=i[2], name=i[0])
         temp.append(tempStr)
     return ''.join(temp)
@@ -126,5 +120,4 @@ if __name__ == '__main__':
     # from management.tasks import test
     # a = test.delay(1,2).get()
     # print(a)
-    a = testsb('网盘载入')
-    print(a)
+    pass
