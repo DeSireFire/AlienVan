@@ -74,65 +74,6 @@ def callBackBinding(request):
     return HttpResponse(json.dumps(temp))
 
 
-def sidebar_list(active):
-    #todo fixbug
-    temp = []
-    for i in Sidebar:
-        if i == active:
-            if i[1]:
-                tempStr = '''
-                    <li class="treeview active">
-                    <a href="#">{i} <span>{name}</span>
-                    <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                    </a>
-                    <ul class="treeview-menu">
-                    {li}
-                    </ul>
-                    </li>
-                '''
-                temp.append(tempStr.format(
-                    i='<i class="{}">'.format(i[2]),
-                    name=i[0],
-                    li=''.join(['<li><a href="#">{}</a></li>'.format(x) for x in i[1]])))
-                print(['<li><a href="#">{}</a></li>'.format(x) for x in i[1]])
-            else:
-                tempStr = '<li class="active"><a href="#">{i} <span>{name}</span></a></li>'
-                temp.append(tempStr.format(
-                    i='<i class="{}">'.format(i[2]),
-                    name=i[0],
-                ))
-        else:
-            if i[1]:
-                tempStr = '''
-                    <li class="treeview active">
-                    <a href="#">{i} <span>{name}</span>
-                    <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                    </a>
-                    <ul class="treeview-menu">
-                    {li}
-                    </ul>
-                    </li>
-                '''
-                temp.append(tempStr.format(
-                    i='<i class="{}">'.format(i[2]),
-                    name=i[0],
-                    li=''.join(['<li><a href="#">{}</a></li>'.format(x) for x in i[1]])))
-                print(['<li><a href="#">{}</a></li>'.format(x) for x in i[1]])
-            else:
-                tempStr = '<li class=""><a href="#">{i} <span>{name}</span></a></li>'
-                temp.append(tempStr.format(
-                    i='<i class="{}">'.format(i[2]),
-                    name=i[0],
-                ))
-    print(temp)
-    return ''.join(temp)
-
-
-
 def ce_test(request):
     x = request.GET.get('x', '1')
     y = request.GET.get('y', '1')
@@ -153,7 +94,37 @@ def od_ce_test(request):
     res = {'code': 200, 'message': 'ok', 'data': [{'x': x}]}
     return HttpResponse(json.dumps(res))
 
+
+def sidebar_list(active):
+    temp = []
+    htmlDict = {
+        'li':'<li class="{active}"><a href="#"><i class="{i}"></i> <span>{name}</span></a></li>',
+        'menuLi':'<li><a href="#">{}</a></li>',
+        'treeview':'<li class="treeview active"><a href="#"><i class="{i}"></i> <span>{name}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a><ul class="treeview-menu">{li}</ul></li>',
+    }
+    for i in Sidebar:
+        if i[0] == active:
+            if i[1]:
+                print(''.join([htmlDict['menuLi'].format(x) for x in i[1]]))
+                print(htmlDict['treeview'].format(active='active',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(x) for x in i[1]])))
+                tempStr = htmlDict['treeview'].format(active='active',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(x) for x in i[1]]))
+            else:
+                print(htmlDict['li'].format(active='active',i=i[2],name=i[0]))
+                tempStr = htmlDict['li'].format(active='active',i=i[2],name=i[0])
+        else:
+            if i[1]:
+                print(''.join([htmlDict['menuLi'].format(x) for x in i[1]]))
+                print(htmlDict['treeview'].format(active='',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(x) for x in i[1]])))
+                tempStr = htmlDict['treeview'].format(active='',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(x) for x in i[1]]))
+            else:
+                print(htmlDict['li'].format(active='', i=i[2], name=i[0]))
+                tempStr = htmlDict['li'].format(active='', i=i[2], name=i[0])
+        temp.append(tempStr)
+    return ''.join(temp)
+
 if __name__ == '__main__':
-    from management.tasks import test
-    a = test.delay(1,2).get()
+    # from management.tasks import test
+    # a = test.delay(1,2).get()
+    # print(a)
+    a = testsb('网盘载入')
     print(a)
