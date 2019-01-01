@@ -61,10 +61,8 @@
         <small>{{pageHeaderSmall}}</small>
       </h1>
        <!-- 面包屑导航 -->
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-        <li class="active">Here</li>
-      </ol>
+
+    {% block breadcrumb %}{% endblock %}
     </section>
 
     <!-- 内容主体 补充 -->
