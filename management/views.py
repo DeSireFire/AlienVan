@@ -29,7 +29,6 @@ def addPan(request):
         'authUrl':sign_in_url,
         'info':'',
     }
-    #todo 面包屑安装
     if 'code' in request.GET and request.GET['code']:  # 获得用户输入值
         driveInfo = {
             'panName':request.GET.get('panName'),
@@ -52,15 +51,24 @@ def addPan(request):
 
 def panAction(request):
     context = {
-        'title':'管理页',
-        'temp':'',
+        'title':'管理-网盘状态',
+        'sidebar':sidebar_list('网盘组状态'),    # 左导航条
+        'pageHeader':'管理-网盘状态',   # 选项卡标题
+        'Level':'网盘状态',  # 面包屑次级
+        'Here':'',  # 面包屑次级
+        'pageHeaderSmall':'',
+        'info':'',
     }
     # 读取 session 的 json 文件
     from .tasks import loadSession
-    temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/anime.json').get()
-    print(temp)
+    temp = loadSession('/home/rq/workspace/python/AlienVan/driveJsons/anime.json')
+    context['Here'] = temp['panName']
 
-    # from odTools.authHandler import get_sign_in_url
+    # temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/anime.json').get()
+    from odTools.filesHandler import files_list
+    fl = files_list(temp,1,'')
+    print(fl)
+    context['info'] = fl['value']
     # sign_in_url, state = get_sign_in_url()
     # context['temp'] = sign_in_url
 

@@ -42,13 +42,13 @@ def getAuth(driveInfo):
     return temp
 
 @app.task
-def returnClient(code):
+def returnfileList(client):
     '''
     返回onedrive client实例
-    :param code: 字符串，onedive登陆授权码code
+    :param client:
     :return: 返回onedrive client实例
     '''
-    fileList(os.path.join(BASE_DIR, 'driveJsons'), '.json')
+    temp = fileList(os.path.join(BASE_DIR, 'driveJsons'), '.json')
     return temp
 
 @app.task

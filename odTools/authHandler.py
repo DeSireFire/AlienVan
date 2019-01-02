@@ -103,7 +103,7 @@ def save_session(client, fileName):
     :return:
     '''
     # 转成json对象并保存
-    if 'error' not in client.keys() :
+    if 'error' not in client.keys():
         with open(os.path.join(BASE_DIR, 'driveJsons', '%s.json' % fileName), "w+") as session_file:
             json.dump(client, session_file)
 
@@ -120,6 +120,8 @@ def load_session(pathFileName):
     # print(fileList(os.path.join(BASE_DIR, 'driveJsons'), '.json'))
     client = json_file_to_dict(pathFileName)
     if token_time_to_live(client):
+        client = refresh_token(client)
+        save_session(client,pathFileName.split('/')[-1])
         return refresh_token(client)
     else:
         return client

@@ -36,7 +36,7 @@ def files_list(client,od_type,path=''):
     '''
 
     headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {}'.format(client["access_token"])}
-    get_res = requests.get(typeURL(client,od_type,path), headers=headers, timeout=30)
+    get_res = requests.get(typeURL(client,od_type,path), headers=headers, timeout=30, verify=False)
     get_res = json.loads(get_res.text)
     print(get_res)
     for i in get_res:
