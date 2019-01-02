@@ -3,9 +3,9 @@ from . import views
 
 app_name = 'management'
 urlpatterns = [
-    # path('',views.home),
+    path('',views.panAction),
     # path('',views.test),
-    path('',views.loadDrive),
+    path('addpan/',views.addPan),
     path('nd/',views.initBinding),
     path('cetest/',views.ce_test),
     path('odtest/',views.od_ce_test),

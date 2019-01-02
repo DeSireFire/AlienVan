@@ -1,6 +1,10 @@
 {% extends 'theme_AdminLTE/management/base_sec.html' %}
 <!-- 网盘添加 -->
 
+{% block css %}
+<link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/css/bootstrapValidator.css" rel="stylesheet">
+{% endblock css %}
+
 <!-- 左导航列表 -->
 {% block sidebarMenu %}
     {{sidebar|safe}}
@@ -19,7 +23,7 @@
 <div class="callout callout-info lead">
     <h4>步骤 提示!</h4>
     <p>
-      1.点击授权链接 《 <a href="{{authUrl}}"> Microsoft Graph </a>》 登陆并授权给 AlienVan 使用您的onedrive;<br>
+      1.点击授权链接 《 <a href="{{authUrl}}" target="_blank"> Microsoft Graph </a>》 登陆并授权给 AlienVan 使用您的onedrive;<br>
       2.授权完毕，微软自动会跳转网页，将显示的 code 验证码复制粘贴到对应表单中；<br>
     </p>
 </div>
@@ -29,12 +33,21 @@
     </div>
     <!-- /.box-header -->
     <!-- form start -->
+    <div class="overlay hidden" id="addloading">
+        <i class="fa fa-refresh fa-spin"></i>
+    </div>
     <form class="form-horizontal">
       <div class="box-body">
         <div class="form-group">
+          <label for="panName" class="col-sm-2 control-label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">盘符名称</font></font></label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="panName" name="panName" placeholder="给新添加的网盘起个名字吧？">
+          </div>
+        </div>
+        <div class="form-group">
           <label for="code" class="col-sm-2 control-label"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">code 验证码</font></font></label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="code" name="code" placeholder="把code 验证码粘贴到这里">
+            <input type="text" class="form-control" id="code" name="code" placeholder="把code 验证码粘贴到这里" data-bv-notempty="true" data-bv-notempty-message="不能为空">
           </div>
         </div>
         <div class="form-group">
@@ -50,8 +63,27 @@
       <!-- /.box-body -->
       <div class="box-footer">
         <!--<button type="submit" class="btn btn-default"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">取消</font></font></button>-->
-        <button type="submit" class="btn btn-info pull-right"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">添加</font></font></button>
+        <button id="addb" type="submit" class="btn btn-info pull-right"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">添加</font></font></button>
       <!-- /.box-footer -->
+      </div>
     </form>
 </div>
+{% if info %}
+<div class="callout callout-info lead">
+    <h4>{{ info }}</h4>
+</div>
+{% endif %}
 {% endblock PageContent %}
+
+{% block Jscript %}
+<script src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js"></script>
+{% endblock Jscript %}
+
+{% block script %}
+<script>
+$("#addb").click(function (e) {
+    $("#addloading").removeClass("hidden");
+    e.stopPropagation();
+});
+</script>
+{% endblock script %}

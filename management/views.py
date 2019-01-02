@@ -16,33 +16,55 @@ Sidebar = [
 def test(request):
     return render(request, 'theme_AdminLTE/management/base_sec.html')
 
-def loadDrive(request):
+def addPan(request):
     from odTools.authHandler import get_sign_in_url
     sign_in_url, state = get_sign_in_url()
     context = {
         'title':'管理-网盘载入',
         'sidebar':sidebar_list('网盘组状态'),    # 左导航条
         'pageHeader':'网盘载入',   # 选项卡标题
+        'Level':'网盘载入',  # 面包屑次级
         'Here':'网盘载入',  # 面包屑次级
         'pageHeaderSmall':'没有载入网盘，就什么也做不了..emmmmm',
         'authUrl':sign_in_url,
+        'info':'',
     }
+    #todo 面包屑安装
+    if 'code' in request.GET and request.GET['code']:  # 获得用户输入值
+        driveInfo = {
+            'panName':request.GET.get('panName'),
+            'code':request.GET.get('code'),
+            'odtype':request.GET.get('odtype'),
+        }
+        for i in driveInfo:
+            if driveInfo[i]:
+                context['info'] = '信息不完整，要填完哦'
+
+                return render(request, 'theme_AdminLTE/management/loadDrive.html',context)
+
+        # from .tasks import getAuth
+        # client = getAuth.delay(driveInfo).get()
+        # print(client)
+        context['info'] = '添加成功～'
+        return render(request, 'theme_AdminLTE/management/dashBoard.html', context)
+
     return render(request, 'theme_AdminLTE/management/loadDrive.html',context)
 
-def home(request):
+def panAction(request):
     context = {
         'title':'管理页',
         'temp':'',
     }
     # 读取 session 的 json 文件
     from .tasks import loadSession
-    # temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/233.json').get()
-    # print(temp)
+    temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/anime.json').get()
+    print(temp)
 
-    from odTools.authHandler import get_sign_in_url
-    sign_in_url, state = get_sign_in_url()
-    context['temp'] = sign_in_url
-    return render(request, 'theme_simple/management/index.html', context)
+    # from odTools.authHandler import get_sign_in_url
+    # sign_in_url, state = get_sign_in_url()
+    # context['temp'] = sign_in_url
+
+    return render(request, 'theme_AdminLTE/management/dashBoard.html', context)
 
 def initBinding(request):
     '''

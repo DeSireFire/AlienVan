@@ -7,7 +7,7 @@ from alienVan.appConfig import token_url,oauthDict,authorize_url
 import logging
 from time import time
 from odTools.otherHandler import *
-
+from alienVan.settings import BASE_DIR
 
 # auth 授权登陆
 
@@ -44,10 +44,8 @@ def get_token_from_code(code):
     client = json.loads(rep.text)
     client.update({
         'expires_set': time(),
-        'is_sharePoint': False,
         'panFrom': 'oneDrive',
     })
-    print(client)
     return client
 
 
@@ -79,7 +77,6 @@ def refresh_token(client):
     client.update(json.loads(req.text))
     client.update({
         'expires_set': time(),
-        'is_sharePoint': False,
         'panFrom': 'oneDrive',
     })
     return client
@@ -105,15 +102,12 @@ def save_session(client, fileName):
     :param fileName:
     :return:
     '''
-    client.update({
-        'panName': fileName,
-    })
-
     # 转成json对象并保存
-    with open(os.path.join(BASE_DIR, 'driveJsons', '%s.json' % fileName), "w+") as session_file:
-        json.dump(client, session_file)
+    if 'error' not in client.keys() :
+        with open(os.path.join(BASE_DIR, 'driveJsons', '%s.json' % fileName), "w+") as session_file:
+            json.dump(client, session_file)
 
-    return client
+        return client
 
 
 def load_session(pathFileName):

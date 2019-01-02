@@ -1,0 +1,31 @@
+{% extends 'theme_AdminLTE/management/base_sec.html' %}
+<!-- 网盘添加 -->
+
+{% block css %}
+{% endblock css %}
+
+<!-- 左导航列表 -->
+{% block sidebarMenu %}
+    {{sidebar|safe}}
+{% endblock sidebarMenu %}
+
+<!--面包屑导航-->
+{% block breadcrumb %}
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> {{Level}}</a></li>
+        <li class="active">{{Here}}</li>
+      </ol>
+{% endblock %}
+
+<!-- 分页主内容 -->
+{% block PageContent %}
+23333
+{% endblock PageContent %}
+
+{% block Jscript %}
+{% endblock Jscript %}
+
+{% block script %}
+<script>
+</script>
+{% endblock script %}

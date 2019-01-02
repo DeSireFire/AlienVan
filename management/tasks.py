@@ -7,6 +7,7 @@ from alienVan.celery import app
 # from odTools import authentication
 
 from odTools.authentication import *
+from odTools.authHandler import *
 
 @app.task
 def test(x, y):
@@ -29,13 +30,16 @@ def odtest(init_type):
     return getClient(init_type)
 
 @app.task
-def authURL(init_type):
+def getAuth(driveInfo):
     '''
     异步获取注册链接
     :param init_type: 字符串，选择普通版或者商业版OD使用。
     :return: 字符串，授权登陆URL
     '''
-    return getClient(init_type)
+    temp = get_token_from_code(driveInfo['code'])
+    temp.update(driveInfo)
+    save_session(temp,driveInfo['panName'])
+    return temp
 
 @app.task
 def returnClient(code):
@@ -44,23 +48,9 @@ def returnClient(code):
     :param code: 字符串，onedive登陆授权码code
     :return: 返回onedrive client实例
     '''
-    print('code : %s'%code)
-    # return init_N(code)
-    temp = init_N(code)
-    # return 'nyanyan code : %s'%code
+    fileList(os.path.join(BASE_DIR, 'driveJsons'), '.json')
     return temp
 
 @app.task
 def loadSession(pathFileName):
-    from odTools.session import load_session
-    import json
-    import logging
-    # temp = load_session(pathFileName)
-    try:
-        with open(pathFileName, "r") as session_file:
-            status_dict = json.load(fp=session_file)
-    except IOError as e:
-        logging.fatal(e.strerror)
-        logging.fatal('无法读取到session文件!')
-        exit()
-    return status_dict
+    return load_session(pathFileName)
