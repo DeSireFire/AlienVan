@@ -17,12 +17,15 @@ def test(request):
     return render(request, 'theme_AdminLTE/management/base_sec.html')
 
 def loadDrive(request):
+    from odTools.authHandler import get_sign_in_url
+    sign_in_url, state = get_sign_in_url()
     context = {
         'title':'管理-网盘载入',
-        'sidebar':sidebar_list('网盘组状态'),# 左导航条
-        'pageHeader':'网盘载入',
-        'Here':'网盘载入',
+        'sidebar':sidebar_list('网盘组状态'),    # 左导航条
+        'pageHeader':'网盘载入',   # 选项卡标题
+        'Here':'网盘载入',  # 面包屑次级
         'pageHeaderSmall':'没有载入网盘，就什么也做不了..emmmmm',
+        'authUrl':sign_in_url,
     }
     return render(request, 'theme_AdminLTE/management/loadDrive.html',context)
 
