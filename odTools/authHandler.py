@@ -121,7 +121,7 @@ def load_session(pathFileName):
     client = json_file_to_dict(pathFileName)
     if token_time_to_live(client):
         client = refresh_token(client)
-        save_session(client,pathFileName.split('/')[-1])
+        save_session(client,pathFileName.split('/')[-1].split('.')[0])
         return refresh_token(client)
     else:
         return client
