@@ -57,18 +57,18 @@ def panAction(request):
         'Level':'网盘状态',  # 面包屑次级
         'Here':'',  # 面包屑次级
         'pageHeaderSmall':'',
-        'info':'',
+        'info':{'wo':'233','wo2':'233','wo3':'233'},
     }
     # 读取 session 的 json 文件
-    from .tasks import loadSession
-    temp = loadSession('/home/rq/workspace/python/AlienVan/driveJsons/anime.json')
-    context['Here'] = temp['panName']
+    # from .tasks import loadSession
+    # temp = loadSession('/home/rq/workspace/python/AlienVan/driveJsons/anime.json')
+    # context['Here'] = temp['panName']
 
     # temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/anime.json').get()
-    from odTools.filesHandler import files_list
-    fl = files_list(temp,1,'')
-    print(fl)
-    context['info'] = fl['value']
+    # from odTools.filesHandler import files_list
+    # fl = files_list(temp,1,'')
+    # print(fl)
+    # context['info'] = fl['value']
     # sign_in_url, state = get_sign_in_url()
     # context['temp'] = sign_in_url
 
@@ -149,6 +149,12 @@ def sidebar_list(active):
                 tempStr = htmlDict['li'].format(active='', i=i[2], name=i[0])
         temp.append(tempStr)
     return ''.join(temp)
+
+
+from django.template.defaulttags import register
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
 
 if __name__ == '__main__':
     # from management.tasks import test
