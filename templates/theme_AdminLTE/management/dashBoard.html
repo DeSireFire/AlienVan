@@ -35,27 +35,20 @@
               <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
         <thead>
         <tr role="row">
-            <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 217.8px;">文件/目录 名</th>
-            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 266.6px;">大小</th>
-            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 237px;">修改日期</th>
+            <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="根据 文件/目录 名 排序" style="width: 217.8px;">文件/目录 名</th>
+            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 大小 排序" style="width: 266.6px;">大小</th>
+            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 修改日期 排序" style="width: 237px;">修改日期</th>
             <!--<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 187.4px;">Engine version</th>-->
             <!--<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 134.8px;">CSS grade</th></tr>-->
         </thead>
         <tbody>
         {% for item in info %}
-        <tr role="row" class="odd">
-          <td class="sorting_1">{{ item|get_item:"name" }}</td>
+        <tr role="row" class="">
+          <td class="sorting_1"><a href="">{{ item|get_item:"name" }}</a></td>
           <td>{{ item|get_item:"size" }}</td>
           <td>{{ item|get_item:"lastModifiedDateTime" }}</td>
         </tr>
         {% endfor %}
-        <!--<tr role="row" class="even">-->
-          <!--<td class="sorting_1">Gecko</td>-->
-          <!--<td>Firefox 1.5</td>-->
-          <!--<td>Win 98+ / OSX.2+</td>-->
-          <!--<td>1.8</td>-->
-          <!--<td>A</td>-->
-        <!--</tr>-->
         </tbody>
         <tfoot>
         <tr>

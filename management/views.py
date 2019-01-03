@@ -50,6 +50,9 @@ def addPan(request):
     return render(request, 'theme_AdminLTE/management/loadDrive.html',context)
 
 def panAction(request):
+    #todo 把读取方式改成celery
+    #todo 添加更多模板标签，整理odata
+    #todo 添加前端列表超链接
     context = {
         'title':'管理-网盘状态',
         'sidebar':sidebar_list('网盘组状态'),    # 左导航条
