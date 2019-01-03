@@ -1,4 +1,5 @@
 {% extends 'theme_AdminLTE/management/base_sec.html' %}
+{% load tags %}
 <!-- 网盘添加 -->
 
 {% block css %}
@@ -40,9 +41,13 @@
                   <!--<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">一个</font></font></td>-->
                 <!--</tr>-->
                 <!--{% endfor %}-->
-                {% for key,value in info.items %}
-                    {{key}}
-                    {{value}}
+                {% for item in List %}
+                    {{ item|get_item:"" }}
+                {% endfor %}
+
+                <!--{% for key,value in info.items %}-->
+                    <!--{{key}}-->
+                    <!--{{value}}-->
                     <!--<tr role="row" class="odd">-->
                     <!--&lt;!&ndash;<td>{{ forloop.counter }}</td>&ndash;&gt;-->
                     <!--<td>{{ key }}</td>-->
@@ -55,7 +60,7 @@
                       <!--<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1.7</font></font></td>-->
                       <!--<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">一个</font></font></td>-->
                     <!--</tr>-->
-                {% endfor %}
+                <!--{% endfor %}-->
                 <!--<tr role="row" class="odd">-->
                   <!--<td class="sorting_1"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">壁虎</font></font></td>-->
                   <!--<td><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Firefox 1.0</font></font></td>-->
