@@ -89,7 +89,8 @@ def token_time_to_live(client):
     :param client:
     :return: OneDriveClient->bool
     '''
-    if int(client['expires_set'] - time()) > 3000:
+    print(int(client['expires_set'] - time()))
+    if int(client['expires_set'] - time()) > 3000 or int(client['expires_set'] - time()) < 0:
         return True
     else:
         return False
@@ -120,9 +121,10 @@ def load_session(pathFileName):
     # print(fileList(os.path.join(BASE_DIR, 'driveJsons'), '.json'))
     client = json_file_to_dict(pathFileName)
     if token_time_to_live(client):
+        print('需要刷新')
         client = refresh_token(client)
         save_session(client,pathFileName.split('/')[-1].split('.')[0])
-        return refresh_token(client)
+        return client
     else:
         return client
 
@@ -138,4 +140,4 @@ if __name__ == '__main__':
     # flush_token(temp['refresh_token'])
 
     # print(save_session(client,'nya'))
-    # print(load_session('/home/rq/workspace/python/AlienVan/driveJsons/nya.json'))
+    print(load_session('/home/rq/workspace/python/AlienVan/driveJsons/anime.json'))

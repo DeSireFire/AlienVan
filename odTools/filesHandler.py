@@ -21,7 +21,7 @@ def typeURL(client,od_type,path=''):
         BaseUrl = app_url + '/root:{}:/children?expand=thumbnails'.format(path)
     else:
         BaseUrl = app_url + '/root/children?expand=thumbnails'
-
+    print(BaseUrl)
     return BaseUrl
 
 

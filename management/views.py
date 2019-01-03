@@ -61,7 +61,7 @@ def panAction(request):
     }
     # 读取 session 的 json 文件
     from .tasks import loadSession
-    temp = loadSession('/home/rq/workspace/python/AlienVan/driveJsons/anime.json')
+    temp = loadSession('/home/rq/workspace/python/AlienVan/driveJsons/nya.json')
     context['Here'] = temp['panName']
 
     # temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/anime.json').get()
