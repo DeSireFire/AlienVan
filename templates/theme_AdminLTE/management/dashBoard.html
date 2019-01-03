@@ -40,13 +40,11 @@
         </thead>
         <tbody>
         {% for item in info %}
-            <tr role="row" class="odd">
-           <tr role="row" class="odd">
-              <td class="sorting_1">{{ item|get_item:"name" }}</td>
-              <td>{{ item|get_item:"size" }}</td>
-              <td>{{ item|get_item:"lastModifiedDateTime" }}</td>
-            </tr>
-            </tr>
+        <tr role="row" class="odd">
+          <td class="sorting_1">{{ item|get_item:"name" }}</td>
+          <td>{{ item|get_item:"size" }}</td>
+          <td>{{ item|get_item:"lastModifiedDateTime" }}</td>
+        </tr>
         {% endfor %}
         <!--<tr role="row" class="even">-->
           <!--<td class="sorting_1">Gecko</td>-->
