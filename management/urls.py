@@ -3,7 +3,7 @@ from . import views
 
 app_name = 'management'
 urlpatterns = [
-    re_path('(.*?)$',views.panAction),
+    path('',views.panAction),
     re_path(r'pans/(.*?).html$',views.pans),
     # path('',views.test),
     path('addpan/',views.addPan),

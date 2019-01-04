@@ -20,7 +20,7 @@ def test(request):
     return render(request, 'theme_AdminLTE/management/base_sec.html')
 
 
-def panAction(request, panName):
+def panAction(request):
     '''
     网盘状态视图
     :param panName:
@@ -28,20 +28,22 @@ def panAction(request, panName):
     '''
     context = {
         'title': '管理-网盘状态',
-        'sidebar': sidebar_list('网盘状态'),  # 左导航条
+        'sidebar': sidebar_list('网盘状态',request.path),  # 左导航条
         'pageHeader': '管理-网盘状态',  # 选项卡标题
         'Level': '网盘列表',  # 面包屑次级
         'Here': '',  # 面包屑次级
         'pageHeaderSmall': '未发现挂载网盘',
         'info': '',
     }
-
     # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
     if not Sidebar[0][1]:
         return HttpResponseRedirect("addpan/")
 
     # 检查panName 是否存在和存在于挂载网盘列表中
-    if not panName or panName not in Sidebar[0][1]:
+    if request.GET['name'] in Sidebar[0][1]:
+        context['Here'] = request.GET['name']
+        context['pageHeaderSmall'] = request.GET['name']
+    else:
         context['Here'] = Sidebar[0][1][0]
         context['pageHeaderSmall'] = Sidebar[0][1][0]
         # todo 添加更多   context
@@ -58,7 +60,7 @@ def addPan(request):
     sign_in_url, state = get_sign_in_url()
     context = {
         'title':'管理-网盘载入',
-        'sidebar':sidebar_list('网盘组状态'),    # 左导航条
+        'sidebar':sidebar_list('网盘组状态',request.path),    # 左导航条
         'pageHeader':'网盘载入',   # 选项卡标题
         'Level':'网盘载入',  # 面包屑次级
         'Here':'网盘载入',  # 面包屑次级
@@ -98,7 +100,7 @@ def pans(request,panName):
     #todo 添加前端列表超链接
     context = {
         'title':'管理-网盘状态',
-        'sidebar':sidebar_list('网盘列表'),    # 左导航条
+        'sidebar':sidebar_list('网盘列表',request.path),    # 左导航条
         'pageHeader':'管理-网盘状态',   # 选项卡标题
         'Level':'网盘状态',  # 面包屑次级
         'Here':'',  # 面包屑次级
@@ -110,9 +112,13 @@ def pans(request,panName):
     if not Sidebar[0][1]:
         return HttpResponseRedirect("addpan/")
 
-    # panName不存在时，默认使用列表第一个盘符
-    if not panName or panName not in Sidebar[0][1]:
+    # 检查panName 是否存在和存在于挂载网盘列表中
+    if request.GET['name'] in Sidebar[0][1]:
+        context['Here'] = request.GET['name']
+        context['pageHeaderSmall'] = request.GET['name']
+    else:
         context['Here'] = Sidebar[0][1][0]
+        context['pageHeaderSmall'] = Sidebar[0][1][0]
         # todo 添加更多   context
 
     # 读取 session 的 json 文件
@@ -182,11 +188,12 @@ def od_ce_test(request):
     return HttpResponse(json.dumps(res))
 
 
-def sidebar_list(active):
+def sidebar_list(active,appName=None):
     temp = []
+    getValue = '#'  # 左导航下拉菜单超链接
     htmlDict = {
         'li':'<li class="{active}"><a href="#"><i class="{i}"></i> <span>{name}</span></a></li>',
-        'menuLi':'<li><a href="#">{}</a></li>',
+        'menuLi':'<li><a href="{url}">{text}</a></li>',
         'treeview':'<li class="treeview active"><a href="#"><i class="{i}"></i> <span>{name}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a><ul class="treeview-menu">{li}</ul></li>',
     }
     for i in Sidebar:
@@ -197,7 +204,9 @@ def sidebar_list(active):
                 tempStr = htmlDict['li'].format(active='active',i=i[2],name=i[0])
         else:
             if i[1]:
-                tempStr = htmlDict['treeview'].format(active='',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(x) for x in i[1]]))
+                if appName:
+                    getValue = '?name='
+                tempStr = htmlDict['treeview'].format(active='',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(url=appName+getValue+x,text=x) for x in i[1]]))
             else:
                 tempStr = htmlDict['li'].format(active='', i=i[2], name=i[0])
         temp.append(tempStr)
