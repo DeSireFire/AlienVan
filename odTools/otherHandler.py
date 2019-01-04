@@ -64,6 +64,6 @@ def json_file_to_dict(pathFileName):
 
 if __name__ == '__main__':
     from alienVan.settings import BASE_DIR
-    print(os.path.join(BASE_DIR,'driveJsons'))
+    # print(os.path.join(BASE_DIR,'driveJsons'))
     a = fileList(os.path.join(BASE_DIR,'driveJsons'),'.json')
     print(a)

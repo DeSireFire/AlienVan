@@ -25,7 +25,7 @@
 {% block PageContent %}
 <div class="box">
     <div class="box-header">
-      <h3 class="box-title">Data Table With Full Features</h3>
+      <h3 class="box-title">存储仓库</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -35,30 +35,26 @@
               <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
         <thead>
         <tr role="row">
-            <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="根据 文件/目录 名 排序" style="width: 217.8px;">文件/目录 名</th>
-            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 大小 排序" style="width: 266.6px;">大小</th>
-            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 修改日期 排序" style="width: 237px;">修改日期</th>
-            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 187.4px;">创建日期</th>
-            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 134.8px;">文件类型</th></tr>
+            <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="根据 文件/目录 名 排序" style=";">文件/目录 名</th>
+            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 大小 排序" style="">大小</th>
+            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 修改日期 排序" style="">修改日期</th>
+
+        </tr>
         </thead>
         <tbody>
         {% for item in info %}
         <tr role="row" class="">
-          <td class="sorting_1"><a href="">{{ item|get_item:"name" }}</a></td>
-          <td>{{ item|get_item:"size" }}</td>
-          <td>{{ item|get_item:"lastModifiedDateTime" }}</td>
-          <td>{{ item|get_item:"createdDateTime" }}</td>
-          <td>{{ item|get_item:"size" }}</td>
+            <td class="sorting_1"><a href="">{{ item|get_item:"name" }}</a></td>
+            <td>{{ item.size|size_cutover }}</td>
+            <td>{{ item|get_item:"lastModifiedDateTime" }}</td>
         </tr>
         {% endfor %}
         </tbody>
         <tfoot>
         <tr>
             <th rowspan="1" colspan="1">文件/目录 名</th>
-            <th rowspan="1" colspan="1">文件类型</th>
             <th rowspan="1" colspan="1">大小</th>
             <th rowspan="1" colspan="1">修改日期</th>
-            <th rowspan="1" colspan="1">创建日期</th>
         </tfoot>
       </table>
       </div>
@@ -67,6 +63,15 @@
     </div>
     <!-- /.box-body -->
 </div>
+{{test|slice:":1"}}<br>
+{{ test.2 }}<br>
+{{ info.2.folder }}<br>
+
+{% for item in info %}
+<tr role="row" class="">
+    <td>{{ item.folder.childCount }}</td>
+</tr>
+{% endfor %}
 
 {% endblock PageContent %}
 

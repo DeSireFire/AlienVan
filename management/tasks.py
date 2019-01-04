@@ -54,3 +54,13 @@ def returnfileList(client):
 @app.task
 def loadSession(pathFileName):
     return load_session(pathFileName)
+
+@app.task
+def returnPanNames():
+    temp = []
+    for i in fileList(os.path.join(BASE_DIR, 'driveJsons'), '.json'):
+        temp.append(os.path.splitext(i)[0].split('/')[-1])
+    return temp
+
+if __name__ == '__main__':
+    print(returnPanNames())

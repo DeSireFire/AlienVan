@@ -5,7 +5,9 @@ import json
 
 # Create your views here.
 # 左导航选项控制[[选项名，次级菜单列表，选项前小图标],[选项名，是否包含次级菜单，选项前小图标]]
+from .tasks import returnPanNames
 Sidebar = [
+    ['网盘列表',returnPanNames(),'fa fa-edit'],
     ['网盘组状态',['硬盘组 1','硬盘组 2'],'fa fa-edit'],
     ['网盘载入',False,'fa fa-edit'],
     ['数据库设置',False,'fa fa-edit'],
@@ -51,7 +53,6 @@ def addPan(request):
 
 def panAction(request):
     #todo 把读取方式改成celery
-    #todo 使用jinja2
     #todo 添加前端列表超链接
     context = {
         'title':'管理-网盘状态',
@@ -61,6 +62,7 @@ def panAction(request):
         'Here':'',  # 面包屑次级
         'pageHeaderSmall':'',
         'info':'',
+        'test':[233,666,777]
     }
     # 读取 session 的 json 文件
     from .tasks import loadSession
@@ -70,10 +72,10 @@ def panAction(request):
     # temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/anime.json').get()
     from odTools.filesHandler import files_list
     fl = files_list(temp,1,'')
-    print(fl)
     context['info'] = fl['value']
 
     return render(request, 'theme_AdminLTE/management/dashBoard.html', context)
+
 
 def initBinding(request):
     '''
@@ -155,5 +157,5 @@ def sidebar_list(active):
 if __name__ == '__main__':
     # from management.tasks import test
     # a = test.delay(1,2).get()
-    # print(a)
+    # print(Sidebar)
     pass
