@@ -38,8 +38,8 @@
             <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="根据 文件/目录 名 排序" style="width: 217.8px;">文件/目录 名</th>
             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 大小 排序" style="width: 266.6px;">大小</th>
             <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 修改日期 排序" style="width: 237px;">修改日期</th>
-            <!--<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 187.4px;">Engine version</th>-->
-            <!--<th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 134.8px;">CSS grade</th></tr>-->
+            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 187.4px;">创建日期</th>
+            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 134.8px;">文件类型</th></tr>
         </thead>
         <tbody>
         {% for item in info %}
@@ -47,17 +47,18 @@
           <td class="sorting_1"><a href="">{{ item|get_item:"name" }}</a></td>
           <td>{{ item|get_item:"size" }}</td>
           <td>{{ item|get_item:"lastModifiedDateTime" }}</td>
+          <td>{{ item|get_item:"createdDateTime" }}</td>
+          <td>{{ item|get_item:"size" }}</td>
         </tr>
         {% endfor %}
         </tbody>
         <tfoot>
         <tr>
             <th rowspan="1" colspan="1">文件/目录 名</th>
+            <th rowspan="1" colspan="1">文件类型</th>
             <th rowspan="1" colspan="1">大小</th>
             <th rowspan="1" colspan="1">修改日期</th>
-            <!--<th rowspan="1" colspan="1">Engine version</th>-->
-            <!--<th rowspan="1" colspan="1">CSS grade</th>-->
-        </tr>
+            <th rowspan="1" colspan="1">创建日期</th>
         </tfoot>
       </table>
       </div>

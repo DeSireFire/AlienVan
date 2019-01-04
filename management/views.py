@@ -51,7 +51,7 @@ def addPan(request):
 
 def panAction(request):
     #todo 把读取方式改成celery
-    #todo 添加更多模板标签，整理odata
+    #todo 使用jinja2
     #todo 添加前端列表超链接
     context = {
         'title':'管理-网盘状态',

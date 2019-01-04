@@ -60,6 +60,8 @@ def json_file_to_dict(pathFileName):
         logging.fatal('无法读取到session文件!')
         exit()
 
+
+
 if __name__ == '__main__':
     from alienVan.settings import BASE_DIR
     print(os.path.join(BASE_DIR,'driveJsons'))

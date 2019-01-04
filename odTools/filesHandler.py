@@ -24,6 +24,22 @@ def typeURL(client,od_type,path=''):
     print(BaseUrl)
     return BaseUrl
 
+def reduce_odata(odatavalue):
+    '''
+    简化odata,提取需要常用键值对
+    :param odata: 字典，od返回的文件列表数据,键'value'
+    :return: dict->dict
+    '''
+    temp = {
+        'id':odatavalue['id'],
+        'name':odatavalue['name'],
+        'size':odatavalue['size'],
+        'createdDateTime':odatavalue['createdDateTime'],
+        'lastModifiedDateTime':odatavalue['lastModifiedDateTime'],
+        'foldeChildCountr':odatavalue['folder']['childCount'],
+    }
+
+
 
 
 # 操作函数
