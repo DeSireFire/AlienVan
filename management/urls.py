@@ -1,9 +1,10 @@
-from django.urls import path
+from django.urls import path,re_path
 from . import views
 
 app_name = 'management'
 urlpatterns = [
-    path('',views.panAction),
+    re_path('(.*?)$',views.panAction),
+    re_path(r'pans/(.*?).html$',views.pans),
     # path('',views.test),
     path('addpan/',views.addPan),
     path('nd/',views.initBinding),

@@ -1,0 +1,98 @@
+{% extends 'theme_AdminLTE/management/base_sec.html' %}
+{% load static %}
+{% load tags %}
+<!-- 网盘添加 -->
+
+{% block css %}
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'AdminLTE-2.4.15/bower_components/datatables.net-bs/css/dataTables.bootstrap.css' %}">
+{% endblock css %}
+
+<!-- 左导航列表 -->
+{% block sidebarMenu %}
+    {{sidebar|safe}}
+{% endblock sidebarMenu %}
+
+<!--面包屑导航-->
+{% block breadcrumb %}
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> {{Level}}</a></li>
+        <li class="active">{{Here}}</li>
+      </ol>
+{% endblock %}
+
+<!-- 分页主内容 -->
+{% block PageContent %}
+<div class="box">
+    <div class="box-header">
+      <h3 class="box-title">存储仓库</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+          <div class="row">
+              <div class="col-sm-12">
+              <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+        <thead>
+        <tr role="row">
+            <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="根据 文件/目录 名 排序" style=";">文件/目录 名</th>
+            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 大小 排序" style="">大小</th>
+            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 修改日期 排序" style="">修改日期</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in info %}
+        <tr role="row" class="">
+            <td class="sorting_1"><a href="">{{ item|get_item:"name" }}</a></td>
+            <td>{{ item.size|size_cutover }}</td>
+            <td>{{ item|get_item:"lastModifiedDateTime" }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th rowspan="1" colspan="1">文件/目录 名</th>
+            <th rowspan="1" colspan="1">大小</th>
+            <th rowspan="1" colspan="1">修改日期</th>
+        </tfoot>
+      </table>
+      </div>
+      </div>
+      </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!--{{test|slice:":1"}}<br>-->
+<!--{{ test.2 }}<br>-->
+<!--{{ info.2.folder }}<br>-->
+
+<!--{% for item in info %}-->
+<!--<tr role="row" class="">-->
+    <!--<td>{{ item.folder.childCount }}</td>-->
+<!--</tr>-->
+<!--{% endfor %}-->
+
+{% endblock PageContent %}
+
+<!--添加外联JS-->
+{% block Jscript %}
+<script src="{% static 'AdminLTE-2.4.15/bower_components/datatables.net/js/jquery.dataTables.js' %}"></script>
+<script src="{% static 'AdminLTE-2.4.15/bower_components/datatables.net-bs/js/dataTables.bootstrap.js' %}"></script>
+{% endblock Jscript %}
+
+{% block script %}
+<script>
+  $(function () {
+    $('#example1').DataTable()
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+</script>
+{% endblock script %}

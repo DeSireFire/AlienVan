@@ -6,19 +6,54 @@ import json
 # Create your views here.
 # 左导航选项控制[[选项名，次级菜单列表，选项前小图标],[选项名，是否包含次级菜单，选项前小图标]]
 from .tasks import returnPanNames
+panNames = returnPanNames()
 Sidebar = [
-    ['网盘列表',returnPanNames(),'fa fa-edit'],
-    ['网盘组状态',['硬盘组 1','硬盘组 2'],'fa fa-edit'],
+    ['网盘列表',panNames,'fa fa-edit'],
+    ['网盘组状态',panNames,'fa fa-dashboard'],
     ['网盘载入',False,'fa fa-edit'],
-    ['数据库设置',False,'fa fa-edit'],
-    ['Aria2工具',False,'fa fa-edit'],
-    ['主题设置',False,'fa fa-edit'],
+    ['数据库设置',False,'fa fa-circle-o'],
+    ['Aria2工具',False,'fa fa-circle-o'],
+    ['主题设置',False,'fa fa-circle-o'],
 ]
 
 def test(request):
     return render(request, 'theme_AdminLTE/management/base_sec.html')
 
+
+def panAction(request, panName):
+    '''
+    网盘状态视图
+    :param panName:
+    :return:
+    '''
+    context = {
+        'title': '管理-网盘状态',
+        'sidebar': sidebar_list('网盘状态'),  # 左导航条
+        'pageHeader': '管理-网盘状态',  # 选项卡标题
+        'Level': '网盘列表',  # 面包屑次级
+        'Here': '',  # 面包屑次级
+        'pageHeaderSmall': '未发现挂载网盘',
+        'info': '',
+    }
+
+    # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
+    if not Sidebar[0][1]:
+        return HttpResponseRedirect("addpan/")
+
+    # 检查panName 是否存在和存在于挂载网盘列表中
+    if not panName or panName not in Sidebar[0][1]:
+        context['Here'] = Sidebar[0][1][0]
+        context['pageHeaderSmall'] = Sidebar[0][1][0]
+        # todo 添加更多   context
+
+    return render(request, 'theme_AdminLTE/management/dashBoard.html', context)
+
+
 def addPan(request):
+    '''
+    添加网盘视图
+    :return:
+    '''
     from odTools.authHandler import get_sign_in_url
     sign_in_url, state = get_sign_in_url()
     context = {
@@ -51,12 +86,19 @@ def addPan(request):
 
     return render(request, 'theme_AdminLTE/management/loadDrive.html',context)
 
-def panAction(request):
+
+
+def pans(request,panName):
+    '''
+    网盘列表视图
+    :param panName:
+    :return:
+    '''
     #todo 把读取方式改成celery
     #todo 添加前端列表超链接
     context = {
         'title':'管理-网盘状态',
-        'sidebar':sidebar_list('网盘组状态'),    # 左导航条
+        'sidebar':sidebar_list('网盘列表'),    # 左导航条
         'pageHeader':'管理-网盘状态',   # 选项卡标题
         'Level':'网盘状态',  # 面包屑次级
         'Here':'',  # 面包屑次级
@@ -64,6 +106,15 @@ def panAction(request):
         'info':'',
         'test':[233,666,777]
     }
+    # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
+    if not Sidebar[0][1]:
+        return HttpResponseRedirect("addpan/")
+
+    # panName不存在时，默认使用列表第一个盘符
+    if not panName or panName not in Sidebar[0][1]:
+        context['Here'] = Sidebar[0][1][0]
+        # todo 添加更多   context
+
     # 读取 session 的 json 文件
     from .tasks import loadSession
     temp = loadSession('/home/rq/workspace/python/AlienVan/driveJsons/nya.json')
@@ -74,8 +125,7 @@ def panAction(request):
     fl = files_list(temp,1,'')
     context['info'] = fl['value']
 
-    return render(request, 'theme_AdminLTE/management/dashBoard.html', context)
-
+    return render(request, 'theme_AdminLTE/management/pans.html', context)
 
 def initBinding(request):
     '''
