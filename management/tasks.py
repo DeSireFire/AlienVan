@@ -53,6 +53,7 @@ def returnfileList(client):
 
 @app.task
 def loadSession(pathFileName):
+    pathFileName = os.path.join(BASE_DIR, 'driveJsons',pathFileName)
     return load_session(pathFileName)
 
 @app.task

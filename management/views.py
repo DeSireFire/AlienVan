@@ -4,16 +4,16 @@ from django.template import RequestContext
 import json
 
 # Create your views here.
-# 左导航选项控制[[选项名，次级菜单列表，选项前小图标],[选项名，是否包含次级菜单，选项前小图标]]
+# 左导航选项控制[[选项名，次级菜单列表，选项前小图标,选项卡的URL]
 from .tasks import returnPanNames
 panNames = returnPanNames()
 Sidebar = [
-    ['网盘列表',panNames,'fa fa-edit'],
-    ['网盘组状态',panNames,'fa fa-dashboard'],
-    ['网盘载入',False,'fa fa-edit'],
-    ['数据库设置',False,'fa fa-circle-o'],
-    ['Aria2工具',False,'fa fa-circle-o'],
-    ['主题设置',False,'fa fa-circle-o'],
+    ['网盘列表',panNames,'fa fa-edit',''],
+    ['网盘组状态',panNames,'fa fa-dashboard','pans'],
+    ['网盘载入',False,'fa fa-edit','addpan'],
+    ['数据库设置',False,'fa fa-circle-o',''],
+    ['Aria2工具',False,'fa fa-circle-o',''],
+    ['主题设置',False,'fa fa-circle-o',''],
 ]
 
 def test(request):
@@ -28,7 +28,7 @@ def panAction(request):
     '''
     context = {
         'title': '管理-网盘状态',
-        'sidebar': sidebar_list('网盘状态',request.path),  # 左导航条
+        'sidebar': sidebar_list('网盘状态','/manage/'),  # 左导航条
         'pageHeader': '管理-网盘状态',  # 选项卡标题
         'Level': '网盘列表',  # 面包屑次级
         'Here': '',  # 面包屑次级
@@ -40,7 +40,7 @@ def panAction(request):
         return HttpResponseRedirect("addpan/")
 
     # 检查panName 是否存在和存在于挂载网盘列表中
-    if request.GET['name'] in Sidebar[0][1]:
+    if 'name' in request.GET and request.GET['name'] and request.GET['name'] in Sidebar[0][1]:  # 获得用户输入值
         context['Here'] = request.GET['name']
         context['pageHeaderSmall'] = request.GET['name']
     else:
@@ -60,7 +60,7 @@ def addPan(request):
     sign_in_url, state = get_sign_in_url()
     context = {
         'title':'管理-网盘载入',
-        'sidebar':sidebar_list('网盘组状态',request.path),    # 左导航条
+        'sidebar':sidebar_list('网盘组状态','/manage/'),    # 左导航条
         'pageHeader':'网盘载入',   # 选项卡标题
         'Level':'网盘载入',  # 面包屑次级
         'Here':'网盘载入',  # 面包屑次级
@@ -90,7 +90,7 @@ def addPan(request):
 
 
 
-def pans(request,panName):
+def pans(request):
     '''
     网盘列表视图
     :param panName:
@@ -100,7 +100,7 @@ def pans(request,panName):
     #todo 添加前端列表超链接
     context = {
         'title':'管理-网盘状态',
-        'sidebar':sidebar_list('网盘列表',request.path),    # 左导航条
+        'sidebar':sidebar_list('网盘列表','/manage/'),    # 左导航条
         'pageHeader':'管理-网盘状态',   # 选项卡标题
         'Level':'网盘状态',  # 面包屑次级
         'Here':'',  # 面包屑次级
@@ -110,10 +110,10 @@ def pans(request,panName):
     }
     # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
     if not Sidebar[0][1]:
-        return HttpResponseRedirect("addpan/")
+        return HttpResponseRedirect("pans")
 
     # 检查panName 是否存在和存在于挂载网盘列表中
-    if request.GET['name'] in Sidebar[0][1]:
+    if 'name' in request.GET and request.GET['name'] and request.GET['name'] in Sidebar[0][1]:  # 获得用户输入值
         context['Here'] = request.GET['name']
         context['pageHeaderSmall'] = request.GET['name']
     else:
@@ -123,7 +123,7 @@ def pans(request,panName):
 
     # 读取 session 的 json 文件
     from .tasks import loadSession
-    temp = loadSession('/home/rq/workspace/python/AlienVan/driveJsons/nya.json')
+    temp = loadSession('nya.json')
     context['Here'] = temp['panName']
 
     # temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/anime.json').get()
@@ -187,28 +187,28 @@ def od_ce_test(request):
     res = {'code': 200, 'message': 'ok', 'data': [{'x': x}]}
     return HttpResponse(json.dumps(res))
 
-
-def sidebar_list(active,appName=None):
+# 视图辅助函数
+def sidebar_list(active,appURL=None):
     temp = []
     getValue = '#'  # 左导航下拉菜单超链接
     htmlDict = {
-        'li':'<li class="{active}"><a href="#"><i class="{i}"></i> <span>{name}</span></a></li>',
+        'li':'<li class="{active}"><a href="{url}"><i class="{i}"></i> <span>{name}</span></a></li>',
         'menuLi':'<li><a href="{url}">{text}</a></li>',
         'treeview':'<li class="treeview active"><a href="#"><i class="{i}"></i> <span>{name}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a><ul class="treeview-menu">{li}</ul></li>',
     }
     for i in Sidebar:
         if i[0] == active:
             if i[1]:
-                tempStr = htmlDict['treeview'].format(active='active',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(x) for x in i[1]]))
+                tempStr = htmlDict['treeview'].format(active='active',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(url=appURL+i[3]+getValue+x,text=x) for x in i[1]]))
             else:
-                tempStr = htmlDict['li'].format(active='active',i=i[2],name=i[0])
+                tempStr = htmlDict['li'].format(active='active',url=i[3],i=i[2],name=i[0])
         else:
             if i[1]:
-                if appName:
+                if appURL:
                     getValue = '?name='
-                tempStr = htmlDict['treeview'].format(active='',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(url=appName+getValue+x,text=x) for x in i[1]]))
+                tempStr = htmlDict['treeview'].format(active='',i=i[2],name=i[0],li=''.join([htmlDict['menuLi'].format(url=appURL+i[3]+getValue+x,text=x) for x in i[1]]))
             else:
-                tempStr = htmlDict['li'].format(active='', i=i[2], name=i[0])
+                tempStr = htmlDict['li'].format(active='',url=i[3],i=i[2],name=i[0])
         temp.append(tempStr)
     return ''.join(temp)
 
