@@ -13,22 +13,47 @@ def dict_merge(a, b):
     c.update(b)
     return c
 
-def fileList(path,fileType,listName=[]):
+def fileList(path,fileType):
     '''
     读取指定目录下的文件名
     :param path: 需要检查的目录
-    :param listName: 已有的文件名列表，用于根新查找出来的列表合并
     :param fileType: 文件格式（后缀）
     :return: str->list
     '''
+    temp = []
     for file in os.listdir(path):
         file_path = os.path.join(path, file)
         if os.path.isdir(file_path):
-            fileList(file_path,fileType,listName)
+            fileList(file_path,fileType)
         elif os.path.splitext(file_path)[1]==fileType:
-            listName.append(file_path)
-    return listName
+            temp.append(file_path)
+    return list(set(temp))
 
+def fileWalk(path,fileType = None):
+    '''
+    列出所有文件，包括次级目录
+    :param path:字符串，需要递归的路径
+    :param fileType:字符串，需要递归的路径
+    :var root:字符串，路径列表
+    :var dirs:字符串，目录列表
+    :var files:字符串，文件列表
+    :return:
+    '''
+    temp = {
+        'fileNames':[],# 文件名列表（有后缀）
+        'files':[],# 文件名列表（无后缀）
+        'rootfiles':[],# 绝对路径文件名列表
+    }
+    for root, dirs, files in os.walk(path, topdown=False):
+        temp['fileNames']=files
+        for name in files:
+            temp['rootfiles'].append(os.path.join(root, name))
+            if fileType in name and fileType != None:
+                temp['files'].append(os.path.splitext(name)[0])
+        for name in dirs:
+            temp['rootfiles'].append(os.path.join(root, name))
+
+    return temp
 
 def dict_to_json_write_file(dictTemp,pathFileName):
     '''
@@ -65,5 +90,6 @@ def json_file_to_dict(pathFileName):
 if __name__ == '__main__':
     from alienVan.settings import BASE_DIR
     # print(os.path.join(BASE_DIR,'driveJsons'))
-    a = fileList(os.path.join(BASE_DIR,'driveJsons'),'.json')
+    # a = fileList(os.path.join(BASE_DIR,'driveJsons'),'.json')
+    a = fileWalk(os.path.join(BASE_DIR,'driveJsons'),'.json')
     print(a)
