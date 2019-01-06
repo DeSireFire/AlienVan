@@ -146,24 +146,27 @@ def sidebar_list(active,appURL=None):
     :param appURL:
     :return:
     '''
-    temp = []
+    from .tasks import returnPanNames
+    pansName = returnPanNames() # 盘符列表
+
+
+
     getValue = '#'  # 左导航下拉菜单超链接
+    if appURL:
+        getValue = '?name='
+
+
     htmlDict = {
         'li':'<li class="{active}"><a href="{url}"><i class="{i}"></i> <span>{name}</span></a></li>',
         'menuLi':'<li><a href="{url}">{text}</a></li>',
         'treeview':'<li class="treeview active"><a href="#"><i class="{i}"></i> <span>{name}</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a><ul class="treeview-menu">{li}</ul></li>',
     }
 
-    if appURL:
-        getValue = '?name='
-
-
+    temp = []
     for i in Sidebar:
-        #todo 待优化
         menuLi = i[1]
         if i[1] == []:
-            from .tasks import returnPanNames
-            menuLi = returnPanNames()
+            menuLi = pansName
 
         if i[0] == active:
             if menuLi:
