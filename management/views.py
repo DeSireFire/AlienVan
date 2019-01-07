@@ -8,8 +8,8 @@ import json
 #todo 盘符更新需要思路
 # 左导航选项控制[[选项名，是否有次级菜单列表，选项前小图标,选项卡的URL]
 Sidebar = [
-    ['网盘组状态',[],'fa fa-dashboard','pans'],
-    ['网盘列表',[],'fa fa-edit',''],
+    ['网盘组状态',[],'fa fa-dashboard',''],
+    ['网盘列表',[],'fa fa-edit','pans'],
     ['网盘载入',False,'fa fa-edit','addpan'],
     ['数据库设置',False,'fa fa-circle-o',''],
     ['Aria2工具',False,'fa fa-circle-o',''],
@@ -34,7 +34,9 @@ def panAction(request):
         'info': '',
     }
     # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
-    if not Sidebar[0][1]:
+    from .tasks import returnPanNames
+    pansName = returnPanNames() # 盘符列表
+    if not pansName:
         return HttpResponseRedirect("addpan")
 
     # 检查panName 是否存在和存在于挂载网盘列表中
@@ -42,8 +44,8 @@ def panAction(request):
         context['Here'] = request.GET['name']
         context['pageHeaderSmall'] = request.GET['name']
     else:
-        context['Here'] = Sidebar[0][1][0]
-        context['pageHeaderSmall'] = Sidebar[0][1][0]
+        context['Here'] = pansName[0]
+        context['pageHeaderSmall'] = pansName[0]
         # todo 添加更多   context
 
 
@@ -68,7 +70,9 @@ def pans(request):
         'test':[233,666,777]
     }
     # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
-    if not Sidebar[0][1]:
+    from .tasks import returnPanNames
+    pansName = returnPanNames() # 盘符列表
+    if not pansName:
         return HttpResponseRedirect("addpan")
 
     # 检查panName 是否存在和存在于挂载网盘列表中
@@ -76,8 +80,8 @@ def pans(request):
         context['Here'] = request.GET['name']
         context['pageHeaderSmall'] = request.GET['name']
     else:
-        context['Here'] = Sidebar[0][1][0]
-        context['pageHeaderSmall'] = Sidebar[0][1][0]
+        context['Here'] = pansName[0]
+        context['pageHeaderSmall'] = pansName[0]
         # todo 添加更多   context
 
     # 读取 session 的 json 文件
