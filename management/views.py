@@ -90,8 +90,14 @@ def pans(request):
     context['Here'] = temp['panName']
 
     # temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/anime.json').get()
-    from odTools.filesHandler import files_list
-    fl = files_list(temp,1,'')
+    from odTools.filesHandler import files_list,reduce_odata
+    fp = ''
+    if 'path' in request.GET and request.GET['path']:
+        fp = request.GET['path']
+    fl = files_list(temp,1,fp)
+
+    # context['info'] = [reduce_odata(x) for x in fl['value']]
+    print([reduce_odata(x) for x in fl['value']])
     context['info'] = fl['value']
 
     return render(request, 'theme_AdminLTE/management/pans.html', context)
@@ -149,7 +155,6 @@ def sidebar_list(active,appURL=None):
     :param appURL:
     :return:
     '''
-    from .tasks import returnPanNames
     pansName = returnPanNames() # 盘符列表
 
 

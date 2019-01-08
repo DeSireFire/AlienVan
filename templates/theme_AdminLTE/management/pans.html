@@ -44,7 +44,7 @@
         <tbody>
         {% for item in info %}
         <tr role="row" class="">
-            <td class="sorting_1"><a href="">{{ item|get_item:"name" }}</a></td>
+            <td class="sorting_1"><a href="?path=/{{ item|get_item:'name' }}">{{ item|get_item:"name" }}</a></td>
             <td>{{ item.size|size_cutover }}</td>
             <td>{{ item|get_item:"lastModifiedDateTime" }}</td>
         </tr>

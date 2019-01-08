@@ -26,19 +26,24 @@ def typeURL(client,od_type,path=''):
 
 def reduce_odata(odatavalue):
     '''
-    简化odata,提取需要常用键值对
+    简化odata,提取需要的常用键值对
     :param odata: 字典，od返回的文件列表数据,键'value'
     :return: dict->dict
     '''
+    mineType = lambda x:x['file']['mimeType'] if 'file' in x.keys() else '文件夹'  # 文件类型判断
+    childCount = lambda x:x['folder']['childCount'] if 'folder' in x.keys() else ''  # 文件子项
     temp = {
-        'id':odatavalue['id'],
-        'name':odatavalue['name'],
-        'size':odatavalue['size'],
-        'createdDateTime':odatavalue['createdDateTime'],
-        'lastModifiedDateTime':odatavalue['lastModifiedDateTime'],
-        'foldeChildCountr':odatavalue['folder']['childCount'],
+        'id':odatavalue['id'],  # 文件id
+        'name':odatavalue['name'],  # 文件名
+        'size':odatavalue['size'],  # 文件大小
+        'mimeType':mineType(odatavalue),  # 类型
+        'createdDateTime':odatavalue['createdDateTime'].replace('-','/').replace('T',' ').replace('Z',''),    # 创建日期
+        'lastModifiedDateTime':odatavalue['lastModifiedDateTime'].replace('-','/').replace('T',' ').replace('Z',''),  # 修改日期
+        'childCount':childCount(odatavalue),  # 内含子项数
+        'parentID':odatavalue['parentReference']['id'],  # 父级目录id
+        'parentRoot':odatavalue['parentReference']['path'][12:],  # 父级目录路径
     }
-
+    return temp
 
 
 
