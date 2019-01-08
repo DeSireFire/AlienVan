@@ -39,7 +39,7 @@ def reduce_odata(odatavalue):
         'mimeType':mineType(odatavalue),  # 类型
         'createdDateTime':odatavalue['createdDateTime'].replace('-','/').replace('T',' ').replace('Z',''),    # 创建日期
         'lastModifiedDateTime':odatavalue['lastModifiedDateTime'].replace('-','/').replace('T',' ').replace('Z',''),  # 修改日期
-        'childCount':childCount(odatavalue),  # 内含子项数
+        'childCount':str(childCount(odatavalue)),  # 内含子项数
         'parentID':odatavalue['parentReference']['id'],  # 父级目录id
         'parentRoot':odatavalue['parentReference']['path'][12:],  # 父级目录路径
     }

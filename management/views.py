@@ -58,7 +58,6 @@ def pans(request):
     :return:
     '''
     #todo 把读取方式改成celery
-    #todo 添加前端列表超链接
     context = {
         'title':'管理-网盘列表',
         'sidebar':sidebar_list('网盘列表','/manage/'),    # 左导航条
@@ -66,7 +65,7 @@ def pans(request):
         'Level':'网盘列表',  # 面包屑次级
         'Here':'',  # 面包屑次级
         'pageHeaderSmall':'',
-        'info':'',
+        'files':'',
         'test':[233,666,777]
     }
     # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
@@ -85,7 +84,6 @@ def pans(request):
 
     # 读取 session 的 json 文件
     from .tasks import loadSession
-    print('{}.json'.format(context['Here']))
     temp = loadSession('{}.json'.format(context['Here']))
     context['Here'] = temp['panName']
 
@@ -96,9 +94,8 @@ def pans(request):
         fp = request.GET['path']
     fl = files_list(temp,1,fp)
 
-    # context['info'] = [reduce_odata(x) for x in fl['value']]
     print([reduce_odata(x) for x in fl['value']])
-    context['info'] = fl['value']
+    context['files'] = [reduce_odata(x) for x in fl['value']]
 
     return render(request, 'theme_AdminLTE/management/pans.html', context)
 

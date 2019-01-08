@@ -42,9 +42,12 @@
         </tr>
         </thead>
         <tbody>
-        {% for item in info %}
+        {% for item in files %}
         <tr role="row" class="">
-            <td class="sorting_1"><a href="?path=/{{ item|get_item:'name' }}">{{ item|get_item:"name" }}</a></td>
+            <td class="sorting_1">
+                <a href="?path={% if item.parentRoot %}{{item.parentRoot}}{% endif %}/{{ item|get_item:'name' }}">{{ item|get_item:"name" }}  {% if item.childCount %}<small style="font-size: 5px;color: #E0E0E0;">(包含 {{ item|get_item:"childCount" }} 个子项）</small>{% endif %}</a>
+
+            </td>
             <td>{{ item.size|size_cutover }}</td>
             <td>{{ item|get_item:"lastModifiedDateTime" }}</td>
         </tr>
