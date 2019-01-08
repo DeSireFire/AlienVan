@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from .tasks import *
 from django.template import RequestContext
 import json
 
@@ -34,7 +35,6 @@ def panAction(request):
         'info': '',
     }
     # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
-    from .tasks import returnPanNames
     pansName = returnPanNames() # 盘符列表
     if not pansName:
         return HttpResponseRedirect("addpan")
@@ -70,7 +70,6 @@ def pans(request):
         'test':[233,666,777]
     }
     # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
-    from .tasks import returnPanNames
     pansName = returnPanNames() # 盘符列表
     if not pansName:
         return HttpResponseRedirect("addpan")
