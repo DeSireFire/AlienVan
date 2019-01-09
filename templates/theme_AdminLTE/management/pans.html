@@ -45,7 +45,7 @@
     {% for item in files %}
     <tr role="row" class="">
     <td class="sorting_1">
-        {% if item == '文件夹' %}
+        {% if item.mimeType == '文件夹' %}
         <a href="?path={% if item.parentRoot %}{{item.parentRoot}}{% endif %}/{{ item|get_item:'name' }}">
             <i class="fa {{item.fileIco}}"></i>
             {{ item|get_item:"name" }}
