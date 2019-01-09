@@ -46,13 +46,13 @@
     <tr role="row" class="">
     <td class="sorting_1">
         {% if item.mimeType == '文件夹' %}
-        <a href="?path={% if item.parentRoot %}{{item.parentRoot}}{% endif %}/{{ item|get_item:'name' }}">
+        <a href="?name={{ Here }}&path={% if item.parentRoot %}{{item.parentRoot}}{% endif %}/{{ item|get_item:'name' }}">
             <i class="fa {{item.fileIco}}"></i>
             {{ item|get_item:"name" }}
-            {% if item.childCount %}<small style="font-size: 5px;color: #E0E0E0;">(包含 {{ item|get_item:"childCount" }} 个子项）</small>{% endif %}
+            {% if item.childCount %}<small style="font-size: 5px;color: #8c8c8c;">(包含 {{ item|get_item:"childCount" }} 个子项）</small>{% endif %}
         </a>
         {% else %}
-        <a href="/file?path={% if item.parentRoot %}{{item.parentRoot}}{% endif %}/{{ item|get_item:'name' }}">
+        <a href="/file?name={{ Here }}&path={% if item.parentRoot %}{{item.parentRoot}}{% endif %}/{{ item|get_item:'name' }}">
             <i class="fa {{item.fileIco}}"></i>
             {{ item|get_item:"name" }}
         </a>

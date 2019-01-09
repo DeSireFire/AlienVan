@@ -40,7 +40,7 @@ def panAction(request):
         return HttpResponseRedirect("addpan")
 
     # 检查panName 是否存在和存在于挂载网盘列表中
-    if 'name' in request.GET and request.GET['name'] and request.GET['name'] in Sidebar[0][1]:  # 获得用户输入值
+    if 'name' in request.GET and request.GET['name'] and request.GET['name'] in pansName:  # 获得用户输入值
         context['Here'] = request.GET['name']
         context['pageHeaderSmall'] = request.GET['name']
     else:
@@ -73,7 +73,7 @@ def pans(request):
         return HttpResponseRedirect("addpan")
 
     # 检查panName 是否存在和存在于挂载网盘列表中
-    if 'name' in request.GET and request.GET['name'] and request.GET['name'] in Sidebar[0][1]:  # 获得用户输入值
+    if 'name' in request.GET and request.GET['name'] and request.GET['name'] in pansName:  # 获得用户输入值
         context['Here'] = request.GET['name']
         context['pageHeaderSmall'] = request.GET['name']
     else:

@@ -49,7 +49,7 @@ def reduce_odata(odatavalue):
         'fileIco':fileIco(mineType(odatavalue)),  # 文件图标
         'download':download(odatavalue),  # 文件下载链接
     }
-    print(temp['mimeType'],temp['name'],temp['fileIco'],temp['thumbnails'],)
+    # print(temp['mimeType'],temp['name'],temp['fileIco'],temp['thumbnails'],)
     return temp
 
 
@@ -66,12 +66,12 @@ def files_list(client,od_type,path=''):
     headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {}'.format(client["access_token"])}
     get_res = requests.get(typeURL(client,od_type,path), headers=headers, timeout=30, verify=False)
     get_res = json.loads(get_res.text)
-    print(get_res)
-    for i in get_res:
-        print('%s:%s'%(i,get_res[i]))
-        if i == 'value':
-            for n in get_res[i]:
-                print(n)
+    # print(get_res)
+    # for i in get_res:
+    #     print('%s:%s'%(i,get_res[i]))
+    #     if i == 'value':
+    #         for n in get_res[i]:
+    #             print(n)
     return get_res
 
 
