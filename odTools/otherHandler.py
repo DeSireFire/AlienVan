@@ -1,6 +1,26 @@
 import sys
 import os
 
+def fileIco(mimeType):
+    '''
+    根据文件名，返回对应fa小图标
+    :param mimeType: 字符串，oddata的 mimeType
+    :return:
+    '''
+    if '文件夹' == mimeType:
+        return 'fa-folder'
+    elif 'video' in mimeType:
+        return 'fa-film'
+    elif 'audio' in mimeType:
+        return 'fa-file-audio-o'
+    elif 'txt' in mimeType:
+        return 'fa-file-text-o'
+    elif 'image' in mimeType:
+        return 'fa-file-image-o'
+    elif 'zip' in mimeType:
+        return 'fa-file-zip-o'
+    else:
+        return 'fa-file-o'
 
 def dict_merge(a, b):
     '''

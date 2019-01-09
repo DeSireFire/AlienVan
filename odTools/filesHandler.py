@@ -32,6 +32,8 @@ def reduce_odata(odatavalue):
     '''
     mineType = lambda x:x['file']['mimeType'] if 'file' in x.keys() else '文件夹'  # 文件类型判断
     childCount = lambda x:x['folder']['childCount'] if 'folder' in x.keys() else ''  # 文件子项
+    thumbnails = lambda x:x['thumbnails'] if 'thumbnails' != [] else ''  # 文件缩略图不为空
+    from odTools.otherHandler import fileIco
     temp = {
         'id':odatavalue['id'],  # 文件id
         'name':odatavalue['name'],  # 文件名
@@ -42,7 +44,10 @@ def reduce_odata(odatavalue):
         'childCount':str(childCount(odatavalue)),  # 内含子项数
         'parentID':odatavalue['parentReference']['id'],  # 父级目录id
         'parentRoot':odatavalue['parentReference']['path'][12:],  # 父级目录路径
+        'thumbnails':thumbnails(odatavalue),  # 文件缩略图
+        'fileIco':fileIco(mineType(odatavalue)),  # 文件缩略图
     }
+    # print(temp['mimeType'],temp['name'],temp['fileIco'],)
     return temp
 
 
