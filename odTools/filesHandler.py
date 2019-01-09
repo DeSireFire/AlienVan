@@ -32,7 +32,8 @@ def reduce_odata(odatavalue):
     '''
     mineType = lambda x:x['file']['mimeType'] if 'file' in x.keys() else '文件夹'  # 文件类型判断
     childCount = lambda x:x['folder']['childCount'] if 'folder' in x.keys() else ''  # 文件子项
-    thumbnails = lambda x:x['thumbnails'] if 'thumbnails' != [] else ''  # 文件缩略图不为空
+    thumbnails = lambda x:x['thumbnails'] if 'thumbnails' != [] and x['file']['mimeType'] == '' else ''  # 文件缩略图不为空
+    download = lambda x:x['@microsoft.graph.downloadUrl'] if '@microsoft.graph.downloadUrl' in x.keys() else ''  # 文件缩略图不为空
     from odTools.otherHandler import fileIco
     temp = {
         'id':odatavalue['id'],  # 文件id
@@ -45,9 +46,10 @@ def reduce_odata(odatavalue):
         'parentID':odatavalue['parentReference']['id'],  # 父级目录id
         'parentRoot':odatavalue['parentReference']['path'][12:],  # 父级目录路径
         'thumbnails':thumbnails(odatavalue),  # 文件缩略图
-        'fileIco':fileIco(mineType(odatavalue)),  # 文件缩略图
+        'fileIco':fileIco(mineType(odatavalue)),  # 文件图标
+        'download':download(odatavalue),  # 文件下载链接
     }
-    # print(temp['mimeType'],temp['name'],temp['fileIco'],)
+    print(temp['mimeType'],temp['name'],temp['fileIco'],)
     return temp
 
 
