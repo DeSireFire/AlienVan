@@ -90,7 +90,7 @@ def token_time_to_live(client):
     :return: OneDriveClient->bool
     '''
     print(int(time() - client['expires_set']))
-    if int(time() - client['expires_set']) > 3000 or int(time() - client['expires_set']) < 0:
+    if int(time() - client['expires_set']) > 3500 or int(time() - client['expires_set']) < 0:
         return True
     else:
         return False

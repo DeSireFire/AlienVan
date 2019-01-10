@@ -46,6 +46,16 @@
     </tr>
     </thead>
     <tbody>
+        <tr role="row" class="">
+        <td><a href="?name={{ Here }}"><i class="fa fa-folder-open-o"></i> 返回根目录 <i class="fa fa-reply-all"></i></a></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr role="row" class="">
+        <td><a href="?name={{ Here }}&path={{files.1.parentRoot}}"><i class="fa fa-folder-open-o"></i> 返回上一级 <i class="fa fa-reply"></i></a></td>
+        <td></td>
+        <td></td>
+    </tr>
     {% for item in files %}
     <tr role="row" class="">
     <td class="sorting_1">

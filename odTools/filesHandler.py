@@ -67,11 +67,11 @@ def files_list(client,od_type,path=''):
     get_res = requests.get(typeURL(client,od_type,path), headers=headers, timeout=30, verify=False)
     get_res = json.loads(get_res.text)
     # print(get_res)
-    # for i in get_res:
-    #     print('%s:%s'%(i,get_res[i]))
-    #     if i == 'value':
-    #         for n in get_res[i]:
-    #             print(n)
+    for i in get_res:
+        print('%s:%s'%(i,get_res[i]))
+        if i == 'value':
+            for n in get_res[i]:
+                print(n)
     return get_res
 
 
