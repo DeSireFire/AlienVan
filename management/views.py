@@ -46,7 +46,6 @@ def panAction(request):
     else:
         context['Here'] = pansName[0]
         context['pageHeaderSmall'] = pansName[0]
-        # todo 添加更多   context
 
 
     return render(request, 'theme_AdminLTE/management/dashBoard.html', context)
@@ -79,7 +78,6 @@ def pans(request):
     else:
         context['Here'] = pansName[0]
         context['pageHeaderSmall'] = pansName[0]
-        # todo 添加更多   context
 
     # 读取 session 的 json 文件
     from .tasks import loadSession
@@ -96,6 +94,12 @@ def pans(request):
     context['files'] = [reduce_odata(x) for x in fl['value']]
 
     return render(request, 'theme_AdminLTE/management/pans.html', context)
+
+
+
+def fileShow(request):
+    pass
+
 
 def addPan(request):
     '''

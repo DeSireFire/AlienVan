@@ -5,6 +5,7 @@ app_name = 'management'
 urlpatterns = [
     path('',views.panAction),
     path('pans',views.pans),
+    path('file',views.fileShow),
     # path('',views.test),
     path('addpan',views.addPan),
     # path('signin', views.sign_in, name='signin'),

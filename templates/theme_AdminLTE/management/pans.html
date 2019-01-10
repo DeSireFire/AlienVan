@@ -6,6 +6,11 @@
 {% block css %}
     <!-- DataTables -->
     <link rel="stylesheet" href="{% static 'AdminLTE-2.4.15/bower_components/datatables.net-bs/css/dataTables.bootstrap.css' %}">
+    <style>
+        .table-hover>tbody>tr:hover {
+            background-color: rgba(62, 248, 217, 0.81);
+            }
+    </style>
 {% endblock css %}
 
 <!-- 左导航列表 -->
@@ -32,13 +37,12 @@
     <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
     <div class="row">
     <div class="col-sm-12">
-    <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
+    <table id="example1" class="table table-hover table-striped dataTable" role="grid" aria-describedby="example1_info">
     <thead>
     <tr role="row">
     <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="根据 文件/目录 名 排序" style=";">文件/目录 名</th>
     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 大小 排序" style="">大小</th>
     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 修改日期 排序" style="">修改日期</th>
-
     </tr>
     </thead>
     <tbody>
@@ -56,7 +60,7 @@
             <i class="fa {{item.fileIco}}"></i>
             {{ item|get_item:"name" }}
         </a>
-        <a href="{{item.download}}" style="text-align:left;"><i class="fa fa-download"></i></a>
+        <a href="{{item.download}}" style="float: right;"><i class="fa fa-download"></i></a>
         {% endif %}
 
     </td>
