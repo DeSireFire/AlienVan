@@ -6,7 +6,6 @@ from celery.utils.log import get_task_logger
 from alienVan.celery import app
 # from odTools import authentication
 
-from odTools.authentication import *
 from odTools.authHandler import *
 
 @app.task
@@ -25,9 +24,9 @@ def test(x, y):
     return temp
     # return {'x': x, 'y': y}
 
-@app.task
-def odtest(init_type):
-    return getClient(init_type)
+# @app.task
+# def odtest(init_type):
+#     return getClient(init_type)
 
 @app.task
 def getAuth(driveInfo):

@@ -93,7 +93,6 @@ def pans(request):
     fl = files_list(temp,1,fp)
 
     context['files'] = [reduce_odata(x) for x in fl['value']]
-    # context['files'].insert(0,{})
 
     return render(request, 'theme_AdminLTE/management/pans.html', context)
 
