@@ -103,7 +103,33 @@ def pans(request):
 
 
 def fileShow(request):
-    return render(request, 'theme_AdminLTE/management/pans.html', context)
+    context = {
+        'title':'管理-文件浏览',
+        'sidebar':sidebar_list('网盘列表','/manage/'),    # 左导航条
+        'pageHeader':'管理-文件浏览',   # 选项卡标题
+        'pageHeaderSmall':'你是在逗我开心对吗？',
+        'Level': '网盘列表',  # 面包屑次级
+        'Here': '',  # 面包屑次级
+        'file':'',
+        'goback':'',
+        'panName':'',
+    }
+    if 'path' in request.GET and request.GET['path'] and 'name' in request.GET and request.GET['name']:
+
+        # 读取 session 的 json 文件
+        from .tasks import loadSession
+        temp = loadSession('{}.json'.format(request.GET['name']))
+        context['Here'] = temp['panName']
+        context['panName'] = temp['panName']
+        # 获取对应文件名信息
+        from odTools.filesHandler import files_list, reduce_odata
+        for i in [reduce_odata(x,'createdBy') for x in files_list(temp, 1, '/'.join(request.GET['path'].split('/')[0:-1]))['value']]:
+            if i['name'] == request.GET['path'].split('/')[-1]:
+                context['file'] = i
+                break
+
+
+    return render(request, 'theme_AdminLTE/management/itemInfo.html', context)
 
 
 def addPan(request):

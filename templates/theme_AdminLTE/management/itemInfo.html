@@ -1,0 +1,153 @@
+{% extends 'theme_AdminLTE/management/base_sec.html' %}
+{% load static %}
+{% load tags %}
+<!-- 网盘添加 -->
+
+{% block css %}
+    <!-- DataTables -->
+{% endblock css %}
+
+<!-- 左导航列表 -->
+{% block sidebarMenu %}
+    {{sidebar|safe}}
+{% endblock sidebarMenu %}
+
+<!--面包屑导航-->
+{% block breadcrumb %}
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> {{Level}}</a></li>
+        <li class="active">{{Here}}</li>
+      </ol>
+{% endblock %}
+
+<!-- 分页主内容 -->
+{% block PageContent %}
+<section class="invoice">
+  <!-- title row -->
+  <div class="row">
+    <div class="col-xs-12">
+      <h2 class="page-header">
+        <i class="fa {{ file.fileIco }}"></i> 『{{ file.name }}』,详细信息.
+        <small class="pull-right">创建时间: {{ file.createdDateTime }}</small>
+      </h2>
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- info row -->
+  <div class="row invoice-info">
+    <div class="col-sm-8 invoice-col">
+        <img class="mdui-img-fluid img-responsive center-block" style="max-width: 100%;max-height: 600px" src="{{ file.thumbnails.0.large.url }}">
+    </div>
+    <!-- /.col -->
+    <div class="col-sm-4 invoice-col">
+      <b>文件名 ：</b> {{ file.name }}<br>
+      <b>文件大小 :</b> {{ file.size }}<br>
+      <b>文件类型 :</b> {{ file.mimeType }}<br>
+      <b>文件ID :</b> {{ file.id }}<br>
+      <b>创建时间 :</b> {{ file.createdDateTime }}<br>
+      <b>修改时间 :</b> {{ file.lastModifiedDateTime }}<br>
+      <b>所在盘符 :</b> {{ panName }}<br>
+      <b>所在盘符路径 :</b> /{{ file.parentRoot }}<br>
+      <!--<address>-->
+        <!--微软用户:<strong>{{ file.createdBy.user.displayName }}</strong><br>-->
+        <!--上传工具: {{ file.createdBy.application.displayName }}<br>-->
+        <!--用户 Email: {{ file.createdBy.user.email }}-->
+      <!--</address>-->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+
+  <!-- Table row -->
+  <div class="row">
+    <div class="col-xs-12 table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>引用 说明</th>
+          <th> code </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>图片 分享</td>
+          <td class="input-group">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-info btn-flat" onClick="copyValue()">走你！(点击复制)</button>
+            </div>
+            <input type="text" id="copyContent" class="form-control" value='{{ file.thumbnails.0.large.url }}'>
+          </td>
+        </tr>
+        <tr>
+          <td>html 引用</td>
+          <td class="input-group">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-info btn-flat" onClick="copyValue()">走你！(点击复制)</button>
+            </div>
+            <input type="text" id="copyContent" class="form-control" value='<img src="{{ file.thumbnails.0.large.url }}">'>
+          </td>
+        </tr>
+        <tr>
+          <td>Markdown 引用</td>
+          <td class="input-group">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-info btn-flat" onClick="copyValue()">走你！(点击复制)</button>
+            </div>
+            <input type="text" id="copyContent" class="form-control" value="![{{ file.name }}]({{ file.thumbnails.0.large.url }})">
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+  <!-- this row will not appear when printing -->
+  <div class="row no-print">
+    <div class="col-xs-12">
+      <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
+      <button type="button" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment
+      </button>
+      <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
+        <i class="fa fa-download"></i> Generate PDF
+      </button>
+    </div>
+  </div>
+</section>
+<!--<div class="row">-->
+    <!--<div class="col-sm-6 col-md-3">-->
+        <!--<div class="thumbnail">-->
+            <!--<img src="/wp-content/uploads/2014/06/kittens.jpg"-->
+                 <!--alt="通用的占位符缩略图">-->
+            <!--<div class="caption">-->
+                <!--<h3>缩略图标签</h3>-->
+                <!--<p>一些示例文本。一些示例文本。</p>-->
+                <!--<p>-->
+                    <!--<a href="#" class="btn btn-primary" role="button">-->
+                        <!--按钮-->
+                    <!--</a>-->
+                    <!--<a href="#" class="btn btn-default" role="button">-->
+                        <!--按钮-->
+                    <!--</a>-->
+                <!--</p>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+{% endblock PageContent %}
+
+<!--添加外联JS-->
+{% block Jscript %}
+{% endblock Jscript %}
+
+{% block script %}
+<script type="text/javascript">
+function copyValue()
+{
+var temp = document.getElementById("copyContent");
+temp.select(); // 选中要复制的内容
+document.execCommand("Copy"); // 核心代码，复制选中的内容到剪切板
+alert("复制成功");
+}
+</script>
+{% endblock script %}

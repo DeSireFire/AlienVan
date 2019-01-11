@@ -24,12 +24,14 @@ def typeURL(client,od_type,path=''):
     print(BaseUrl)
     return BaseUrl
 
-def reduce_odata(odatavalue):
+def reduce_odata(odatavalue,keyName = None):
     '''
     简化odata,提取需要的常用键值对
     :param odata: 字典，od返回的文件列表数据,键'value'
+    :param keyName: 字符串，需要特殊提取的odata键名
     :return: dict->dict
     '''
+    get_keyName = lambda x:x[keyName] if keyName in x.keys() else []  # 获取特殊键
     mineType = lambda x:x['file']['mimeType'] if 'file' in x.keys() else '文件夹'  # 文件类型判断
     childCount = lambda x:x['folder']['childCount'] if 'folder' in x.keys() else ''  # 文件子项
     thumbnails = lambda x:x['thumbnails'] if 'thumbnails' != [] and 'file' in x.keys() else ''  # 文件缩略图不为空
@@ -47,9 +49,11 @@ def reduce_odata(odatavalue):
         'parentRoot':odatavalue['parentReference']['path'][12:],  # 父级目录路径
         'thumbnails':thumbnails(odatavalue),  # 文件缩略图
         'fileIco':fileIco(mineType(odatavalue)),  # 文件图标
-        'download':download(odatavalue),  # 文件下载链接
-    }
-    # print(temp['mimeType'],temp['name'],temp['fileIco'],temp['thumbnails'],)
+        'download':download(odatavalue),  # 文件下载链
+        }
+    if keyName:
+        temp[keyName] = get_keyName(odatavalue)
+    # print(temp['mimeType'],temp['name'],temp['fileIco'])
     return temp
 
 
