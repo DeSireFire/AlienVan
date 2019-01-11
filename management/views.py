@@ -65,6 +65,7 @@ def pans(request):
         'Here':'',  # 面包屑次级
         'pageHeaderSmall':'',
         'files':'',
+        'goback':'',
     }
     # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
     pansName = returnPanNames() # 盘符列表
@@ -86,20 +87,23 @@ def pans(request):
 
     # temp = loadSession.delay('/home/rq/workspace/python/AlienVan/driveJsons/anime.json').get()
     from odTools.filesHandler import files_list,reduce_odata
+    # 获取需要请求的od路径
     fp = ''
     if 'path' in request.GET and request.GET['path']:
         fp = request.GET['path']
-        context['Here'] = context['Here']
-    fl = files_list(temp,1,fp)
+        context['goback'] = '/'.join(request.GET['path'].split('/')[0:-1])  # 返回od上一级路径
+
+    fl = files_list(temp,1,fp)  # 向od获取odata,文件列表信息需要时间
 
     context['files'] = [reduce_odata(x) for x in fl['value']]
+
 
     return render(request, 'theme_AdminLTE/management/pans.html', context)
 
 
 
 def fileShow(request):
-    pass
+    return render(request, 'theme_AdminLTE/management/pans.html', context)
 
 
 def addPan(request):

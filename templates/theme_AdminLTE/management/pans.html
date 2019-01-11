@@ -34,6 +34,20 @@
     <div class="box-header">
       <h3 class="box-title">存储仓库</h3>
     </div>
+    <div class="box-body">
+    <a href="?name={{ Here }}">
+
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-info">
+            <font style="vertical-align: inherit;"><i class="fa fa-folder-open-o"></i> 返回根目录 <i class="fa fa-reply-all"></i></font>
+        </button>
+    </a>
+    </a>
+    <a href="?name={{ Here }}{% if goback %}&path={{goback}}{% endif %}">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-info">
+            <font style="vertical-align: inherit;"><i class="fa fa-folder-open-o"></i> 返回上一级 <i class="fa fa-reply"></i></font>
+        </button>
+    </a>
+    </div>
     <!-- /.box-header -->
     <div class="box-body">
     <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
@@ -41,11 +55,6 @@
     <div class="col-sm-12">
     <table id="example1" class="table table-hover table-striped dataTable" role="grid" aria-describedby="example1_info">
     <thead>
-    <tr role="row" class="">
-        <td><a href="?name={{ Here }}"><i class="fa fa-folder-open-o"></i> 返回根目录 <i class="fa fa-reply-all"></i></a></td>
-        <td><a href="?name={{ Here }}&path={{files.1.parentRoot}}"><i class="fa fa-folder-open-o"></i> 返回上一级 <i class="fa fa-reply"></i></a></td>
-        <td>刷新</td>
-    </tr>
     <tr role="row">
     <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="根据 文件/目录 名 排序" style=";">文件/目录 名</th>
     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 大小 排序" style="">大小</th>
@@ -53,7 +62,6 @@
     </tr>
     </thead>
     <tbody>
-
     {% for item in files %}
     <tr role="row" class="">
     <td>
@@ -64,7 +72,7 @@
             {% if item.childCount %}<small style="font-size: 5px;color: #8c8c8c;">(包含 {{ item|get_item:"childCount" }} 个子项）</small>{% endif %}
         </a>
         {% else %}
-        <a href="/file?name={{ Here }}&path={% if item.parentRoot %}{{item.parentRoot}}{% endif %}/{{ item|get_item:'name' }}">
+        <a href="file?name={{ Here }}&path={% if item.parentRoot %}{{item.parentRoot}}{% endif %}/{{ item|get_item:'name' }}">
             <i class="fa {{item.fileIco}}"></i>
             {{ item|get_item:"name" }}
         </a>
