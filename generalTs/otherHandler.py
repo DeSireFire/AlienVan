@@ -22,6 +22,15 @@ def fileIco(mimeType):
     else:
         return 'fa-file-o'
 
+def fileSize(sizeNumb):
+    '''
+    文件大小换算
+    :param sizeNumb: int 数字
+    :return:
+    '''
+    from hurry.filesize import size
+    return size(int(sizeNumb))
+
 def dict_merge(a, b):
     '''
     字典合并
@@ -108,8 +117,9 @@ def json_file_to_dict(pathFileName):
 
 
 if __name__ == '__main__':
-    from alienVan.settings import BASE_DIR
-    # print(os.path.join(BASE_DIR,'driveJsons'))
-    # a = fileList(os.path.join(BASE_DIR,'driveJsons'),'.json')
-    a = fileWalk(os.path.join(BASE_DIR,'driveJsons'),'.json')
-    print(a)
+    # from alienVan.settings import BASE_DIR
+    # # print(os.path.join(BASE_DIR,'driveJsons'))
+    # # a = fileList(os.path.join(BASE_DIR,'driveJsons'),'.json')
+    # a = fileWalk(os.path.join(BASE_DIR,'driveJsons'),'.json')
+    # print(a)
+    print(fileSize(2333))
