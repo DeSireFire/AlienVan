@@ -27,7 +27,7 @@
   <div class="row">
     <div class="col-xs-12">
       <h2 class="page-header">
-        <i class="fa {{ file.fileIco }}"></i> 『{{ file.name }}』,详细信息.
+        <i class="fa {{ file.fileIco }}"></i> 『{{ file.name }}』,信息.
         <small class="pull-right">创建时间: {{ file.createdDateTime }}</small>
       </h2>
     </div>
@@ -40,14 +40,31 @@
     </div>
     <!-- /.col -->
     <div class="col-sm-4 invoice-col">
-      <b>文件名 ：</b> {{ file.name }}<br>
-      <b>文件大小 :</b> {{ file.size }}<br>
-      <b>文件类型 :</b> {{ file.mimeType }}<br>
-      <b>文件ID :</b> {{ file.id }}<br>
-      <b>创建时间 :</b> {{ file.createdDateTime }}<br>
-      <b>修改时间 :</b> {{ file.lastModifiedDateTime }}<br>
-      <b>所在盘符 :</b> {{ panName }}<br>
-      <b>所在盘符路径 :</b> /{{ file.parentRoot }}<br>
+        <div class="box box-info box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title">文件信息</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+          </div>
+          <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <ul class="list-group list-group-flush">
+                <a href="#" class="list-group-item"><b>文件名 ：</b> {{ file.name }}</a>
+                <a href="#" class="list-group-item"><b>文件大小 :</b> {{ file.size }}</a>
+                <a href="#" class="list-group-item"><b>文件类型 :</b> {{ file.mimeType }}</a>
+                <a href="#" class="list-group-item"><b>文件ID :</b> {{ file.id }}</a>
+                <a href="#" class="list-group-item"><b>创建时间 :</b> {{ file.createdDateTime }}</a>
+                <a href="#" class="list-group-item"><b>修改时间 :</b> {{ file.lastModifiedDateTime }}</a>
+                <a href="pans?name={% if file.panName %}&path={{ panName }}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符 :</b> {{ panName }}</a>
+                <a href="pans?name={% if file.panName %}&path={{ panName }}{% else %}#{% endif %}{% if file.parentRoot %}&path={{file.parentRoot}}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符路径 :</b> {{panName}}/{{ file.parentRoot }}</a>
+            </ul>
+        </div>
+        <!-- /.box-body -->
+        </div>
       <!--<address>-->
         <!--微软用户:<strong>{{ file.createdBy.user.displayName }}</strong><br>-->
         <!--上传工具: {{ file.createdBy.application.displayName }}<br>-->
@@ -57,6 +74,7 @@
     <!-- /.col -->
   </div>
   <!-- /.row -->
+    <hr>
 
   <!-- Table row -->
   <div class="row">
