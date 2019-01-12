@@ -103,6 +103,10 @@ def pans(request):
 
 
 def fileShow(request):
+    '''
+    文件浏览视图
+    :return:
+    '''
     context = {
         'title':'管理-文件浏览',
         'sidebar':sidebar_list('网盘列表','/manage/'),    # 左导航条
@@ -130,6 +134,39 @@ def fileShow(request):
 
 
     return render(request, 'theme_AdminLTE/management/itemInfo.html', context)
+
+def fileDel(request):
+    '''
+    文件删除
+    :return:
+    '''
+    # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
+    pansName = returnPanNames() # 盘符列表
+    if not pansName:
+        return HttpResponseRedirect("addpan")
+
+    # 如果无文件id和动作参数，则跳转到对对应盘根目录
+    if 'fileid' in request.GET and request.GET['fileid'] and 'action' in request.GET and request.GET['action']:
+        pass
+    else:
+        return HttpResponseRedirect("pas?name={}".format(request.GET.get('name', pansName[0])))
+
+
+def fileRename(request):
+    '''
+    文件重命名
+    :return:
+    '''
+    # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
+    pansName = returnPanNames()  # 盘符列表
+    if not pansName:
+        return HttpResponseRedirect("addpan")
+
+    # 如果无文件id和动作参数，则跳转到对对应盘根目录
+    if 'fileid' in request.GET and request.GET['fileid'] and 'action' in request.GET and request.GET['action']:
+        pass
+    else:
+        return HttpResponseRedirect("pas?name={}".format(request.GET.get('name', pansName[0])))
 
 
 def addPan(request):
