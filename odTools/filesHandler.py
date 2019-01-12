@@ -71,11 +71,11 @@ def files_list(client,od_type,path=''):
     get_res = requests.get(typeURL(client,od_type,path), headers=headers, timeout=30, verify=False)
     get_res = json.loads(get_res.text)
     # print(get_res)
-    for i in get_res:
-        print('%s:%s'%(i,get_res[i]))
-        if i == 'value':
-            for n in get_res[i]:
-                print(n)
+    # for i in get_res:
+    #     print('%s:%s'%(i,get_res[i]))
+    #     if i == 'value':
+    #         for n in get_res[i]:
+    #             print(n)
     return get_res
 
 
@@ -128,10 +128,13 @@ def delete_files(client, fileid):
     :param fileid: 文件/目录的id
     :return:
     '''
-    url = client['app_url'] + '/v1.0/me/drive/items/{}'.format(fileid)
+    #todo 待优化,错误信息检查和返回信息
+    from alienVan.appConfig import oauthDict
+    url = oauthDict['app_url'] + '/v1.0/me/drive/items/{}'.format(fileid)
     headers = {'Authorization': 'bearer {}'.format(client["access_token"]), 'Content-Type': 'application/json'}
-    get_res = requests.delete(url, headers=headers)
+    get_res = requests.delete(url, headers=headers, verify=False)
     print(get_res)
+
     return get_res
 
 

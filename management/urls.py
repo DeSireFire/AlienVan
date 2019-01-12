@@ -8,5 +8,6 @@ urlpatterns = [
     path('file',views.fileShow),
     # path('',views.test),
     path('addpan',views.addPan),
+    path('del',views.fileDel),
     # path('signin', views.sign_in, name='signin'),
 ]

@@ -66,6 +66,7 @@
                 <a href="#" class="list-group-item"><b>修改时间 :</b> {{ file.lastModifiedDateTime }}</a>
                 <a href="pans?name={% if panName %}{{ panName }}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符 :</b> {{ panName }}</a>
                 <a href="pans?name={% if panName %}{{ panName }}{% else %}#{% endif %}&path={% if file.parentRoot %}{{file.parentRoot}}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符路径 :</b> {{panName}}:{{ file.parentRoot }}</a>
+                <a href="del?name={% if panName %}{{ panName }}{% endif %}&fileid={{ file.id }}" class="list-group-item"><b>删除文件</b></a>
             </div>
         </div>
         <!-- /.box-body -->
