@@ -4,7 +4,12 @@
 <!-- 网盘添加 -->
 
 {% block css %}
-    <!-- DataTables -->
+    <!--文件信息内容，太长则换行-->
+<style>
+    .box-body, .list-group-flush > a{
+        word-wrap:break-word;
+    }
+</style>
 {% endblock css %}
 
 <!-- 左导航列表 -->
@@ -52,16 +57,16 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <ul class="list-group list-group-flush">
+            <div class="list-group list-group-flush">
                 <a href="#" class="list-group-item"><b>文件名 ：</b> {{ file.name }}</a>
                 <a href="#" class="list-group-item"><b>文件大小 :</b> {{ file.size }}</a>
                 <a href="#" class="list-group-item"><b>文件类型 :</b> {{ file.mimeType }}</a>
                 <a href="#" class="list-group-item"><b>文件ID :</b> {{ file.id }}</a>
                 <a href="#" class="list-group-item"><b>创建时间 :</b> {{ file.createdDateTime }}</a>
                 <a href="#" class="list-group-item"><b>修改时间 :</b> {{ file.lastModifiedDateTime }}</a>
-                <a href="pans?name={% if file.panName %}&path={{ panName }}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符 :</b> {{ panName }}</a>
-                <a href="pans?name={% if file.panName %}&path={{ panName }}{% else %}#{% endif %}{% if file.parentRoot %}&path={{file.parentRoot}}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符路径 :</b> {{panName}}/{{ file.parentRoot }}</a>
-            </ul>
+                <a href="pans?name={% if panName %}{{ panName }}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符 :</b> {{ panName }}</a>
+                <a href="pans?name={% if panName %}{{ panName }}{% else %}#{% endif %}&path={% if file.parentRoot %}{{file.parentRoot}}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符路径 :</b> {{panName}}:{{ file.parentRoot }}</a>
+            </div>
         </div>
         <!-- /.box-body -->
         </div>

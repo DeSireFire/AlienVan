@@ -36,7 +36,7 @@ def reduce_odata(odatavalue,keyName = None):
     childCount = lambda x:x['folder']['childCount'] if 'folder' in x.keys() else ''  # 文件子项
     thumbnails = lambda x:x['thumbnails'] if 'thumbnails' != [] and 'file' in x.keys() else ''  # 文件缩略图不为空
     download = lambda x:x['@microsoft.graph.downloadUrl'] if '@microsoft.graph.downloadUrl' in x.keys() else ''  # 文件缩略图不为空
-    from odTools.otherHandler import fileIco
+    from generalTs.otherHandler import fileIco
     temp = {
         'id':odatavalue['id'],  # 文件id
         'name':odatavalue['name'],  # 文件名

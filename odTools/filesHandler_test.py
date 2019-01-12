@@ -86,8 +86,8 @@ def delete(client, item_id):
 
 if __name__ == '__main__':
     # 读取保存在json的session信息
-    from odTools.otherHandler import json_file_to_dict
-    from odTools.session import load_session,refresh_token,save_session
+    from generalTs. import json_file_to_dict
+    from generalTs.session import load_session,refresh_token,save_session
     temp = json_file_to_dict('/home/rq/workspace/python/AlienVan/driveJsons/233.json')
     client = load_session(temp)
     print(client)

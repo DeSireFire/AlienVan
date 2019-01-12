@@ -6,7 +6,7 @@ import requests,json
 from alienVan.appConfig import token_url,oauthDict,authorize_url
 import logging
 from time import time
-from odTools.otherHandler import *
+from generalTs.otherHandler import *
 from alienVan.settings import BASE_DIR
 
 # auth 授权登陆
