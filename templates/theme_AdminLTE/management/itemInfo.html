@@ -47,10 +47,15 @@
         {% if 'image' in file.mimeType %}
         <img class="mdui-img-fluid img-responsive center-block" style="max-width: 100%;max-height: 600px" src="{{ file.thumbnails.0.large.url }}">
         {% elif 'audio' in file.mimeType %}
-        <audio controls>
+        <audio class="center-block" controls>
           <source src="{{file.download}}" type="audio/mpeg">
         您的浏览器不支持 audio 元素。
         </audio>
+        {% elif 'video' in file.mimeType %}
+        <video class="center-block" style="max-width: 100%;max-height: 600px;padding-top: 15px;" controls>
+          <source src="{{file.download}}" type="video/mp4">
+        您的浏览器不支持Video标签。
+        </video>
         {% else %}
         <img class="mdui-img-fluid img-responsive center-block" style="max-width: 100%;max-height: 600px" src="{% static '/image/file.svg' %}">
         {% endif %}
