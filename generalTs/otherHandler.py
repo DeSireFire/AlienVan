@@ -29,7 +29,7 @@ def fileSize(sizeNumb):
     :return:
     '''
     from hurry.filesize import size
-    return size(int(sizeNumb))
+    return {'o':sizeNumb,'h':size(int(sizeNumb))}
 
 def dict_merge(a, b):
     '''

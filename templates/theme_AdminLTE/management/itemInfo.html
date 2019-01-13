@@ -9,6 +9,9 @@
     .box-body, .list-group-flush > a{
         word-wrap:break-word;
     }
+    .box.box-solid {
+        border: 2px solid #00c0ef;
+    }
 </style>
 {% endblock css %}
 
@@ -41,7 +44,16 @@
   <!-- info row -->
   <div class="row invoice-info">
     <div class="col-sm-8 invoice-col">
+        {% if 'image' in file.mimeType %}
         <img class="mdui-img-fluid img-responsive center-block" style="max-width: 100%;max-height: 600px" src="{{ file.thumbnails.0.large.url }}">
+        {% elif 'audio' in file.mimeType %}
+        <audio controls>
+          <source src="{{file.download}}" type="audio/mpeg">
+        您的浏览器不支持 audio 元素。
+        </audio>
+        {% else %}
+        <img class="mdui-img-fluid img-responsive center-block" style="max-width: 100%;max-height: 600px" src="{% static '/image/file.svg' %}">
+        {% endif %}
     </div>
     <!-- /.col -->
     <div class="col-sm-4 invoice-col">
@@ -59,25 +71,41 @@
         <div class="box-body">
             <div class="list-group list-group-flush">
                 <p href="#" class="list-group-item"><b>文件名 ：</b> {{ file.name }}</p>
-                <p href="#" class="list-group-item"><b>文件大小 :</b> {{ file.size }}</p>
+                <p href="#" class="list-group-item"><b>文件大小 :</b> {{ file.size.o }}</p>
                 <p href="#" class="list-group-item"><b>文件类型 :</b> {{ file.mimeType }}</p>
                 <p href="#" class="list-group-item"><b>文件ID :</b> {{ file.id }}</p>
                 <p href="#" class="list-group-item"><b>创建时间 :</b> {{ file.createdDateTime }}</p>
                 <p href="#" class="list-group-item"><b>修改时间 :</b> {{ file.lastModifiedDateTime }}</p>
+                <p href="#" class="list-group-item"><b>上传工具 :</b> {{ file.createdBy.application.displayName }}</p>
                 <a href="pans?name={% if panName %}{{ panName }}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符 :</b> {{ panName }}</a>
                 <a href="pans?name={% if panName %}{{ panName }}{% else %}#{% endif %}&path={% if file.parentRoot %}{{file.parentRoot}}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符路径 :</b> {{panName}}:{{ file.parentRoot }}</a>
             </div>
         </div>
         <!-- /.box-body -->
         </div>
-      <!--<address>-->
-        <!--微软用户:<strong>{{ file.createdBy.user.displayName }}</strong><br>-->
-        <!--上传工具: {{ file.createdBy.application.displayName }}<br>-->
-        <!--用户 Email: {{ file.createdBy.user.email }}-->
-      <!--</address>-->
+
+        <div class="box box-warning collapsed-box box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title">可展开</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+            </button>
+          </div>
+          <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          预留，想不起来做啥用了
+        </div>
+        <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+
     </div>
     <!-- /.col -->
   </div>
+
   <!-- /.row -->
     <hr>
 
@@ -117,7 +145,7 @@
     <div class="row no-print">
         <div class="col-xs-12">
             {% if file.id and panName %}<a href="del?name={{ panName }}&fileid={{ file.id }}" target="_blank" class="btn btn-default"><i class="fa fa-remove"></i> 删除文件</a>{% endif %}
-            {% if file.parentRoot and panName %}<a href="pans?name={{ panName }}&path={{file.parentRoot}}" class="btn btn-success pull-right"><i class="fa fa-folder"></i> 返回文件目录</a>{% endif %}
+            {% if panName %}<a href="pans?name={{ panName }}&path={{file.parentRoot}}" class="btn btn-success pull-right"><i class="fa fa-folder"></i> 返回文件目录</a>{% endif %}
             {% if file.download %}<a href="{{file.download}}" class="btn btn-primary pull-right" style="margin-right: 5px;" ><i class="fa fa-download"></i> 下载文件</a>{% endif %}
         </div>
     </div>

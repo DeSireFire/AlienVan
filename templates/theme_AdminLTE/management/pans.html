@@ -63,7 +63,7 @@
     </thead>
     <tbody>
     {% for item in files %}
-    <tr role="row" class="">
+    <tr role="row" class="sorting_1">
     <td>
         {% if item.mimeType == '文件夹' %}
         <a href="?name={{ Here }}&path={% if item.parentRoot %}{{item.parentRoot}}{% endif %}/{{ item|get_item:'name' }}">
@@ -80,8 +80,8 @@
         {% endif %}
 
     </td>
-    <td>{{ item.size }}</td>
-    <td class="sorting_1">{{ item|get_item:"lastModifiedDateTime" }}</td>
+    <td>{{ item.size.o }}</td>
+    <td>{{ item|get_item:"lastModifiedDateTime" }}</td>
     </tr>
     {% endfor %}
     </tbody>
