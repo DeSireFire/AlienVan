@@ -58,15 +58,14 @@
         <!-- /.box-header -->
         <div class="box-body">
             <div class="list-group list-group-flush">
-                <a href="#" class="list-group-item"><b>文件名 ：</b> {{ file.name }}</a>
-                <a href="#" class="list-group-item"><b>文件大小 :</b> {{ file.size }}</a>
-                <a href="#" class="list-group-item"><b>文件类型 :</b> {{ file.mimeType }}</a>
-                <a href="#" class="list-group-item"><b>文件ID :</b> {{ file.id }}</a>
-                <a href="#" class="list-group-item"><b>创建时间 :</b> {{ file.createdDateTime }}</a>
-                <a href="#" class="list-group-item"><b>修改时间 :</b> {{ file.lastModifiedDateTime }}</a>
+                <p href="#" class="list-group-item"><b>文件名 ：</b> {{ file.name }}</p>
+                <p href="#" class="list-group-item"><b>文件大小 :</b> {{ file.size }}</p>
+                <p href="#" class="list-group-item"><b>文件类型 :</b> {{ file.mimeType }}</p>
+                <p href="#" class="list-group-item"><b>文件ID :</b> {{ file.id }}</p>
+                <p href="#" class="list-group-item"><b>创建时间 :</b> {{ file.createdDateTime }}</p>
+                <p href="#" class="list-group-item"><b>修改时间 :</b> {{ file.lastModifiedDateTime }}</p>
                 <a href="pans?name={% if panName %}{{ panName }}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符 :</b> {{ panName }}</a>
                 <a href="pans?name={% if panName %}{{ panName }}{% else %}#{% endif %}&path={% if file.parentRoot %}{{file.parentRoot}}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符路径 :</b> {{panName}}:{{ file.parentRoot }}</a>
-                <a href="del?name={% if panName %}{{ panName }}{% endif %}&fileid={{ file.id }}" class="list-group-item"><b>删除文件</b></a>
             </div>
         </div>
         <!-- /.box-body -->
@@ -82,8 +81,11 @@
   <!-- /.row -->
     <hr>
 
+<!--如果存在则显示表格信息-->
+{% if urlDict %}
   <!-- Table row -->
   <div class="row">
+
     <div class="col-xs-12 table-responsive">
       <table class="table table-striped">
         <thead>
@@ -93,50 +95,32 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <td>图片 分享</td>
-          <td class="input-group">
-            <div class="input-group-btn">
-              <button type="button" class="btn btn-info btn-flat" onClick="copyValue()">走你！(点击复制)</button>
-            </div>
-            <input type="text" id="copyContent" class="form-control" value='{{ file.thumbnails.0.large.url }}'>
-          </td>
-        </tr>
-        <tr>
-          <td>html 引用</td>
-          <td class="input-group">
-            <div class="input-group-btn">
-              <button type="button" class="btn btn-info btn-flat" onClick="copyValue()">走你！(点击复制)</button>
-            </div>
-            <input type="text" id="copyContent" class="form-control" value='<img src="{{ file.thumbnails.0.large.url }}">'>
-          </td>
-        </tr>
-        <tr>
-          <td>Markdown 引用</td>
-          <td class="input-group">
-            <div class="input-group-btn">
-              <button type="button" class="btn btn-info btn-flat" onClick="copyValue()">走你！(点击复制)</button>
-            </div>
-            <input type="text" id="copyContent" class="form-control" value="![{{ file.name }}]({{ file.thumbnails.0.large.url }})">
-          </td>
-        </tr>
+          {% for key,value  in urlDict.items %}
+            <tr>
+              <td>{{key}}</td>
+              <td class="input-group">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-info btn-flat" onClick="copyValue()">走你！(点击复制)</button>
+                </div>
+                <input type="text" id="copyContent" class="form-control" value='{{value}}'>
+              </td>
+            </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
     <!-- /.col -->
   </div>
   <!-- /.row -->
+{% endif %}
   <!-- this row will not appear when printing -->
-  <div class="row no-print">
-    <div class="col-xs-12">
-      <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
-      <button type="button" class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment
-      </button>
-      <button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
-        <i class="fa fa-download"></i> Generate PDF
-      </button>
+    <div class="row no-print">
+        <div class="col-xs-12">
+            {% if file.id and panName %}<a href="del?name={{ panName }}&fileid={{ file.id }}" target="_blank" class="btn btn-default"><i class="fa fa-remove"></i> 删除文件</a>{% endif %}
+            {% if file.parentRoot and panName %}<a href="pans?name={{ panName }}&path={{file.parentRoot}}" class="btn btn-success pull-right"><i class="fa fa-folder"></i> 返回文件目录</a>{% endif %}
+            {% if file.download %}<a href="{{file.download}}" class="btn btn-primary pull-right" style="margin-right: 5px;" ><i class="fa fa-download"></i> 下载文件</a>{% endif %}
+        </div>
     </div>
-  </div>
 </section>
 <!--<div class="row">-->
     <!--<div class="col-sm-6 col-md-3">-->

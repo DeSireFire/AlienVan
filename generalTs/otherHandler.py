@@ -13,7 +13,7 @@ def fileIco(mimeType):
         return 'fa-film'
     elif 'audio' in mimeType:
         return 'fa-file-audio-o'
-    elif 'txt' in mimeType:
+    elif 'text' in mimeType:
         return 'fa-file-text-o'
     elif 'image' in mimeType:
         return 'fa-file-image-o'

@@ -115,7 +115,7 @@ def fileShow(request):
         'Level': '网盘列表',  # 面包屑次级
         'Here': '',  # 面包屑次级
         'file':'',
-        'goback':'',
+        'urlDict':'',
         'panName':'',
     }
     if 'path' in request.GET and request.GET['path'] and 'name' in request.GET and request.GET['name']:
@@ -130,6 +130,20 @@ def fileShow(request):
         for i in [reduce_odata(x,'createdBy') for x in files_list(temp, 1, '/'.join(request.GET['path'].split('/')[0:-1]))['value']]:
             if i['name'] == request.GET['path'].split('/')[-1]:
                 context['file'] = i
+                # 通过文件类型构造各类引用链接
+                if 'image' in i['mimeType']:
+                    context['urlDict'] = {
+                        '图片 分享':i['thumbnails'][0]['large']['url'],
+                        'html 引用':'<img src="{}">'.format(i['thumbnails'][0]['large']['url']),
+                        'Markdown 引用':'![{name}]({url})'.format(name=i['name'],url=i['thumbnails'][0]['large']['url']),
+                    }
+                elif 'text' in i['mimeType']:
+
+                    context['urlDict'] = {
+                        '文本 分享':i['download'],
+                        'html 引用':i['download'],
+                    }
+
                 break
 
 
