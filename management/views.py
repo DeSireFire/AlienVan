@@ -167,6 +167,7 @@ def fileDel(request):
         client = loadSession('{}.json'.format(request.GET.get('name')))
 
         # 删除对应文件
+        #todo 有待改成post
         from odTools.filesHandler import delete_files
         nya = delete_files(client,request.GET['fileid'])
 
@@ -186,8 +187,18 @@ def fileRename(request):
         return HttpResponseRedirect("addpan")
 
     # 如果无文件id和动作参数，则跳转到对对应盘根目录
-    if 'fileid' in request.GET and request.GET['fileid'] and 'action' in request.GET and request.GET['action']:
-        pass
+    if 'fileid' in request.GET and request.GET['fileid'] and 'new_name' in request.GET and request.GET['new_name']:
+
+        # 读取 session 的 json 文件
+        from .tasks import loadSession
+        client = loadSession('{}.json'.format(request.GET.get('name')))
+
+        # 给对应文件改名
+        #todo 有待改成post
+        from odTools.filesHandler import delete_files
+        nya = delete_files(client,request.GET['fileid'])
+
+        return HttpResponseRedirect("pans?name={}&path={}".format(request.GET.get('name'),request.GET.get('path','')))
     else:
         return HttpResponseRedirect("pas?name={}".format(request.GET.get('name', pansName[0])))
 
