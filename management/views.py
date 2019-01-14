@@ -198,6 +198,7 @@ def fileRename(request):
         from odTools.filesHandler import delete_files
         nya = delete_files(client,request.GET['fileid'])
 
+
         return HttpResponseRedirect("pans?name={}&path={}".format(request.GET.get('name'),request.GET.get('path','')))
     else:
         return HttpResponseRedirect("pas?name={}".format(request.GET.get('name', pansName[0])))
