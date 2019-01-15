@@ -60,12 +60,13 @@
     <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
     <div class="row">
     <div class="col-sm-12">
-    <table id="example1" class="table table-hover table-striped dataTable" role="grid" aria-describedby="example1_info">
+    <table id="fileDataTabel" class="table table-hover table-striped dataTable" role="grid" aria-describedby="fileDataTabel_info">
     <thead>
     <tr role="row">
-    <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="根据 文件/目录 名 排序" style=";">文件/目录 名</th>
-    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 大小 排序" style="">大小</th>
-    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="根据 修改日期 排序" style="">修改日期</th>
+    <th class="sorting_asc" tabindex="0" aria-controls="fileDataTabel" rowspan="1" colspan="1" aria-sort="ascending" aria-label="根据 文件/目录 名 排序" style=";">文件/目录 名</th>
+    <th class="sorting" tabindex="0" aria-controls="fileDataTabel" rowspan="1" colspan="1" aria-label="根据 大小 排序" style="">状态</th>
+    <th class="sorting" tabindex="0" aria-controls="fileDataTabel" rowspan="1" colspan="1" aria-label="根据 大小 排序" style="">大小</th>
+    <th class="sorting" tabindex="0" aria-controls="fileDataTabel" rowspan="1" colspan="1" aria-label="根据 修改日期 排序" style="">修改日期</th>
     </tr>
     </thead>
     <tbody>
@@ -87,6 +88,7 @@
         {% endif %}
 
     </td>
+    <td><span>是否为隐藏文件</span></td>
     <td><span>{{ item.size.o }}</span></td>
     <td>{{ item|get_item:"lastModifiedDateTime" }}</td>
     </tr>
@@ -149,15 +151,38 @@
 <script>
     // 文件列表
     $(function () {
-    $('#example1').DataTable({})
-    $('#example2').DataTable({
-      'paging'      : false,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : false,
-      'info'        : false,
-      'autoWidth'   : false
-    })
+    $('#fileDataTabel').DataTable({
+    // 'paging'      : true,
+    // 'lengthChange': true,
+    // 'searching'   : true,
+    // 'ordering'    : true,
+    // 'info'        : true,
+    // 'autoWidth'   : true,
+    language: {
+       "sProcessing": "处理中...",
+       "sLengthMenu": "显示 _MENU_ 项结果",
+       "sZeroRecords": "没有匹配结果",
+       "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+       "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+       "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+       "sInfoPostFix": "",
+       "sSearch": "搜索:",
+       "sUrl": "",
+       "sEmptyTable": "表中数据为空",
+       "sLoadingRecords": "载入中...",
+       "sInfoThousands": ",",
+       "oPaginate": {
+           "sFirst": "首页",
+           "sPrevious": "上页",
+           "sNext": "下页",
+           "sLast": "末页"
+       },
+       "oAria": {
+           "sSortAscending": ": 以升序排列此列",
+           "sSortDescending": ": 以降序排列此列"
+       }
+    }
+    });
     })
 
     // 上传文件 弹窗
