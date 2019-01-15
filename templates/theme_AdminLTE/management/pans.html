@@ -6,6 +6,10 @@
 {% block css %}
     <!-- DataTables -->
     <link rel="stylesheet" href="{% static 'AdminLTE-2.4.15/bower_components/datatables.net-bs/css/dataTables.bootstrap.css' %}">
+    <!-- fileinput -->
+    <link href="https://cdn.bootcss.com/bootstrap-fileinput/5.0.5/css/fileinput.min.css" rel="stylesheet">
+
+
     <style>
         .table-hover>tbody>tr:hover {
             background-color: rgba(62, 248, 217, 0.81);
@@ -38,15 +42,18 @@
     <a href="?name={{ Here }}">
 
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-info">
-            <i class="fa fa-folder-open-o"></i> 返回根目录 <i class="fa fa-reply-all"></i>
+            <i class="fa fa-folder-open-o"> </i> 返回根目录 <i class="fa fa-reply-all"></i>
         </button>
     </a>
     </a>
     <a href="?name={{ Here }}{% if goback %}&path={{goback}}{% endif %}">
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-info">
-            <i class="fa fa-folder-open-o"></i> 返回上一级 <i class="fa fa-reply"></i>
+            <i class="fa fa-folder-open-o"> </i> 返回上一级 <i class="fa fa-reply"></i>
         </button>
     </a>
+    <button class="btn btn-info" id="modalBtn" data-toggle="modal" data-target="#myModal">
+        <i class="fa fa-upload"> </i> 上传文件
+    </button>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -98,6 +105,26 @@
     </div>
     <!-- /.box-body -->
 </div>
+
+<!-- 弹窗 -->
+<div class="modal animated fade" id="upModal" tabindex="-1" role="dialog" aria-labelledby="upModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="upModalLabel">上传文件</h4>
+            </div>
+            <div class="modal-body">
+                <input id="upload-file" type="file" class="file-loading" name="attachment" multiple />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">提交更改</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
 <!--{{test|slice:":1"}}<br>-->
 <!--{{ test.2 }}<br>-->
 <!--{{ info.2.folder }}<br>-->
@@ -114,11 +141,14 @@
 {% block Jscript %}
 <script src="{% static 'AdminLTE-2.4.15/bower_components/datatables.net/js/jquery.dataTables.js' %}"></script>
 <script src="{% static 'AdminLTE-2.4.15/bower_components/datatables.net-bs/js/dataTables.bootstrap.js' %}"></script>
+<script src="https://cdn.bootcss.com/bootstrap-fileinput/5.0.5/js/fileinput.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap-fileinput/5.0.5/js/locales/zh.min.js"></script>
 {% endblock Jscript %}
 
 {% block script %}
 <script>
-  $(function () {
+    // 文件列表
+    $(function () {
     $('#example1').DataTable({})
     $('#example2').DataTable({
       'paging'      : false,
@@ -128,6 +158,69 @@
       'info'        : false,
       'autoWidth'   : false
     })
-  })
+    })
+
+    // 上传文件 弹窗
+    $(function(){
+    // dom加载完毕
+    var $m_btn = $('#modalBtn');
+    var $modal = $('#upModal');
+    $m_btn.on('click', function(){
+      $modal.modal({backdrop: 'static'});
+    });
+
+    // bootstrap 居中
+    $modal.on('show.bs.modal', function(){
+      var $this = $(this);
+      var $modal_dialog = $this.find('.modal-dialog');
+      // 关键代码，如没将modal设置为 block，则$modala_dialog.height() 为零
+      $this.css('display', 'block');
+      $modal_dialog.css({'margin-top': Math.max(0, ($(window).height() - $modal_dialog.height()) / 2) });
+    });
+
+    });
+
+
+    // 上传文件插件
+    var aryFiles = Array();
+        $('#upload-file').fileinput({
+            language: 'zh',     // 设置语言，需要引入locales/zh.js文件
+            uploadUrl: '/att_upload/',     // 上传路径
+            maxFileSize: 0,     // 上传文件大小限制，触发 msgSizeTooLarge 提示
+            // {name}：将被上传的文件名替换，{size}：将被上传的文件大小替换，{maxSize}：将被maxFileSize参数替换。
+            msgSizeTooLarge: '"{name}" ({size} KB) 超过允许的最大上传大小 {maxSize} KB。请重新上传!',
+            showPreview: true,  // 展示预览
+            showUpload: true,   // 是否显示上传按钮
+            showCaption: true,  // 是否显示文字描述
+            showClose: false,   // 隐藏右上角×
+            uploadAsync: true, // 是否异步上传
+            initialPreviewShowDelete: true, // 预览中的删除按钮
+            autoReplace: true,  // 达到最大上传数时，自动替换之前的附件
+            // uploadExtraData: function () {  // uploadExtraData携带附加参数，上传时携带csrftoken
+            //     return {csrfmiddlewaretoken: $.cookie('csrftoken'), doc_uuid: $('[name=doc_uuid]').val()}
+            // },
+            initialPreview :[],　　// 默认预览设置，回显时会用到
+            initialPreviewConfig: [],　　// 默认预览的详细配置，回显时会用到
+        }).on("fileuploaded", function (e,data,previewId,index) {
+            // 上传成功后触发的事件
+        }).on("fileclear", function (e) {
+            // 移除按钮触发的事件，用该事件批量删除
+
+            $.ajax({
+                url: '/del_all_att/',
+                method: 'post',
+                dataType: 'json',
+                data: {'aryFiles': JSON.stringify(aryFiles)},
+                success: function (data) {
+    　　　　　　　　　　　　　　
+                }
+            })
+        }).on("filepredelete", function (e, key, jqXHR, data) {
+            // 预览中删除按钮，删除上传的文件触发的事件
+        }).on("fileloaded", function (e, file, previewId) {
+            // aryFile.length = 0;
+            // 加载预览后触发的事件，将所有文件名添加到全局变量 aryFiles 数组中
+            aryFiles.push(file.name);
+        })
 </script>
 {% endblock script %}

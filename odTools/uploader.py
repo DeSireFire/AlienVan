@@ -150,5 +150,6 @@ def uploader_fileSlice(filePath,setPoint,sliceLen):
 
 
 if __name__ == '__main__':
-    temp = flush_token(info["refresh_token"])
-    big_uploader(temp,'test.zip','/')
+    pass
+    # temp = flush_token(info["refresh_token"])
+    # big_uploader(temp,'test.zip','/')
