@@ -3,16 +3,15 @@ onedrive 上传文件
 '''
 import requests,json
 from alienVan.appConfig import oauthDict
-
+import os.path
 
 ## 上传总函数
 
-def main_uploader(client,filePath,remotePath='/',fileid=False):
+def main_uploader(client,filePath,remotePath,fileid=False):
     '''上传文件，总函数
     :param filePath:str,上传的目标文件在本地的完整路径
     :param remotePath:str,远程网盘要放的路径
     '''
-    import os.path
 
     # 如果存在文件id,则使用文件更新已有项目
     if fileid:
@@ -20,7 +19,7 @@ def main_uploader(client,filePath,remotePath='/',fileid=False):
 
     # 小于8MB用小文件上传
     if os.path.getsize(filePath) < 8388608:
-        return small_uploader(client,os.path.basename(filePath),remotePath)
+        return small_uploader(client,filePath,remotePath)
     else:   # 大于8mb用大文件上传
         return big_uploader(client,os.path.basename(filePath),remotePath)
 
@@ -38,7 +37,7 @@ def updater(client,fileid,filePath):
     pull_res = json.loads(pull_res.text)
     return pull_res
 
-def small_uploader(client,fileName,remotePath):
+def small_uploader(client,filePath,remotePath):
     '''上传新项目
     PUT /me/drive/items/{parent-id}:/{filename}:/content
 
@@ -50,11 +49,13 @@ def small_uploader(client,fileName,remotePath):
     Content-Type: text/plain
 
     '''
-    url = oauthDict['app_url'] + '/v1.0/me/drive/items/root:/{}:/content'.format(fileName)
+    fileName = os.path.basename(filePath)
+    url = oauthDict['app_url'] + '/v1.0/me/drive/items/root:/{remotePath}{fileName}:/content'.format(remotePath=remotePath+'/',fileName=fileName)
     headers = {'Authorization': 'bearer {}'.format(client["access_token"])}
-    pull_res = requests.put(url, headers=headers, data=open(fileName, 'rb'))
+    pull_res = requests.put(url, headers=headers, data=open(filePath, 'rb'), verify=False)
     pull_res = json.loads(pull_res.text)
-    return pull_res
+
+    return {"status":"ok","info":pull_res,"percent": "100%"}
 
 def big_uploader(client,filePath,remotePath):
     '''
@@ -69,7 +70,6 @@ def big_uploader(client,filePath,remotePath):
     # 目标文件分段
     #todo fileRuler可以写活而不用固定长度
     fileSize = os.path.getsize(filePath)
-    print(fileSize)# 获取文件大小
     fileRuler = 10485760    # 10MB 尺
     listSlice = [[i, i + fileRuler - 1, fileRuler] for i in range(0, fileSize, fileRuler)] # 生成切好的分段组数
     # 对齐末尾剩余的文件片段
@@ -93,7 +93,6 @@ def big_uploader(client,filePath,remotePath):
         uploaderPart = requests.put(sessionInfo['uploadUrl'], headers=headers, data=uploader_fileSlice(filePath,i[0],i[2]))
         if uploaderPart.status_code in [200,201,202,204]:
             if uploaderPart.status_code == 201:  # 201 表示上传完成
-                print({"status":"ok","info":json.loads(uploaderPart.text),"percent": "100%"})
                 return {"status":"ok","info":json.loads(uploaderPart.text),"percent": "100%"}
             else:
                 print({"status":"uploading","info":"","percent": '{:.0%}'.format(int(json.loads(uploaderPart.text)['nextExpectedRanges'][0].split('-')[0])/fileSize)})

@@ -249,18 +249,44 @@ def upLoader(request):
     上传文件
     :return:
     '''
+    # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
+    pansName = returnPanNames() # 盘符列表
+
     from alienVan.settings import MEDIA_ROOT
     filesdata = request.FILES.get('filesdata', None)
-    panName = request.FILES.get('panname', None)
-    panPath = request.FILES.get('path', None)
-    if filesdata:
+    panName = request.POST.get('panname', None)
+    panPath = request.POST.get('path', None)
+    if filesdata and panName and panName in pansName:
+
         # 保存文件到硬盘中
         file_dir = os.path.join(MEDIA_ROOT, filesdata.name)
         print(file_dir)
         with open(file_dir,"wb") as f:
             for chunk in filesdata.chunks():
                 f.write(chunk)
-    return JsonResponse({'status':'success'})
+
+        # 读取 session 的 json 文件
+        from .tasks import loadSession
+        client = loadSession('{}.json'.format(panName))
+
+        # 上传文件到对应网盘
+        from odTools.uploader import main_uploader
+        file_res = main_uploader(client,file_dir,panPath)
+        print(file_res)
+
+        # 验证是否成功上传到OD
+        if 'status'in file_res.keys() and file_res['status'] == 'ok':
+            # 成功则删除缓存
+            if os.path.exists(file_dir):
+                # 删除文件，可使用以下两种方法。
+                os.remove(file_dir)
+                # os.unlink(my_file)
+
+            return JsonResponse({'status':'success'})
+        else:
+            return HttpResponse(status=400)
+    else:
+        return HttpResponse(status=400)
 
 
 

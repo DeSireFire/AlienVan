@@ -256,6 +256,7 @@
             initialPreviewConfig: [],　　// 默认预览的详细配置，回显时会用到
         }).on("fileuploaded", function (e,data,previewId,index) {
             // 上传成功后触发的事件
+            location.reload();
         }).on("fileclear", function (e) {
             // 移除按钮触发的事件，用该事件批量删除
 
