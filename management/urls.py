@@ -10,5 +10,6 @@ urlpatterns = [
     path('addpan',views.addPan),
     path('del',views.fileDel),
     path('rename',views.fileRename),
+    path('uploader',views.upLoader),
     # path('signin', views.sign_in, name='signin'),
 ]

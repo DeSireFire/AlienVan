@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
 from .tasks import *
 from django.template import RequestContext
 import json
-
+# csrf 例外
+# from django.views.decorators.csrf import csrf_exempt
+# @csrf_exempt
 # Create your views here.
 
 #todo 盘符更新需要思路
@@ -155,8 +157,8 @@ def fileDel(request):
     :return:
     '''
     # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
-    pansName = returnPanNames() # 盘符列表
-    if not pansName:
+    pansNames = returnPanNames() # 盘符列表
+    if not pansNames:
         return HttpResponseRedirect("addpan")
 
     # 如果无文件id和动作参数，则跳转到对应盘根目录
@@ -242,10 +244,25 @@ def addPan(request):
     return render(request, 'theme_AdminLTE/management/loadDrive.html',context)
 
 
+def upLoader(request):
+    '''
+    上传文件
+    :return:
+    '''
+    from alienVan.settings import MEDIA_ROOT
+    filesdata = request.FILES.get('filesdata', None)
+    panName = request.FILES.get('panname', None)
+    panPath = request.FILES.get('path', None)
+    if filesdata:
+        # 保存文件到硬盘中
+        file_dir = os.path.join(MEDIA_ROOT, filesdata.name)
+        print(file_dir)
+        with open(file_dir,"wb") as f:
+            for chunk in filesdata.chunks():
+                f.write(chunk)
+    return JsonResponse({'status':'success'})
 
-# csrf 例外
-# from django.views.decorators.csrf import csrf_exempt
-# @csrf_exempt
+
 
 # 视图辅助函数
 

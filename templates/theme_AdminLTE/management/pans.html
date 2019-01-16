@@ -117,11 +117,12 @@
                 <h4 class="modal-title" id="upModalLabel">上传文件</h4>
             </div>
             <div class="modal-body">
-                <input id="upload-file" type="file" class="file-loading" name="attachment" multiple />
+                <input id="upload-file" type="file" class="file-loading" name="filesdata" multiple />
+                <!--<input id="upload-file" type="file" class="file-loading" name="fileData" multiple />-->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">提交更改</button>
+                <!--<button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>-->
+                <!--<button type="button" class="btn btn-primary">提交更改</button>-->
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
@@ -204,13 +205,38 @@
     });
 
     });
-
+    // 获取头部
+    function getCookie(name) {
+        var cookieValue = null;
+         if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+            }
+        }
+        }
+        return cookieValue;
+    }
+    // 获取url链接参数
+    function getQueryVariable(variable)
+    {
+           var query = window.location.search.substring(1);
+           var vars = query.split("&");
+           for (var i=0;i<vars.length;i++) {
+                   var pair = vars[i].split("=");
+                   if(pair[0] == variable){return pair[1];}
+           }
+           return('');
+    }
 
     // 上传文件插件
     var aryFiles = Array();
         $('#upload-file').fileinput({
             language: 'zh',     // 设置语言，需要引入locales/zh.js文件
-            uploadUrl: '/att_upload/',     // 上传路径
+            uploadUrl: 'uploader',     // 上传路径
             maxFileSize: 0,     // 上传文件大小限制，触发 msgSizeTooLarge 提示
             // {name}：将被上传的文件名替换，{size}：将被上传的文件大小替换，{maxSize}：将被maxFileSize参数替换。
             msgSizeTooLarge: '"{name}" ({size} KB) 超过允许的最大上传大小 {maxSize} KB。请重新上传!',
@@ -221,9 +247,11 @@
             uploadAsync: true, // 是否异步上传
             initialPreviewShowDelete: true, // 预览中的删除按钮
             autoReplace: true,  // 达到最大上传数时，自动替换之前的附件
-            // uploadExtraData: function () {  // uploadExtraData携带附加参数，上传时携带csrftoken
-            //     return {csrfmiddlewaretoken: $.cookie('csrftoken'), doc_uuid: $('[name=doc_uuid]').val()}
-            // },
+            uploadExtraData: {
+                csrfmiddlewaretoken: getCookie('csrftoken'),
+                'panname':decodeURI(getQueryVariable('name')),
+                'path':decodeURI(getQueryVariable('path')),
+            },
             initialPreview :[],　　// 默认预览设置，回显时会用到
             initialPreviewConfig: [],　　// 默认预览的详细配置，回显时会用到
         }).on("fileuploaded", function (e,data,previewId,index) {
@@ -232,16 +260,21 @@
             // 移除按钮触发的事件，用该事件批量删除
 
             $.ajax({
-                url: '/del_all_att/',
+                url: 'uploader/',
                 method: 'post',
                 dataType: 'json',
-                data: {'aryFiles': JSON.stringify(aryFiles)},
+                data: {
+                    'panname':getQueryString('name'),
+                    'path':getQueryString('path'),
+                    'aryFiles': JSON.stringify(aryFiles)
+                },
                 success: function (data) {
     　　　　　　　　　　　　　　
                 }
             })
         }).on("filepredelete", function (e, key, jqXHR, data) {
             // 预览中删除按钮，删除上传的文件触发的事件
+            alert('喵叽')
         }).on("fileloaded", function (e, file, previewId) {
             // aryFile.length = 0;
             // 加载预览后触发的事件，将所有文件名添加到全局变量 aryFiles 数组中

@@ -131,6 +131,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+MEDIA_URL = '/tempFiles/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'tempFiles')
+
 #############################
 # celery 配置信息 start
 #############################
