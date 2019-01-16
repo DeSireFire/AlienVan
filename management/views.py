@@ -157,8 +157,8 @@ def fileDel(request):
     :return:
     '''
     # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
-    pansNames = returnPanNames() # 盘符列表
-    if not pansNames:
+    pansName = returnPanNames() # 盘符列表
+    if not pansName:
         return HttpResponseRedirect("addpan")
 
     # 如果无文件id和动作参数，则跳转到对应盘根目录
@@ -244,7 +244,7 @@ def addPan(request):
     return render(request, 'theme_AdminLTE/management/loadDrive.html',context)
 
 
-def upLoader(request):
+def fileupLoader(request):
     '''
     上传文件
     :return:
