@@ -112,7 +112,8 @@ def rename_files(client, fileid, new_name):
     :param new_name:
     :return:
     '''
-    url = client['app_url'] + '/v1.0/me/drive/items/{}'.format(fileid)
+    from alienVan.appConfig import oauthDict
+    url = oauthDict['app_url'] + '/v1.0/me/drive/items/{}'.format(fileid)
     headers = {'Authorization': 'bearer {}'.format(client["access_token"]), 'Content-Type': 'application/json'}
     payload = {"name": new_name}
     get_res = requests.patch(url, headers=headers, data=json.dumps(payload))

@@ -12,6 +12,18 @@
     .box.box-solid {
         border: 2px solid #00c0ef;
     }
+    #ck {
+        display:none
+    }
+    #csk{
+        position:absolute;
+        top:0
+        left:0
+
+    }
+    #filename{
+        position:relative;
+    }
 </style>
 {% endblock css %}
 
@@ -75,10 +87,15 @@
         <!-- /.box-header -->
         <div class="box-body">
             <div class="list-group list-group-flush">
-                <p class="list-group-item" id="csk" id="csk"><b>文件名 ：</b> {{ file.name }}</p>
+                <p class="list-group-item" id="filename">
+                    <b>文件名 ：</b>
+                    <input id ='ck' value='{{ file.name }}' type="text">
+                    <label for="ck" id="csk">{{ file.name }} <small>(修改文件名)</small></label>
+
+                </p>
                 <p href="#" class="list-group-item"><b>文件大小 :</b> {{ file.size.o }}</p>
                 <p href="#" class="list-group-item"><b>文件类型 :</b> {{ file.mimeType }}</p>
-                <p href="#" class="list-group-item"><b>文件ID :</b> {{ file.id }}</p>
+                <p id="fileid" class="list-group-item"><b>文件ID :</b> {{ file.id }}</p>
                 <p href="#" class="list-group-item"><b>创建时间 :</b> {{ file.createdDateTime }}</p>
                 <p href="#" class="list-group-item"><b>修改时间 :</b> {{ file.lastModifiedDateTime }}</p>
                 <p href="#" class="list-group-item"><b>上传工具 :</b> {{ file.createdBy.application.displayName }}</p>
@@ -155,6 +172,8 @@
         </div>
     </div>
 </section>
+
+
 <!--<div class="row">-->
     <!--<div class="col-sm-6 col-md-3">-->
         <!--<div class="thumbnail">-->
@@ -191,6 +210,33 @@ document.execCommand("Copy"); // 核心代码，复制选中的内容到剪切�
 alert("复制成功");
 }
 
+// 获取头部
+function getCookie(name) {
+    var cookieValue = null;
+     if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+        }
+    }
+    }
+    return cookieValue;
+}
+// 获取url链接参数
+function getQueryVariable(variable)
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return('');
+}
+
 // 文件改名
 let ck = $('#ck')
 let csk = $('#csk')
@@ -198,6 +244,7 @@ let kuang = $('body')
 console.log($('csk').css('display'))
 console.log(csk)
 csk.on('click',()=>{
+    let temp = ck.val()
     csk.hide()
     ck.show()
     console.log(csk)
@@ -207,22 +254,34 @@ csk.on('click',()=>{
             if(e.target.id !== 'csk'){
                 kuang.unbind("click")
                 csk.text(ck.val())
-                let xxx = ck.val()
+                let fileName = ck.val()
+                let fileid = $('#fileid').text().slice(7)
             // 发送ajax请求
-            $.ajax({
-                type:'post',
-                url:'127.0.0.1',
-                data:{
-                    filename:xxx
-                },
-                success:function(){
+                console.log(ck.val())
+                console.log(temp)
 
-                },
-                error:function(){
+                if(ck.val() !== temp){
+                $.ajax({
+                    type:'post',
+                    url:'rename',
+                    data:{
+                        fileName:fileName,
+                        fileid:fileid,
+                        csrfmiddlewaretoken: getCookie('csrftoken'),
+                        panName:decodeURI(getQueryVariable('name'))
+                    },
+                    success:function(data){
+                        if(data.status = 'success'){
+                            console.log(data)
+                            //todo 加个转圈和打钩
+                        }
+                    },
+                    error:function(){
 
+                    }
+
+                })
                 }
-
-            })
             csk.show()
             ck.hide()
             }

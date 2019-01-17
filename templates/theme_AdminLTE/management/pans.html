@@ -40,7 +40,6 @@
     </div>
     <div class="box-body">
     <a href="?name={{ Here }}">
-
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-info">
             <i class="fa fa-folder-open-o"> </i> 返回根目录 <i class="fa fa-reply-all"></i>
         </button>
@@ -118,7 +117,6 @@
             </div>
             <div class="modal-body">
                 <input id="upload-file" type="file" class="file-loading" name="filesdata" multiple />
-                <!--<input id="upload-file" type="file" class="file-loading" name="fileData" multiple />-->
             </div>
             <div class="modal-footer">
                 <!--<button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>-->
@@ -262,7 +260,7 @@
             // 移除按钮触发的事件，用该事件批量删除
 
             $.ajax({
-                url: 'uploader/',
+                url: 'del',
                 method: 'post',
                 dataType: 'json',
                 data: {

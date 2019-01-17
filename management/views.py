@@ -183,27 +183,29 @@ def fileRename(request):
     文件重命名
     :return:
     '''
-    # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
-    pansName = returnPanNames()  # 盘符列表
-    if not pansName:
-        return HttpResponseRedirect("addpan")
-
+    pansName = returnPanNames() # 盘符列表
     # 如果无文件id和动作参数，则跳转到对对应盘根目录
-    if 'fileid' in request.POST and request.POST['fileid'] and 'new_name' in request.GET and request.GET['new_name']:
+    if 'fileid' in request.POST and request.POST['fileid'] \
+            and 'fileName' in request.POST and request.POST['fileName'] \
+            and 'panName' in request.POST and request.POST['panName'] and request.POST['panName'] in pansName:
 
         # 读取 session 的 json 文件
         from .tasks import loadSession
-        client = loadSession('{}.json'.format(request.GET.get('name')))
+        client = loadSession('{}.json'.format(request.POST.get('panName')))
 
-        # 给对应文件改名
-        #todo 有待改成post
-        from odTools.filesHandler import delete_files
-        nya = delete_files(client,request.GET['fileid'])
+        # # 给对应文件改名
+        from odTools.filesHandler import rename_files
+        rename_res = rename_files(client,request.POST['fileid'],request.POST['fileName'])
 
-
-        return HttpResponseRedirect("pans?name={}&path={}".format(request.GET.get('name'),request.GET.get('path','')))
+        # 响应请求，回复信息
+        #todo 返回消息跳转到新文件页
+        if '@microsoft.graph.downloadUrl' in rename_res.keys():
+            return JsonResponse({'status':'success','info':''})
+        else:
+            return JsonResponse({'status':'Fuck','info':''})
     else:
-        return HttpResponseRedirect("pas?name={}".format(request.GET.get('name', pansName[0])))
+        # 缺少必须的字段全部500
+        return HttpResponse(status=500)
 
 
 def addPan(request):
