@@ -17,8 +17,8 @@
     }
     #csk{
         position:absolute;
-        top:0
-        left:0
+        top:0;
+        left:0;
 
     }
     #filename{
@@ -241,15 +241,11 @@ function getQueryVariable(variable)
 let ck = $('#ck')
 let csk = $('#csk')
 let kuang = $('body')
-console.log($('csk').css('display'))
-console.log(csk)
 csk.on('click',()=>{
     let temp = ck.val()
     csk.hide()
     ck.show()
-    console.log(csk)
     kuang.on('click',(e)=>{
-        console.log(e.target.id)
         if(e.target.id !== 'ck'){
             if(e.target.id !== 'csk'){
                 kuang.unbind("click")
@@ -257,9 +253,6 @@ csk.on('click',()=>{
                 let fileName = ck.val()
                 let fileid = $('#fileid').text().slice(7)
             // 发送ajax请求
-                console.log(ck.val())
-                console.log(temp)
-
                 if(ck.val() !== temp){
                 $.ajax({
                     type:'post',

@@ -19,7 +19,9 @@ Sidebar = [
     ['主题设置',False,'fa fa-circle-o',''],
 ]
 
-
+'''
+网盘状态和管理
+'''
 
 def panAction(request):
     '''
@@ -51,6 +53,11 @@ def panAction(request):
 
 
     return render(request, 'theme_AdminLTE/management/dashBoard.html', context)
+
+
+'''
+网盘列表相关视图
+'''
 
 def pans(request):
     '''
