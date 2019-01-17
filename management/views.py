@@ -51,6 +51,30 @@ def panAction(request):
         context['Here'] = pansName[0]
         context['pageHeaderSmall'] = pansName[0]
 
+    # 读取 session 的 json 文件
+    from .tasks import loadSession
+    temp = loadSession('{}.json'.format(context['Here']))
+    context['Here'] = temp['panName']
+
+    from odTools.panAction import get_driveInfo
+    tempDict = get_driveInfo(temp)
+    print(tempDict)
+    # 删除用不上的字段
+
+    context['info'] = {
+        'createdDateTime':tempDict['createdDateTime'].replace('-','/').replace('T',' ').replace('Z',''),
+        'lastModifiedDateTime':tempDict['lastModifiedDateTime'].replace('-','/').replace('T',' ').replace('Z',''),
+        'name':tempDict['name'],
+        'driveType':tempDict['driveType'],
+        'owner':tempDict['owner']['user']['displayName'],
+        'email':tempDict['owner']['user']['email'],
+        'deleted':tempDict['quota']['deleted'],
+        'remaining':tempDict['quota']['remaining'],
+        'state':tempDict['quota']['state'],
+        'total':tempDict['quota']['total'],
+        'used':tempDict['quota']['used'],
+    }
+
 
     return render(request, 'theme_AdminLTE/management/dashBoard.html', context)
 
