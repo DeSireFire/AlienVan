@@ -61,6 +61,7 @@ def panAction(request):
     print(tempDict)
     # 删除用不上的字段
 
+    from generalTs.otherHandler import fileSize
     context['info'] = {
         'createdDateTime':tempDict['createdDateTime'].replace('-','/').replace('T',' ').replace('Z',''),
         'lastModifiedDateTime':tempDict['lastModifiedDateTime'].replace('-','/').replace('T',' ').replace('Z',''),
@@ -68,13 +69,13 @@ def panAction(request):
         'driveType':tempDict['driveType'],
         'owner':tempDict['owner']['user']['displayName'],
         'email':tempDict['owner']['user']['email'],
-        'deleted':tempDict['quota']['deleted'],
-        'remaining':tempDict['quota']['remaining'],
-        'state':tempDict['quota']['state'],
-        'total':tempDict['quota']['total'],
-        'used':tempDict['quota']['used'],
+        'state': tempDict['quota']['state'],
+        'deleted':fileSize(tempDict['quota']['deleted']),
+        'remaining':dict(fileSize(tempDict['quota']['remaining']), **{'percentage':"%.2f%%" % (tempDict['quota']['remaining']/tempDict['quota']['total']*100)}),
+        'total':fileSize(tempDict['quota']['total']),
+        'used':dict(fileSize(tempDict['quota']['used']), **{'percentage':"%.2f%%" % (tempDict['quota']['used']/tempDict['quota']['total']*100)}),
     }
-
+    #todo 研究以下od的过滤器
 
     return render(request, 'theme_AdminLTE/management/dashBoard.html', context)
 

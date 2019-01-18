@@ -1,4 +1,5 @@
 {% extends 'theme_AdminLTE/management/base_sec.html' %}
+
 {% load static %}
 {% load tags %}
 <!-- 网盘添加 -->
@@ -24,86 +25,259 @@
 <!-- 分页主内容 -->
 {% block PageContent %}
 {{info}}
-  <div class="row">
-   <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="info-box">
-     <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
-     <div class="info-box-content">
-      <span class="info-box-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">CPU流量</font></font></span>
-      <span class="info-box-number"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">90 </font></font><small><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">％</font></font></small></span>
-     </div>
-     <!-- /.info-box-content -->
+<div class="row">
+    <div class="col-md-8">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    {{pageHeaderSmall}} 硬盘
+                </h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="box-group" id="accordion">
+                    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects
+                    it -->
+                    <div class="panel box box-primary">
+                        <div class="box-header with-border">
+                            <h4 class="box-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                                aria-expanded="false" class="collapsed">
+                                    硬盘信息
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false"
+                        style="height: 0px;">
+                            <div class="box-body">
+                                <div class="col-md-12">
+                                    <div class="box box-solid">
+                                        <div class="box-header with-border">
+                                            <i class="fa fa-text-width">
+                                            </i>
+                                            <h3 class="box-title">
+                                                盘符 ： {{pageHeaderSmall}}
+                                            </h3>
+                                        </div>
+                                        <!-- /.box-header -->
+                                        <div class="box-body">
+                                            <dl class="dl-horizontal col-md-6">
+                                                <dt>
+                                                    账户所属：
+                                                </dt>
+                                                <dd>
+                                                    {{info.owner}}
+                                                </dd>
+                                                <dt>
+                                                    电子邮件：
+                                                </dt>
+                                                <dd>
+                                                    {{info.email}}
+                                                </dd>
+                                                <dt>
+                                                    网盘类型：
+                                                </dt>
+                                                <dd>
+                                                {{info.driveType}}
+                                                </dd>
+                                                <dt>
+                                                    网盘状态：
+                                                </dt>
+                                                <dd>
+                                                    {{info.state}}
+                                                </dd>
+                                                <dt>
+                                                    网盘总空间：
+                                                </dt>
+                                                <dd>
+                                                    {{info.total.o}}字节 ({{info.total.h}})
+                                                </dd>
+                                                <dt>
+                                                    历史删除数据：
+                                                </dt>
+                                                <dd>
+                                                    {{info.deleted.o}}字节 ({{info.deleted.h}})
+                                                </dd>
+                                                <dt>
+                                                    创建时间：
+                                                </dt>
+                                                <dd>
+                                                    {{info.createdDateTime}}
+                                                </dd>
+                                                <dt>
+                                                    修改时间：
+                                                </dt>
+                                                <dd>
+                                                    {{info.lastModifiedDateTime}}
+                                                </dd>
+                                            </dl>
+                                            <div class="progress-group">
+                                                <span class="progress-text">
+                                                    图片文件类型占比： ({{info.used.percentage}})
+                                                </span>
+                                                <span class="progress-number">
+                                                    <b>
+                                                        {{info.used.h}}
+                                                    </b>
+                                                    /{{info.total.h}}
+                                                </span>
+                                                <div class="progress sm">
+                                                    <div class="progress-bar progress-bar-aqua" style="width:{{info.used.percentage}}%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="progress-group">
+                                                <span class="progress-text">
+                                                    视频文件类型占比：
+                                                </span>
+                                                <span class="progress-number">
+                                                    <b>
+                                                        {{info.used.h}}
+                                                    </b>
+                                                    /{{info.total.h}}
+                                                </span>
+                                                <div class="progress sm">
+                                                    <div class="progress-bar progress-bar-aqua" style="width:{{info.used.percentage}}%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="progress-group">
+                                                <span class="progress-text">
+                                                    音频文件类型占比：
+                                                </span>
+                                                <span class="progress-number">
+                                                    <b>
+                                                        {{info.used.h}}
+                                                    </b>
+                                                    /{{info.total.h}}
+                                                </span>
+                                                <div class="progress sm">
+                                                    <div class="progress-bar progress-bar-aqua" style="width:{{info.used.percentage}}%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="progress-group">
+                                                <span class="progress-text">
+                                                    其他文件类型占比：
+                                                </span>
+                                                <span class="progress-number">
+                                                    <b>
+                                                        {{info.used.h}}
+                                                    </b>
+                                                    /{{info.total.h}}
+                                                </span>
+                                                <div class="progress sm">
+                                                    <div class="progress-bar progress-bar-aqua" style="width:{{info.used.percentage}}%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="progress-group">
+                                                <span class="progress-text">
+                                                    已用空间：({{info.used.percentage}})
+                                                </span>
+                                                <span class="progress-number">
+                                                    <b>
+                                                        {{info.used.h}}
+                                                    </b>
+                                                    /{{info.total.h}}
+                                                </span>
+                                                <div class="progress sm">
+                                                    <div class="progress-bar progress-bar-aqua" style="width:{{info.used.percentage}}%">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.box-body -->
+                                    </div>
+                                    <!-- /.box -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel box box-danger">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
+                            class="collapsed" aria-expanded="false">
+                                硬盘设置
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false"
+                    style="height: 0px;">
+                        <div class="box-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                            richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard
+                            dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf
+                            moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
+                            assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
+                            wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
+                            vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic
+                            synth nesciunt you probably haven't heard of them accusamus labore sustainable
+                            VHS.
+                        </div>
+                    </div>
+                </div>
+                <div class="panel box box-success">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
+                            class="collapsed" aria-expanded="false">
+                                硬盘信息
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse" aria-expanded="false"
+                    style="height: 0px;">
+                        <div class="box-body">
+                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
+                            richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard
+                            dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf
+                            moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla
+                            assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
+                            wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
+                            vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic
+                            synth nesciunt you probably haven't heard of them accusamus labore sustainable
+                            VHS.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
     </div>
-    <!-- /.info-box -->
-   </div>
-   <!-- /.col -->
-   <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="info-box">
-     <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
-     <div class="info-box-content">
-      <span class="info-box-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">喜欢</font></font></span>
-      <span class="info-box-number"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">41,410</font></font></span>
-     </div>
-     <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-   </div>
-   <!-- /.col -->
-   <!-- fix for small devices only -->
-   <div class="clearfix visible-sm-block"></div>
-   <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="info-box">
-     <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
-     <div class="info-box-content">
-      <span class="info-box-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">销售</font></font></span>
-      <span class="info-box-number"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">760</font></font></span>
-     </div>
-     <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-   </div>
-   <!-- /.col -->
-   <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="info-box">
-     <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
-     <div class="info-box-content">
-      <span class="info-box-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">新会员</font></font></span>
-      <span class="info-box-number"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2,000</font></font></span>
-     </div>
-     <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-   </div>
-   <!-- /.col -->
-  </div>
-
-<div class="box box-danger">
-	<div class="box-header with-border">
-		<h3 class="box-title">
-			<font style="vertical-align: inherit;">
-				<font style="vertical-align: inherit;">
-					甜甜圈图
-				</font>
-			</font>
-		</h3>
-		<div class="box-tools pull-right">
-			<button type="button" class="btn btn-box-tool" data-widget="collapse">
-				<i class="fa fa-minus">
-				</i>
-			</button>
-			<button type="button" class="btn btn-box-tool" data-widget="remove">
-				<i class="fa fa-times">
-				</i>
-			</button>
-		</div>
-	</div>
-	<div class="box-body">
-		<canvas id="pieChart" style="height: 297px; width: 594px;" height="371"
-		width="742">
-		</canvas>
-	</div>
-	<!-- /.box-body -->
+    <!-- /.box -->
 </div>
+</div>
+
+<!--<div class="box box-danger">-->
+	<!--<div class="box-header with-border">-->
+		<!--<h3 class="box-title">-->
+
+
+					<!--甜甜圈图-->
+				<!--</font>-->
+			<!--</font>-->
+		<!--</h3>-->
+		<!--<div class="box-tools pull-right">-->
+			<!--<button type="button" class="btn btn-box-tool" data-widget="collapse">-->
+				<!--<i class="fa fa-minus">-->
+				<!--</i>-->
+			<!--</button>-->
+			<!--<button type="button" class="btn btn-box-tool" data-widget="remove">-->
+				<!--<i class="fa fa-times">-->
+				<!--</i>-->
+			<!--</button>-->
+		<!--</div>-->
+	<!--</div>-->
+	<!--<div class="box-body">-->
+		<!--<canvas id="pieChart" style="height: 297px; width: 594px;" height="371"-->
+		<!--width="742">-->
+		<!--</canvas>-->
+	<!--</div>-->
+	<!--&lt;!&ndash; /.box-body &ndash;&gt;-->
+<!--</div>-->
 
 {% endblock PageContent %}
 
@@ -115,10 +289,73 @@
 {% endblock Jscript %}
 
 {% block script %}
-<script>
-$(function() {
-    var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+<script type="text/javascript">
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
     var pieChart       = new Chart(pieChartCanvas)
-})
+    var PieData        = [
+      {
+        value    : 700,
+        color    : '#f56954',
+        highlight: '#f56954',
+        label    : 'Chrome'
+      },
+      {
+        value    : 500,
+        color    : '#00a65a',
+        highlight: '#00a65a',
+        label    : 'IE'
+      },
+      {
+        value    : 400,
+        color    : '#f39c12',
+        highlight: '#f39c12',
+        label    : 'FireFox'
+      },
+      {
+        value    : 600,
+        color    : '#00c0ef',
+        highlight: '#00c0ef',
+        label    : 'Safari'
+      },
+      {
+        value    : 300,
+        color    : '#3c8dbc',
+        highlight: '#3c8dbc',
+        label    : 'Opera'
+      },
+      {
+        value    : 100,
+        color    : '#d2d6de',
+        highlight: '#d2d6de',
+        label    : 'Navigator'
+      }
+    ]
+    var pieOptions     = {
+      //Boolean - Whether we should show a stroke on each segment
+      segmentShowStroke    : true,
+      //String - The colour of each segment stroke
+      segmentStrokeColor   : '#fff',
+      //Number - The width of each segment stroke
+      segmentStrokeWidth   : 2,
+      //Number - The percentage of the chart that we cut out of the middle
+      percentageInnerCutout: 50, // This is 0 for Pie charts
+      //Number - Amount of animation steps
+      animationSteps       : 100,
+      //String - Animation easing effect
+      animationEasing      : 'easeOutBounce',
+      //Boolean - Whether we animate the rotation of the Doughnut
+      animateRotate        : true,
+      //Boolean - Whether we animate scaling the Doughnut from the centre
+      animateScale         : false,
+      //Boolean - whether to make the chart responsive to window resizing
+      responsive           : true,
+      // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+      maintainAspectRatio  : true,
+      //String - A legend template
+      legendTemplate       : ''
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    pieChart.Doughnut(PieData, pieOptions)
 </script>
 {% endblock script %}

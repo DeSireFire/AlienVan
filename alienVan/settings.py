@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'celery',
-    'django_celery_results',
+    'celery',   # 任务队列
+    'django_celery_results',    # django 任务队列拓展
     'index',
     'management',
 
