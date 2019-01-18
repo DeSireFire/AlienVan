@@ -24,26 +24,101 @@
 <!-- 分页主内容 -->
 {% block PageContent %}
 {{info}}
+  <div class="row">
+   <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+     <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+     <div class="info-box-content">
+      <span class="info-box-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">CPU流量</font></font></span>
+      <span class="info-box-number"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">90 </font></font><small><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">％</font></font></small></span>
+     </div>
+     <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+   </div>
+   <!-- /.col -->
+   <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+     <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+     <div class="info-box-content">
+      <span class="info-box-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">喜欢</font></font></span>
+      <span class="info-box-number"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">41,410</font></font></span>
+     </div>
+     <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+   </div>
+   <!-- /.col -->
+   <!-- fix for small devices only -->
+   <div class="clearfix visible-sm-block"></div>
+   <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+     <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+     <div class="info-box-content">
+      <span class="info-box-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">销售</font></font></span>
+      <span class="info-box-number"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">760</font></font></span>
+     </div>
+     <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+   </div>
+   <!-- /.col -->
+   <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+     <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+     <div class="info-box-content">
+      <span class="info-box-text"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">新会员</font></font></span>
+      <span class="info-box-number"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2,000</font></font></span>
+     </div>
+     <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+   </div>
+   <!-- /.col -->
+  </div>
+
+<div class="box box-danger">
+	<div class="box-header with-border">
+		<h3 class="box-title">
+			<font style="vertical-align: inherit;">
+				<font style="vertical-align: inherit;">
+					甜甜圈图
+				</font>
+			</font>
+		</h3>
+		<div class="box-tools pull-right">
+			<button type="button" class="btn btn-box-tool" data-widget="collapse">
+				<i class="fa fa-minus">
+				</i>
+			</button>
+			<button type="button" class="btn btn-box-tool" data-widget="remove">
+				<i class="fa fa-times">
+				</i>
+			</button>
+		</div>
+	</div>
+	<div class="box-body">
+		<canvas id="pieChart" style="height: 297px; width: 594px;" height="371"
+		width="742">
+		</canvas>
+	</div>
+	<!-- /.box-body -->
+</div>
+
 {% endblock PageContent %}
 
 <!--添加外联JS-->
 {% block Jscript %}
 <script src="{% static 'AdminLTE-2.4.15/bower_components/datatables.net/js/jquery.dataTables.js' %}"></script>
 <script src="{% static 'AdminLTE-2.4.15/bower_components/datatables.net-bs/js/dataTables.bootstrap.js' %}"></script>
+<script src="{% static 'AdminLTE-2.4.15/bower_components/chart.js/Chart.min.js' %}"></script>
 {% endblock Jscript %}
 
 {% block script %}
 <script>
-  $(function () {
-    $('#example1').DataTable()
-    $('#example2').DataTable({
-      'paging'      : true,
-      'lengthChange': false,
-      'searching'   : false,
-      'ordering'    : true,
-      'info'        : true,
-      'autoWidth'   : false
-    })
-  })
+$(function() {
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+    var pieChart       = new Chart(pieChartCanvas)
+})
 </script>
 {% endblock script %}
