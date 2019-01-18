@@ -3,6 +3,8 @@
 
 # AlienVan 成长日记
 
-region i { AlienVan 成长日记
-* 百X网盘真难用，于bilibili邂逅oneIndex
-} region 并不是更新日志（
+<details>
+<summary>展开查看 (有点长哦)</summary>
+
+**百X网盘真难用，于bilibili邂逅oneIndex**
+</details>
