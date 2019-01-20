@@ -189,6 +189,43 @@ def all_images(client,path='root'):
 
         imageRes[i]['resSize'] = fileSize(imageRes[i]['resSize'])
     imageRes['Res']['resSize'] = fileSize(imageRes['Res']['resSize'])
+    return imageRes
+
+def all_video(client,path='root'):
+    '''
+    统计所有视频文件
+    :param client:
+    :param path:
+    :return:
+    '''
+    imageType = ['.avi','.mp4','.mkv','.flv','.rm',]
+    imageRes = {
+        '.avi':{'count':0,'resSize':0},# 文件数量，文件大小总和
+        '.mp4':{'count':0,'resSize':0},
+        '.mkv':{'count':0,'resSize':0},
+        '.flv':{'count':0,'resSize':0},
+        '.rm':{'count':0,'resSize':0},
+        'Res':{'count':0,'resSize':0},# 所有图片文件的数量和大小总和
+    }
+    # 商业版OD不支持createdDateTime 以外的过滤语法，垃圾。
+    from generalTs.otherHandler import fileSize
+    for i in imageType:
+        temp = filter_files(client, i, filterStr='image%20ne%20null%20and%20file%20ne%20null', parent_id='root')
+
+        # 请求出错
+        if 'value' not in temp.keys() or ['value']=={}:
+            continue
+        for n in temp['value']:
+            # 排除文件名带关键字但不是图片文件的文件
+            if 'video' in n['file']['mimeType']:
+                imageRes[i]['count'] += 1
+                imageRes[i]['resSize'] += int(n['size'])
+
+        imageRes['Res']['count'] += imageRes[i]['count']
+        imageRes['Res']['resSize'] += imageRes[i]['resSize']
+
+        imageRes[i]['resSize'] = fileSize(imageRes[i]['resSize'])
+    imageRes['Res']['resSize'] = fileSize(imageRes['Res']['resSize'])
     print(imageRes)
     return imageRes
 
@@ -199,7 +236,8 @@ if __name__ == '__main__':
     from alienVan.settings import BASE_DIR
     pathFileName = os.path.join(BASE_DIR, 'driveJsons', 'msDiskOne.json')
     CLIENT = load_session(pathFileName)
-    all_images(CLIENT)
+    # all_images(CLIENT)
+    all_video(CLIENT)
 
     # from odTools.authHandler import refresh_token
     # temp = refresh_token(info["refresh_token"])
