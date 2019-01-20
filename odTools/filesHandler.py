@@ -65,23 +65,13 @@ def filter_files(client,nameKey,filterStr='file ne null',parent_id='root'):
     '''
      # 查询文件名包含.jpg"且image类型不为 null" 的所有子项
     from alienVan.appConfig import oauthDict
-    # url = oauthDict['app_url'] + "/v1.0/me/drive/{parent_id}/search(q='{nameKey}')?filter={filterStr}".format(
-    #     parent_id=parent_id,
-    #      nameKey=nameKey,
-    #      filterStr=filterStr)
-
     url = oauthDict['app_url'] + "/v1.0/me/drive/{parent_id}/search(q='{nameKey}')".format(
         parent_id=parent_id,
          nameKey=nameKey,)
-    print(url)
-
     headers = {'Authorization': 'bearer {}'.format(client["access_token"])}
     get_res = requests.get(url, headers=headers, verify=False)
     get_res = json.loads(get_res.text)
     print(get_res)
-    print(len(get_res['value']))
-    for i in get_res['value']:
-        print(i)
     return get_res
 
 
@@ -181,6 +171,7 @@ def all_images(client,path='root'):
         'Res':{'count':0,'resSize':0},# 所有图片文件的数量和大小总和
     }
     # 商业版OD不支持createdDateTime 以外的过滤语法，垃圾。
+    from generalTs.otherHandler import fileSize
     for i in imageType:
         temp = filter_files(client, i, filterStr='image%20ne%20null%20and%20file%20ne%20null', parent_id='root')
 
@@ -196,6 +187,9 @@ def all_images(client,path='root'):
         imageRes['Res']['count'] += imageRes[i]['count']
         imageRes['Res']['resSize'] += imageRes[i]['resSize']
 
+        imageRes[i]['resSize'] = fileSize(imageRes[i]['resSize'])
+    imageRes['Res']['resSize'] = fileSize(imageRes['Res']['resSize'])
+    print(imageRes)
     return imageRes
 
 

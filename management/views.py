@@ -58,10 +58,11 @@ def panAction(request):
 
     from odTools.panAction import get_driveInfo
     tempDict = get_driveInfo(temp)
-    print(tempDict)
+    # print(tempDict)
 
-    from odTools.filesHandler import filter_files
-    files = filter_files(temp,)
+    # 统计所有图片文件
+    from odTools.filesHandler import all_images
+    imageRes = all_images(temp) #{'.gif': {'count': 25, 'resSize': {'o': 68987781, 'h': '65M'}}, '.jpg': {'count': 25, 'resSize': {'o': 7000786, 'h': '6M'}}, '.png': {'count': 25, 'resSize': {'o': 28207350, 'h': '26M'}}, '.webp': {'count': 5, 'resSize': {'o': 496770, 'h': '485K'}}, 'Res': {'count': 80, 'resSize': {'o': 104692687, 'h': '99M'}}}    print(imageRes)
 
     # 格式化字段
     from generalTs.otherHandler import fileSize
@@ -77,6 +78,7 @@ def panAction(request):
         'remaining':dict(fileSize(tempDict['quota']['remaining']), **{'percentage':"%.2f%%" % (tempDict['quota']['remaining']/tempDict['quota']['total']*100)}),
         'total':fileSize(tempDict['quota']['total']),
         'used':dict(fileSize(tempDict['quota']['used']), **{'percentage':"%.2f%%" % (tempDict['quota']['used']/tempDict['quota']['total']*100)}),
+        'imageRes':dict(imageRes,**{'percentage':"%.2f%%" % (imageRes['Res']['resSize']['o']/tempDict['quota']['total']*100)}),
     }
     #todo 研究以下od的过滤器
 
