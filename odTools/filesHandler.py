@@ -76,7 +76,7 @@ def filter_files(client,nameKey,filterStr='file ne null',parent_id='root'):
     print(url)
 
     headers = {'Authorization': 'bearer {}'.format(client["access_token"])}
-    get_res = requests.get(url, headers=headers)
+    get_res = requests.get(url, headers=headers, verify=False)
     get_res = json.loads(get_res.text)
     print(get_res)
     print(len(get_res['value']))
@@ -173,6 +173,13 @@ def all_images(client,path='root'):
     :return:
     '''
     imageType = ['.gif', '.jpg', '.png', '.webp',]
+    imageRes = {
+        '.gif':{'count':0,'resSize':0},# 文件数量，文件大小总和
+        '.jpg':{'count':0,'resSize':0},
+        '.png':{'count':0,'resSize':0},
+        '.webp':{'count':0,'resSize':0},
+        'Res':{'count':0,'resSize':0},# 所有图片文件的数量和大小总和
+    }
     # 商业版OD不支持createdDateTime 以外的过滤语法，垃圾。
     for i in imageType:
         temp = filter_files(client, i, filterStr='image%20ne%20null%20and%20file%20ne%20null', parent_id='root')
@@ -180,7 +187,17 @@ def all_images(client,path='root'):
         # 请求出错
         if 'value' not in temp.keys():
             continue
-        print(temp)
+        for n in temp['value']:
+            # 排除文件名带关键字但不是图片文件的文件
+            if 'image' in n['file']['mimeType'] or '.webp' == os.path.splitext(n['name'])[1]:
+                imageRes[i]['count'] += 1
+                imageRes[i]['resSize'] += int(n['size'])
+
+        imageRes['Res']['count'] += imageRes[i]['count']
+        imageRes['Res']['resSize'] += imageRes[i]['resSize']
+
+    return imageRes
+
 
 if __name__ == '__main__':
     pass
