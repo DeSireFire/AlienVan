@@ -176,7 +176,7 @@ def all_images(client,path='root'):
         temp = filter_files(client, i, filterStr='image%20ne%20null%20and%20file%20ne%20null', parent_id='root')
 
         # 请求出错
-        if 'value' not in temp.keys():
+        if 'value' not in temp.keys() or ['value']=={}:
             continue
         for n in temp['value']:
             # 排除文件名带关键字但不是图片文件的文件
@@ -198,8 +198,8 @@ def all_video(client,path='root'):
     :param path:
     :return:
     '''
-    imageType = ['.avi','.mp4','.mkv','.flv','.rm',]
-    imageRes = {
+    tempType = ['.avi','.mp4','.mkv','.flv','.rm',]
+    tempRes = {
         '.avi':{'count':0,'resSize':0},# 文件数量，文件大小总和
         '.mp4':{'count':0,'resSize':0},
         '.mkv':{'count':0,'resSize':0},
@@ -209,7 +209,7 @@ def all_video(client,path='root'):
     }
     # 商业版OD不支持createdDateTime 以外的过滤语法，垃圾。
     from generalTs.otherHandler import fileSize
-    for i in imageType:
+    for i in tempType:
         temp = filter_files(client, i, filterStr='image%20ne%20null%20and%20file%20ne%20null', parent_id='root')
 
         # 请求出错
@@ -218,16 +218,16 @@ def all_video(client,path='root'):
         for n in temp['value']:
             # 排除文件名带关键字但不是图片文件的文件
             if 'video' in n['file']['mimeType']:
-                imageRes[i]['count'] += 1
-                imageRes[i]['resSize'] += int(n['size'])
+                tempRes[i]['count'] += 1
+                tempRes[i]['resSize'] += int(n['size'])
 
-        imageRes['Res']['count'] += imageRes[i]['count']
-        imageRes['Res']['resSize'] += imageRes[i]['resSize']
+        tempRes['Res']['count'] += tempRes[i]['count']
+        tempRes['Res']['resSize'] += tempRes[i]['resSize']
 
-        imageRes[i]['resSize'] = fileSize(imageRes[i]['resSize'])
-    imageRes['Res']['resSize'] = fileSize(imageRes['Res']['resSize'])
-    print(imageRes)
-    return imageRes
+        tempRes[i]['resSize'] = fileSize(tempRes[i]['resSize'])
+    tempRes['Res']['resSize'] = fileSize(tempRes['Res']['resSize'])
+    print(tempRes)
+    return tempRes
 
 
 if __name__ == '__main__':
