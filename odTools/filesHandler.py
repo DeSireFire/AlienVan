@@ -1,7 +1,7 @@
 '''
 onedrive 文件操作工具箱
 '''
-import requests,json
+import requests,json,os
 
 
 # 通用函数
@@ -56,12 +56,39 @@ def reduce_odata(odatavalue,keyName = None):
     # print(temp['mimeType'],temp['name'],temp['fileIco'])
     return temp
 
+def filter_files(client,nameKey,filterStr='file ne null',parent_id='root'):
+    '''
+    文件过滤,过滤语法
+    https://docs.microsoft.com/en-us/onedrive/developer/rest-api/concepts/filtering-results?view=odsp-graph-online
+    :param nameKey: 文件名关键字
+    :return:
+    '''
+     # 查询文件名包含.jpg"且image类型不为 null" 的所有子项
+    from alienVan.appConfig import oauthDict
+    # url = oauthDict['app_url'] + "/v1.0/me/drive/{parent_id}/search(q='{nameKey}')?filter={filterStr}".format(
+    #     parent_id=parent_id,
+    #      nameKey=nameKey,
+    #      filterStr=filterStr)
+
+    url = oauthDict['app_url'] + "/v1.0/me/drive/{parent_id}/search(q='{nameKey}')".format(
+        parent_id=parent_id,
+         nameKey=nameKey,)
+    print(url)
+
+    headers = {'Authorization': 'bearer {}'.format(client["access_token"])}
+    get_res = requests.get(url, headers=headers)
+    get_res = json.loads(get_res.text)
+    print(get_res)
+    print(len(get_res['value']))
+    for i in get_res['value']:
+        print(i)
+    return get_res
 
 
 # 操作函数
 def files_list(client,od_type,path=''):
     '''
-    文件列表查询
+    文件列表获取
     :param od_type: 布尔，onedrive 类型
     :param path: 字符串，目标目录名
     :return:
@@ -138,10 +165,33 @@ def delete_files(client, fileid):
 
     return get_res
 
+def all_images(client,path='root'):
+    '''
+    统计所有图片文件
+    :param client:
+    :param path:
+    :return:
+    '''
+    imageType = ['.gif', '.jpg', '.png', '.webp',]
+    # 商业版OD不支持createdDateTime 以外的过滤语法，垃圾。
+    for i in imageType:
+        temp = filter_files(client, i, filterStr='image%20ne%20null%20and%20file%20ne%20null', parent_id='root')
+
+        # 请求出错
+        if 'value' not in temp.keys():
+            continue
+        print(temp)
 
 if __name__ == '__main__':
     pass
-    # temp = flush_token(info["refresh_token"])
+    from odTools.authHandler import load_session
+    from alienVan.settings import BASE_DIR
+    pathFileName = os.path.join(BASE_DIR, 'driveJsons', 'msDiskOne.json')
+    CLIENT = load_session(pathFileName)
+    all_images(CLIENT)
+
+    # from odTools.authHandler import refresh_token
+    # temp = refresh_token(info["refresh_token"])
 
     # flist = od_filesList(temp,1)
 

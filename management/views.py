@@ -59,8 +59,11 @@ def panAction(request):
     from odTools.panAction import get_driveInfo
     tempDict = get_driveInfo(temp)
     print(tempDict)
-    # 删除用不上的字段
 
+    from odTools.filesHandler import filter_files
+    files = filter_files(temp,)
+
+    # 格式化字段
     from generalTs.otherHandler import fileSize
     context['info'] = {
         'createdDateTime':tempDict['createdDateTime'].replace('-','/').replace('T',' ').replace('Z',''),
