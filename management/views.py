@@ -60,6 +60,8 @@ def panAction(request):
     tempDict = get_driveInfo(temp)
     # print(tempDict)
 
+
+    #todo 待优化，改成ajax
     # 统计所有图片文件
     from odTools.filesHandler import all_images
     imageRes = all_images(temp) #{'.gif': {'count': 25, 'resSize': {'o': 68987781, 'h': '65M'}}, '.jpg': {'count': 25, 'resSize': {'o': 7000786, 'h': '6M'}}, '.png': {'count': 25, 'resSize': {'o': 28207350, 'h': '26M'}}, '.webp': {'count': 5, 'resSize': {'o': 496770, 'h': '485K'}}, 'Res': {'count': 80, 'resSize': {'o': 104692687, 'h': '99M'}}}    print(imageRes)
@@ -95,7 +97,6 @@ def panAction(request):
         'audioRes':dict(audioRes,**{'percentage':"%.2f%%" % (audioRes['Res']['resSize']['o']/tempDict['quota']['total']*100)}),
         'otherFileRes':dict(fileSize(otherFileRes),**{'percentage':"%.2f%%" % (otherFileRes/tempDict['quota']['total']*100)}),
     }
-    #todo 研究以下od的过滤器
 
     return render(request, 'theme_AdminLTE/management/dashBoard.html', context)
 
