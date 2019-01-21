@@ -68,6 +68,11 @@ def panAction(request):
     from odTools.filesHandler import all_video
     videoRes = all_video(temp)
 
+    # 统计所有视频文件
+    from odTools.filesHandler import all_audio
+    audioRes = all_audio(temp)
+
+
     # 格式化字段
     from generalTs.otherHandler import fileSize
     context['info'] = {
@@ -84,6 +89,7 @@ def panAction(request):
         'used':dict(fileSize(tempDict['quota']['used']), **{'percentage':"%.2f%%" % (tempDict['quota']['used']/tempDict['quota']['total']*100)}),
         'imageRes':dict(imageRes,**{'percentage':"%.2f%%" % (imageRes['Res']['resSize']['o']/tempDict['quota']['total']*100)}),
         'videoRes':dict(videoRes,**{'percentage':"%.2f%%" % (videoRes['Res']['resSize']['o']/tempDict['quota']['total']*100)}),
+        'audioRes':dict(audioRes,**{'percentage':"%.2f%%" % (audioRes['Res']['resSize']['o']/tempDict['quota']['total']*100)}),
     }
     #todo 研究以下od的过滤器
 

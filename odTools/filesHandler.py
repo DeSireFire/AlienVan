@@ -198,13 +198,14 @@ def all_video(client,path='root'):
     :param path:
     :return:
     '''
-    tempType = ['.avi','.mp4','.mkv','.flv','.rm',]
+    tempType = ['.avi','.mp4','.mkv','.flv','.rm','.mov']
     tempRes = {
         '.avi':{'count':0,'resSize':0},# 文件数量，文件大小总和
         '.mp4':{'count':0,'resSize':0},
         '.mkv':{'count':0,'resSize':0},
         '.flv':{'count':0,'resSize':0},
         '.rm':{'count':0,'resSize':0},
+        '.mov':{'count':0,'resSize':0},
         'Res':{'count':0,'resSize':0},# 所有图片文件的数量和大小总和
     }
     # 商业版OD不支持createdDateTime 以外的过滤语法，垃圾。
@@ -229,6 +230,44 @@ def all_video(client,path='root'):
     print(tempRes)
     return tempRes
 
+def all_audio(client,path='root'):
+    '''
+    统计所有音频文件
+    :param client:
+    :param path:
+    :return:
+    '''
+    tempType = ['.mp3','.flac','.wav','.ape','.wma','.ogg']
+    tempRes = {
+        '.mp3':{'count':0,'resSize':0},# 文件数量，文件大小总和
+        '.flac':{'count':0,'resSize':0},
+        '.wav':{'count':0,'resSize':0},
+        '.ape':{'count':0,'resSize':0},
+        '.wma':{'count':0,'resSize':0},
+        '.ogg':{'count':0,'resSize':0},
+        'Res':{'count':0,'resSize':0},# 所有图片文件的数量和大小总和
+    }
+    # 商业版OD不支持createdDateTime 以外的过滤语法，垃圾。
+    from generalTs.otherHandler import fileSize
+    for i in tempType:
+        temp = filter_files(client, i, filterStr='image%20ne%20null%20and%20file%20ne%20null', parent_id='root')
+
+        # 请求出错
+        if 'value' not in temp.keys() or ['value']=={}:
+            continue
+        for n in temp['value']:
+            # 排除文件名带关键字但不是图片文件的文件
+            if 'audio' in n['file']['mimeType']:
+                tempRes[i]['count'] += 1
+                tempRes[i]['resSize'] += int(n['size'])
+
+        tempRes['Res']['count'] += tempRes[i]['count']
+        tempRes['Res']['resSize'] += tempRes[i]['resSize']
+
+        tempRes[i]['resSize'] = fileSize(tempRes[i]['resSize'])
+    tempRes['Res']['resSize'] = fileSize(tempRes['Res']['resSize'])
+    print(tempRes)
+    return tempRes
 
 if __name__ == '__main__':
     pass
