@@ -16,6 +16,19 @@ WebFrame = 'django 2.2.4'
 <details>
 <summary>展开查看 (有点长哦，从下往上读)</summary>
 
+* 文件详细信息页显示图片缩略图！增加音乐文件和视频文件的辣鸡H5播放器（以后肯定会换那两个牛逼的东西）
+* 文件详细信息页排版调整！增加文件下载，删除按钮钮和对应的功能
+* 文件详细信息页排版调整！增加傻瓜引用链接
+* 文件详细信息页诞生！
+* onedrive 文件列表实现分页，自定义显示文件项数量，文件名搜索功能！
+* onedrive 文件列表拥有更多信息，增加文件名排序，大小排序，最后修改时间排序
+* onedrive 多盘榜绑定，蛇皮切换实现！
+* 前端偷懒，干脆直接使用模板引擎标签
+* onedrive 文件列表展示了出来，感觉还需要增加更多细节
+* 实现保存和刷新保持onedrive连接会话
+* 实现onedrive登陆授权功能
+* 创建前端模板、前端静态文件，使用adminLTE前端框架
+* 展开django框架，创建多个app,设置路由器与次级路由
 * 一个名为 [AlienVan](https://github.com/DeSireFire/AlienVan) 的gtihub repo 喵叽了出来！
 * flask都好几个同类的项目了，再搞一个没意思呐，就django吧。
 * get[Microsoft Graph](https://developer.microsoft.com/en-us/graph/get-started/python) 的 demo。嗯？是flask的

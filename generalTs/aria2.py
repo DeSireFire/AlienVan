@@ -400,6 +400,7 @@ if __name__=='__main__':
                     secret=ARIA2_SECRET,
                     scheme=ARIA2_SCHEME)
         info=json.loads(p.getSessionInfo())[0]
+        print(info)
         if info.get('error'):
             msg=info.get('error').get('message')
             if msg=='Unauthorized':
@@ -408,3 +409,5 @@ if __name__=='__main__':
         print(p)
     except Exception as e:
         print(e)
+
+
