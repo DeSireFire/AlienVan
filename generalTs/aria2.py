@@ -15,13 +15,13 @@ class PyAria2(object):
 
     def __init__(self,host,port,secret,scheme,session=None):
         '''
-        PyAria2 constructor.
-        host: string, aria2 rpc host, default is 'localhost'
-        port: integer, aria2 rpc port, default is 6800
-        session: string, aria2 rpc session saving.
+        PyAria2构造函数。
+        host：字符串，aria2 rpc主机，默认为'localhost'
+        端口：整数，aria2 rpc端口，默认为6800
+        会话：字符串，aria2 rpc会话保存。
         '''
         if not isAria2Installed():
-            raise Exception('aria2 is not installed, please install it before.')
+            raise Exception('aria2 尚未安装，请先安装aria2')
 
         if not isAria2rpcRunning():
             cmd = 'aria2c' \
@@ -75,11 +75,11 @@ class PyAria2(object):
 
     def addUri(self, uris, options=None, position=None):
         '''
-        This method adds new HTTP(S)/FTP/BitTorrent Magnet URI.
-        uris: list, list of URIs
-        options: dict, additional options
-        position: integer, position in download queue
-        return: This method returns GID of registered download.
+        此方法添加了新的HTTP（S）/ FTP / BitTorrent磁体URI。
+        uris：列表，URI列表
+        选项：dict，其他选项
+        position：整数，在下载队列中的位置
+        返回：此方法返回注册下载的GID。
         '''
         params = [[uris]]
         if options:
@@ -89,30 +89,30 @@ class PyAria2(object):
 
     def addTorrent(self, torrent, uris=None, options=None, position=None):
         '''
-        This method adds BitTorrent download by uploading ".torrent" file.
-        torrent: string, torrent file path
-        uris: list, list of webseed URIs
-        options: dict, additional options
-        position: integer, position in download queue
-        return: This method returns GID of registered download.
+        此方法通过上传“ .torrent”文件来添加BitTorrent下载。
+        torrent：字符串，torrent文件路径
+        uris：列表，网络种子URI的列表
+        选项：dict，其他选项
+        position：整数，在下载队列中的位置
+        返回：此方法返回注册下载的GID。
         '''
         return self.server.aria2.addTorrent(xmlrpclib.Binary(open(torrent, 'rb').read()), uris, options, position)
 
     def addMetalink(self, metalink, options=None, position=None):
         '''
-        This method adds Metalink download by uploading ".metalink" file.
-        metalink: string, metalink file path
-        options: dict, additional options
-        position: integer, position in download queue
-        return: This method returns list of GID of registered download.
+        此方法通过上传“ .metalink”文件来添加Metalink下载。
+        metalink：字符串，metalink文件路径
+        选项：dict，其他选项
+        position：整数，在下载队列中的位置
+        返回：此方法返回已注册下载的GID列表。
         '''
         return self.server.aria2.addMetalink(xmlrpclib.Binary(open(metalink, 'rb').read()), options, position)
 
     def remove(self, gid):
         '''
-        This method removes the download denoted by gid.
-        gid: string, GID.
-        return: This method returns GID of removed download.
+        此方法删除了gid表示的下载。
+        gid：字符串，GID。
+        返回：此方法返回已删除下载的GID。
         '''
         params = [gid]
         return self.sendJsonRPC(data=self.getRPCBody('aria2.remove', params))
@@ -120,18 +120,18 @@ class PyAria2(object):
 
     def forceRemove(self, gid):
         '''
-        This method removes the download denoted by gid.
-        gid: string, GID.
-        return: This method returns GID of removed download.
+        此方法删除了gid表示的下载。
+        gid：字符串，GID。
+        返回：此方法返回已删除下载的GID。
         '''
         params = [gid]
         return self.sendJsonRPC(data=self.getRPCBody('aria2.forceRemove', params))
 
     def pause(self, gid):
         '''
-        This method pauses the download denoted by gid.
-        gid: string, GID.
-        return: This method returns GID of paused download.
+        此方法暂停gid表示的下载。
+        gid：字符串，GID。
+        返回：此方法返回已暂停下载的GID。
         '''
         params = [gid]
         return self.sendJsonRPC(data=self.getRPCBody('aria2.pause', params))
@@ -140,6 +140,8 @@ class PyAria2(object):
         '''
         This method is equal to calling aria2.pause() for every active/waiting download.
         return: This method returns OK for success.
+        此方法等于对每个活动/正在等待的下载都调用aria2.pause（）。
+        返回值：此方法成功返回OK。
         '''
         return self.sendJsonRPC(data=self.getRPCBody('aria2.pauseAll'))
 
@@ -148,6 +150,9 @@ class PyAria2(object):
         This method pauses the download denoted by gid.
         gid: string, GID.
         return: This method returns GID of paused download.
+        此方法暂停gid表示的下载。
+        gid：字符串，GID。
+        返回：此方法返回已暂停下载的GID。
         '''
         params = [gid]
         return self.sendJsonRPC(data=self.getRPCBody('aria2.forcePause', params))
@@ -387,9 +392,19 @@ if __name__=='__main__':
     ARIA2_PORT = 6800
     ARIA2_SECRET = ""
     ARIA2_SCHEME = "http"
-    p = PyAria2(host=ARIA2_HOST,
-                port=ARIA2_PORT,
-                secret=ARIA2_SECRET,
-                scheme=ARIA2_SCHEME)
 
 
+    try:
+        p = PyAria2(host=ARIA2_HOST,
+                    port=ARIA2_PORT,
+                    secret=ARIA2_SECRET,
+                    scheme=ARIA2_SCHEME)
+        info=json.loads(p.getSessionInfo())[0]
+        if info.get('error'):
+            msg=info.get('error').get('message')
+            if msg=='Unauthorized':
+                msg='Aria2未验证！请检查Aria2信息！'
+            print(msg)
+        print(p)
+    except Exception as e:
+        print(e)
