@@ -67,7 +67,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # 'DIRS': [],
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': CONTEXT_PROCESSORS,
@@ -137,7 +137,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'tempFiles')
 #############################
 # celery 配置信息 start
 #############################
-CELERY_BROKER_URL = 'redis://:DeSireFire233666888@localhost:6379/0'
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 # result_backend = 'django-db'

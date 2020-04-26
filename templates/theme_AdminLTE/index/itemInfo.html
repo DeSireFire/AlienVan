@@ -1,0 +1,224 @@
+{% extends 'theme_AdminLTE/management/base_sec.html' %}
+{% load static %}
+{% load tags %}
+<!-- 网盘添加 -->
+
+{% block css %}
+    <!--文件信息内容，太长则换行-->
+<style>
+    .box-body, .list-group-flush > a{
+        word-wrap:break-word;
+    }
+    .box.box-solid {
+        border: 2px solid #00c0ef;
+    }
+    #filename{
+        position:relative;
+    }
+</style>
+{% endblock css %}
+
+<!-- 左导航列表 -->
+{% block sidebarMenu %}
+    {{sidebar|safe}}
+{% endblock sidebarMenu %}
+
+<!--面包屑导航-->
+{% block breadcrumb %}
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> {{Level}}</a></li>
+      </ol>
+{% endblock %}
+
+<!-- 分页主内容 -->
+{% block PageContent %}
+<section class="invoice">
+  <!-- title row -->
+  <div class="row">
+    <div class="col-xs-12">
+      <h2 class="page-header">
+        <i class="fa {{ file.fileIco }}"></i> 『{{ file.name }}』,信息.
+        <small class="pull-right">创建时间: {{ file.createdDateTime }}</small>
+      </h2>
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- info row -->
+  <div class="row invoice-info">
+    <div class="col-sm-8 invoice-col">
+        {% if 'image' in file.mimeType %}
+        <img class="mdui-img-fluid img-responsive center-block" style="max-width: 100%;max-height: 600px" src="{{ file.thumbnails.0.large.url }}">
+        {% elif 'audio' in file.mimeType %}
+        <audio class="center-block" controls>
+          <source src="{{file.download}}" type="audio/mpeg">
+        您的浏览器不支持 audio 元素。
+        </audio>
+        {% elif 'video' in file.mimeType %}
+        <video class="center-block" style="max-width: 100%;max-height: 600px;padding-top: 15px;" controls>
+          <source src="{{file.download}}" type="video/mp4">
+        您的浏览器不支持Video标签。
+        </video>
+        {% else %}
+        <img class="mdui-img-fluid img-responsive center-block" style="max-width: 100%;max-height: 600px" src="{% static '/image/file.svg' %}">
+        {% endif %}
+    </div>
+    <!-- /.col -->
+    <div class="col-sm-4 invoice-col">
+        <div class="box box-info box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title">文件信息</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+          </div>
+          <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="list-group list-group-flush">
+                <p href="#" class="list-group-item"><b>文件大小 :</b> {{ file.name }}</p>
+                <p href="#" class="list-group-item"><b>文件大小 :</b> {{ file.size.o }}</p>
+                <p href="#" class="list-group-item"><b>文件类型 :</b> {{ file.mimeType }}</p>
+                <p id="fileid" class="list-group-item"><b>文件ID :</b> {{ file.id }}</p>
+                <p href="#" class="list-group-item"><b>创建时间 :</b> {{ file.createdDateTime }}</p>
+                <p href="#" class="list-group-item"><b>修改时间 :</b> {{ file.lastModifiedDateTime }}</p>
+                <p href="#" class="list-group-item"><b>上传工具 :</b> {{ file.createdBy.application.displayName }}</p>
+                <a href="pans?name={% if panName %}{{ panName }}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符 :</b> {{ panName }}</a>
+                <a href="pans?name={% if panName %}{{ panName }}{% else %}#{% endif %}&path={% if file.parentRoot %}{{file.parentRoot}}{% else %}#{% endif %}" class="list-group-item"><b>所在盘符路径 :</b> {{panName}}:{{ file.parentRoot }}</a>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        </div>
+
+        <div class="box box-warning collapsed-box box-solid">
+        <div class="box-header with-border">
+          <h3 class="box-title">可展开</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+            </button>
+          </div>
+          <!-- /.box-tools -->
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          预留，想不起来做啥用了
+        </div>
+        <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+
+    </div>
+    <!-- /.col -->
+  </div>
+
+  <!-- /.row -->
+    <hr>
+
+<!--如果存在则显示表格信息-->
+{% if urlDict %}
+  <!-- Table row -->
+  <div class="row">
+
+    <div class="col-xs-12 table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>引用 说明</th>
+          <th> code </th>
+        </tr>
+        </thead>
+        <tbody>
+          {% for key,value  in urlDict.items %}
+            <tr>
+              <td>{{key}}</td>
+              <td class="input-group">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-info btn-flat" onClick="copyValue()">走你！(点击复制)</button>
+                </div>
+                <input type="text" id="copyContent" class="form-control" value='{{value}}'>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+{% endif %}
+  <!-- this row will not appear when printing -->
+    <div class="row no-print">
+        <div class="col-xs-12">
+            {% if panName %}<a href="pans?name={{ panName }}&path={{file.parentRoot}}" class="btn btn-success pull-right"><i class="fa fa-folder"></i> 返回文件目录</a>{% endif %}
+            {% if file.download %}<a href="{{file.download}}" class="btn btn-primary pull-right" style="margin-right: 5px;" ><i class="fa fa-download"></i> 下载文件</a>{% endif %}
+        </div>
+    </div>
+</section>
+
+
+<!--<div class="row">-->
+    <!--<div class="col-sm-6 col-md-3">-->
+        <!--<div class="thumbnail">-->
+            <!--<img src="/wp-content/uploads/2014/06/kittens.jpg"-->
+                 <!--alt="通用的占位符缩略图">-->
+            <!--<div class="caption">-->
+                <!--<h3>缩略图标签</h3>-->
+                <!--<p>一些示例文本。一些示例文本。</p>-->
+                <!--<p>-->
+                    <!--<a href="#" class="btn btn-primary" role="button">-->
+                        <!--按钮-->
+                    <!--</a>-->
+                    <!--<a href="#" class="btn btn-default" role="button">-->
+                        <!--按钮-->
+                    <!--</a>-->
+                <!--</p>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+{% endblock PageContent %}
+
+<!--添加外联JS-->
+{% block Jscript %}
+{% endblock Jscript %}
+
+{% block script %}
+<script type="text/javascript">
+function copyValue()
+{
+var temp = document.getElementById("copyContent");
+temp.select(); // 选中要复制的内容
+document.execCommand("Copy"); // 核心代码，复制选中的内容到剪切板
+alert("复制成功");
+}
+
+// 获取头部
+function getCookie(name) {
+    var cookieValue = null;
+     if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+        }
+    }
+    }
+    return cookieValue;
+}
+// 获取url链接参数
+function getQueryVariable(variable)
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return('');
+}
+</script>
+{% endblock script %}
