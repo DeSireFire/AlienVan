@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from management.views import sidebar_list
 from management.tasks import *
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 
@@ -26,6 +25,7 @@ Sidebar = [
 def index(request):
     '''
     网盘列表视图
+    :param request:
     :param panName:
     :return:
     '''
@@ -42,8 +42,11 @@ def index(request):
     }
     # 如果发现没有挂载网盘json文件，直接跳转网盘添加页
     pansName = returnPanNames()  # 盘符列表
-    if not pansName:
-        return HttpResponseRedirect("addpan")
+
+    # if not pansName:
+    #     print(pansName)
+    #     return HttpResponseRedirect("addpan")
+
 
     # 检查panName 是否存在和存在于挂载网盘列表中
     if 'name' in request.GET and request.GET['name'] and request.GET['name'] in pansName:  # 获得用户输入值

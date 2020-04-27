@@ -125,6 +125,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+# 静态文件部署根目录
+STATIC_ROOT = '/www/wwwroot/pan.zzuliacgn.com/alienVan/static/'
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
