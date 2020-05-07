@@ -10,7 +10,7 @@
 写都写了，就做个演示吧，有很多bug 哈哈哈。
 
 # DEMO
-[演示程序](pan.zzuliacgn.com)
+[演示程序](https://pan.zzuliacgn.com/)
 
 # 界面截图
 ![文件列表](docs/636a83dc.png)
