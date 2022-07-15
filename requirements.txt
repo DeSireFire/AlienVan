@@ -5,7 +5,7 @@ celery==4.4.2
 certifi==2020.4.5.1
 chardet==3.0.4
 Django==3.0.7
-django-celery-results==1.2.1
+django-celery-results==2.4.0
 hurry.filesize==0.9
 idna==2.9
 importlib-metadata==1.6.0
